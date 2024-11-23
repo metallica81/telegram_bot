@@ -3,7 +3,10 @@ const puppeteer = require('puppeteer');
 const fs = require('fs').promises;
 // const data_base_info = require("./data_base_new");
 
-const tg_PersonalID = 885326963;
+const tg_PersonalID = 885326963; // мой id
+//1140094825 - Валерий id 
+//5428269745 - id Павла Васильевича
+
 
 let parse_officer_shatsionok = (async (tg_PersonalID) => {
 
