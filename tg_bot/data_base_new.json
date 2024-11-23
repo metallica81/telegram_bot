@@ -1,0 +1,488 @@
+{
+    "data_shatsionok": {
+        "name": "Шационок Павел Васильевич",
+        "tg_id": 885326963,
+        "schedule_2nd_week": [
+            {
+                "Понедельник": [
+                    "18 ноября",
+                    {
+                        "num_les": 3,
+                        "classroom": 3215
+                    }
+                ]
+            },
+            {
+                "Вторник": [
+                    "19 ноября",
+                    {
+                        "num_les": 2,
+                        "classroom": 3212
+                    },
+                    {
+                        "num_les": 3,
+                        "classroom": 3302
+                    }
+                ]
+            },
+            {
+                "Среда": [
+                    "20 ноября",
+                    {
+                        "num_les": 2,
+                        "classroom": 3215
+                    },
+                    {
+                        "num_les": 3,
+                        "classroom": 3215
+                    },
+                    {
+                        "num_les": 4,
+                        "classroom": 3412
+                    },
+                    {
+                        "num_les": 5,
+                        "classroom": 3215
+                    }
+                ]
+            },
+            {
+                "Четверг": [
+                    "21 ноября",
+                    {
+                        "num_les": 2,
+                        "classroom": 3212
+                    },
+                    {
+                        "num_les": 3,
+                        "classroom": 3408
+                    },
+                    {
+                        "num_les": 7,
+                        "classroom": null
+                    }
+                ]
+            },
+            {
+                "Пятница": [
+                    "22 ноября",
+                    {
+                        "num_les": 7,
+                        "classroom": null
+                    }
+                ]
+            },
+            {
+                "Суббота": [
+                    "23 ноября",
+                    {
+                        "num_les": 1,
+                        "classroom": null
+                    }
+                ]
+            }
+        ],
+        "schedule_1th_week": [
+            {
+                "Понедельник": [
+                    "25 ноября",
+                    {
+                        "num_les": 3,
+                        "classroom": 3215
+                    }
+                ]
+            },
+            {
+                "Вторник": [
+                    "26 ноября",
+                    {
+                        "num_les": 2,
+                        "classroom": 3212
+                    },
+                    {
+                        "num_les": 3,
+                        "classroom": 3302
+                    }
+                ]
+            },
+            {
+                "Среда": [
+                    "27 ноября",
+                    {
+                        "num_les": 2,
+                        "classroom": 3215
+                    },
+                    {
+                        "num_les": 3,
+                        "classroom": 3215
+                    },
+                    {
+                        "num_les": 4,
+                        "classroom": 3412
+                    },
+                    {
+                        "num_les": 5,
+                        "classroom": 3215
+                    }
+                ]
+            },
+            {
+                "Четверг": [
+                    "28 ноября",
+                    {
+                        "num_les": 2,
+                        "classroom": 3212
+                    },
+                    {
+                        "num_les": 3,
+                        "classroom": 3408
+                    }
+                ]
+            },
+            {
+                "Пятница": [
+                    "29 ноября",
+                    {
+                        "num_les": 7,
+                        "classroom": null
+                    }
+                ]
+            },
+            {
+                "Суббота": [
+                    "30 ноября",
+                    {
+                        "num_les": 1,
+                        "classroom": null
+                    }
+                ]
+            }
+        ]
+    },
+    "data_vrublevskiy": {
+        "name": "Врублевский Константин Эдуардович",
+        "tg_id": 885326963,
+        "schedule_2nd_week": [
+            {
+                "Понедельник": [
+                    "18 ноября",
+                    {
+                        "num_les": 6,
+                        "classroom": 3302
+                    },
+                    {
+                        "num_les": 7,
+                        "classroom": 3302
+                    },
+                    {
+                        "num_les": 8,
+                        "classroom": 3302
+                    }
+                ]
+            },
+            {
+                "Вторник": [
+                    "19 ноября",
+                    {
+                        "num_les": 4,
+                        "classroom": 3302
+                    },
+                    {
+                        "num_les": 5,
+                        "classroom": 3213
+                    },
+                    {
+                        "num_les": 6,
+                        "classroom": 3213
+                    },
+                    {
+                        "num_les": 7,
+                        "classroom": 3301
+                    },
+                    {
+                        "num_les": 8,
+                        "classroom": 3605
+                    }
+                ]
+            },
+            {
+                "Среда": [
+                    "20 ноября",
+                    {
+                        "num_les": 3,
+                        "classroom": 3302
+                    },
+                    {
+                        "num_les": 4,
+                        "classroom": 3216
+                    }
+                ]
+            },
+            {
+                "Четверг": [
+                    "21 ноября",
+                    {
+                        "num_les": 3,
+                        "classroom": 3302
+                    },
+                    {
+                        "num_les": 4,
+                        "classroom": 3302
+                    },
+                    {
+                        "num_les": 6,
+                        "classroom": 3302
+                    }
+                ]
+            },
+            {
+                "Пятница": [
+                    "22 ноября",
+                    {
+                        "num_les": 2,
+                        "classroom": 3302
+                    },
+                    {
+                        "num_les": 3,
+                        "classroom": 3302
+                    },
+                    {
+                        "num_les": 4,
+                        "classroom": 3302
+                    },
+                    {
+                        "num_les": 5,
+                        "classroom": 3302
+                    },
+                    {
+                        "num_les": 6,
+                        "classroom": 3213
+                    }
+                ]
+            }
+        ],
+        "schedule_1th_week": [
+            {
+                "Понедельник": [
+                    "25 ноября",
+                    {
+                        "num_les": 6,
+                        "classroom": 3302
+                    },
+                    {
+                        "num_les": 7,
+                        "classroom": 3302
+                    },
+                    {
+                        "num_les": 8,
+                        "classroom": 3302
+                    }
+                ]
+            },
+            {
+                "Вторник": [
+                    "26 ноября",
+                    {
+                        "num_les": 4,
+                        "classroom": 3302
+                    },
+                    {
+                        "num_les": 5,
+                        "classroom": 3213
+                    },
+                    {
+                        "num_les": 6,
+                        "classroom": 3213
+                    }
+                ]
+            },
+            {
+                "Среда": [
+                    "27 ноября",
+                    {
+                        "num_les": 3,
+                        "classroom": 3302
+                    }
+                ]
+            },
+            {
+                "Четверг": [
+                    "28 ноября",
+                    {
+                        "num_les": 3,
+                        "classroom": 3302
+                    },
+                    {
+                        "num_les": 4,
+                        "classroom": 3302
+                    },
+                    {
+                        "num_les": 6,
+                        "classroom": 3302
+                    }
+                ]
+            },
+            {
+                "Пятница": [
+                    "29 ноября",
+                    {
+                        "num_les": 2,
+                        "classroom": 3302
+                    },
+                    {
+                        "num_les": 3,
+                        "classroom": 3302
+                    },
+                    {
+                        "num_les": 4,
+                        "classroom": 3302
+                    },
+                    {
+                        "num_les": 5,
+                        "classroom": 3302
+                    }
+                ]
+            }
+        ]
+    },
+    "data_homutov": {
+        "name": "Хомутов Андрей Сергеевич",
+        "tg_id": 885326963,
+        "schedule_2nd_week": [
+            {
+                "Понедельник": [
+                    "18 ноября",
+                    {
+                        "num_les": 2,
+                        "classroom": 3302
+                    },
+                    {
+                        "num_les": 3,
+                        "classroom": 3213
+                    },
+                    {
+                        "num_les": 4,
+                        "classroom": 3408
+                    }
+                ]
+            },
+            {
+                "Вторник": [
+                    "19 ноября",
+                    {
+                        "num_les": 1,
+                        "classroom": 3311
+                    },
+                    {
+                        "num_les": 2,
+                        "classroom": 3213
+                    },
+                    {
+                        "num_les": 4,
+                        "classroom": 3302
+                    }
+                ]
+            },
+            {
+                "Среда": [
+                    "20 ноября",
+                    {
+                        "num_les": 1,
+                        "classroom": 3402
+                    },
+                    {
+                        "num_les": 2,
+                        "classroom": 3402
+                    },
+                    {
+                        "num_les": 3,
+                        "classroom": 3302
+                    }
+                ]
+            },
+            {
+                "Пятница": [
+                    "22 ноября",
+                    {
+                        "num_les": 1,
+                        "classroom": 3311
+                    },
+                    {
+                        "num_les": 2,
+                        "classroom": 3311
+                    }
+                ]
+            }
+        ],
+        "schedule_1th_week": [
+            {
+                "Понедельник": [
+                    "25 ноября",
+                    {
+                        "num_les": 2,
+                        "classroom": 3302
+                    },
+                    {
+                        "num_les": 3,
+                        "classroom": 3213
+                    },
+                    {
+                        "num_les": 4,
+                        "classroom": 3408
+                    },
+                    {
+                        "num_les": 5,
+                        "classroom": 3408
+                    }
+                ]
+            },
+            {
+                "Вторник": [
+                    "26 ноября",
+                    {
+                        "num_les": 1,
+                        "classroom": 3311
+                    },
+                    {
+                        "num_les": 2,
+                        "classroom": 3213
+                    },
+                    {
+                        "num_les": 4,
+                        "classroom": 3302
+                    }
+                ]
+            },
+            {
+                "Среда": [
+                    "27 ноября",
+                    {
+                        "num_les": 1,
+                        "classroom": 3402
+                    },
+                    {
+                        "num_les": 2,
+                        "classroom": 3402
+                    },
+                    {
+                        "num_les": 3,
+                        "classroom": 3302
+                    }
+                ]
+            },
+            {
+                "Пятница": [
+                    "29 ноября",
+                    {
+                        "num_les": 1,
+                        "classroom": 3311
+                    },
+                    {
+                        "num_les": 2,
+                        "classroom": 3311
+                    }
+                ]
+            }
+        ]
+    }
+}

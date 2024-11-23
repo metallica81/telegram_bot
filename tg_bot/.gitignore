@@ -1,0 +1,19 @@
+# Игнорировать директории .VirtualBox и .vscode
+.VirtualBox/
+.vscode/
+
+# Игнорировать временные файлы системы
+*.log
+*.tmp
+.env
+
+# Игнорировать директории, связанные с настройками пользователя и прочие
+AppData/
+Contacts/
+Documents/
+Downloads/
+...
+
+# Игнорировать временные и системные файлы Windows
+Thumbs.db
+Desktop.ini
