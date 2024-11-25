@@ -28,19 +28,25 @@ let parse_officer_shatsionok = (async (tg_PersonalID) => {
         function parse_date() {
             
             const data = {
-                name: "Шационок Павел Васильевич",
+                name: null,
                 tg_id: tg_PersonalID,
             };
             
-
+            function get_name_instructor() { // Имя сотрудника информатизации
+                let name_instructor = null;
+                //page-header-name__title
+                name_instructor = document.querySelector(".page-header-name__title").innerText;
+                return name_instructor; 
+            };
             
-
             // Для второй недели
             let each_day_week_2 = document.querySelectorAll("#week-2 .show");
 
             each_day_week_2.forEach(element => {
                 let day_week = element.querySelector("#week-2 .info-block__header-text").childNodes[0].textContent.trim();
                 let date = element.querySelector("#week-2 .info-block__header-text :first-child").textContent.trim();
+
+                
 
                 // Функция для получения всех номеров занятий (если их несколько)
                 function get_num_lessons() {
@@ -57,6 +63,32 @@ let parse_officer_shatsionok = (async (tg_PersonalID) => {
 
                     return num_lessons; // Массив всех номеров занятий
                 };
+
+                // Функция для получения времени текущей пары
+                function get_time_lesson() {
+                    let time_lesson = [];
+                    let time_elements = element.querySelectorAll('#week2 div.mb-1[style*="font-size: 1.2rem"]');
+                    if (element) {
+                        const text = element.textContent.trim(); // Получить текст
+                        // Извлечь время с помощью регулярного выражения
+                        const matches = text.match(/(\d{2}):(\d{2}) — (\d{2}):(\d{2})/);
+                        if (matches) {
+                            
+                            return [
+                                [
+                                    Number(matches[1].padStart(2, '0')),
+                                    Number(matches[2].padStart(2, '0'))  
+                                ],
+                                [
+                                    Number(matches[3].padStart(2, '0')), 
+                                    Number(matches[4].padStart(2, '0'))
+                                ]
+                            ];
+                        }
+                    }
+                    return time_lesson;
+                }
+                
 
                 // Функция для получения всех номеров аудиторий (если их несколько)
                 function get_classrooms() {
@@ -75,19 +107,22 @@ let parse_officer_shatsionok = (async (tg_PersonalID) => {
                 };
 
                 let date_array_for_lessons = [];
+                data.name = get_name_instructor();
                 data.schedule_2nd_week = data.schedule_2nd_week || []; // Добавляем расписание для второй недели
 
                 // Добавляем дату в массив
                 date_array_for_lessons.push(date);
 
-                // Получаем все занятия и аудитории для этого дня
+                // Получаем все занятия, аудитории и время для пар для этого дня
                 let num_lessons = get_num_lessons();
+                let time_lesson = get_time_lesson();
                 let classrooms = get_classrooms();
 
                 // Если количество занятий и аудиторий совпадает, добавляем их в один объект
-                let lessons_info = num_lessons.map((num, index) => {
+                let lessons_info = num_lessons.map((num, index) => {    //time_lesson, 
                     return {
                         "num_les": num,
+                        "time_les": time_lesson,
                         "classroom": classrooms[index] || null // Если аудитория отсутствует, ставим null
                     };
                 });
@@ -119,6 +154,31 @@ let parse_officer_shatsionok = (async (tg_PersonalID) => {
                     return num_lessons; // Массив всех номеров занятий
                 };
 
+                // Функция для получения времени тукущей пары
+                function get_time_lesson() {
+                    let time_lesson = [];
+                    let time_elements = element.querySelectorAll('#week1 div.mb-1[style*="font-size: 1.2rem"]');
+                    if (element) {
+                        const text = element.textContent.trim(); // Получить текст
+                        // Извлечь время с помощью регулярного выражения
+                        const matches = text.match(/(\d{2}):(\d{2}) — (\d{2}):(\d{2})/);
+                        if (matches) {
+                            // Преобразовать в формат [[11,30],[13,00]] и добавить ведущие нули
+                            return [
+                                [
+                                    Number(matches[1].padStart(2, '0')), // Преобразуем часы в строку с ведущим нулем
+                                    Number(matches[2].padStart(2, '0'))  // Преобразуем минуты в строку с ведущим нулем
+                                ],
+                                [
+                                    Number(matches[3].padStart(2, '0')), 
+                                    Number(matches[4].padStart(2, '0'))
+                                ]
+                            ];
+                        }
+                    }
+                    return time_lesson;
+                }
+
                 // Функция для получения всех номеров аудиторий (если их несколько)
                 function get_classrooms() {
                     let classrooms = [];
@@ -143,12 +203,14 @@ let parse_officer_shatsionok = (async (tg_PersonalID) => {
 
                 // Получаем все занятия и аудитории для этого дня
                 let num_lessons = get_num_lessons();
+                let time_lesson = get_time_lesson();
                 let classrooms = get_classrooms();
 
                 // Если количество занятий и аудиторий совпадает, добавляем их в один объект
-                let lessons_info = num_lessons.map((num, index) => {
+                let lessons_info = num_lessons.map((num, index) => {    //time_lesson, 
                     return {
                         "num_les": num,
+                        "time_les": time_lesson,
                         "classroom": classrooms[index] || null // Если аудитория отсутствует, ставим null
                     };
                 });
@@ -188,12 +250,17 @@ let parse_officer_vrublevskiy = (async (tg_PersonalID) => {
         function parse_date() {
             
             const data = {
-                name: "Врублевский Константин Эдуардович",
+                name: null,
                 tg_id: tg_PersonalID,
                 
             };
             
-
+            function get_name_instructor() { // Имя сотрудника информатизации
+                let name_instructor = null;
+                //page-header-name__title
+                name_instructor = document.querySelector(".page-header-name__title").innerText;
+                return name_instructor; 
+            };
             
 
             // Для второй недели
@@ -219,6 +286,31 @@ let parse_officer_vrublevskiy = (async (tg_PersonalID) => {
                     return num_lessons; // Массив всех номеров занятий
                 };
 
+                // Функция для получения времени тукущей пары
+                function get_time_lesson() {
+                    let time_lesson = [];
+                    let time_elements = element.querySelectorAll('#week2 div.mb-1[style*="font-size: 1.2rem"]');
+                    if (element) {
+                        const text = element.textContent.trim(); // Получить текст
+                        // Извлечь время с помощью регулярного выражения
+                        const matches = text.match(/(\d{2}):(\d{2}) — (\d{2}):(\d{2})/);
+                        if (matches) {
+                            // Преобразовать в формат [[11,30],[13,00]] и добавить ведущие нули
+                            return [
+                                [
+                                    Number(matches[1].padStart(2, '0')), // Преобразуем часы в строку с ведущим нулем
+                                    Number(matches[2].padStart(2, '0'))  // Преобразуем минуты в строку с ведущим нулем
+                                ],
+                                [
+                                    Number(matches[3].padStart(2, '0')), 
+                                    Number(matches[4].padStart(2, '0'))
+                                ]
+                            ];
+                        }
+                    }
+                    return time_lesson;
+                }
+
                 // Функция для получения всех номеров аудиторий (если их несколько)
                 function get_classrooms() {
                     let classrooms = [];
@@ -243,12 +335,14 @@ let parse_officer_vrublevskiy = (async (tg_PersonalID) => {
 
                 // Получаем все занятия и аудитории для этого дня
                 let num_lessons = get_num_lessons();
+                let time_lesson = get_time_lesson();
                 let classrooms = get_classrooms();
 
                 // Если количество занятий и аудиторий совпадает, добавляем их в один объект
-                let lessons_info = num_lessons.map((num, index) => {
+                let lessons_info = num_lessons.map((num, index) => {    //time_lesson, 
                     return {
                         "num_les": num,
+                        "time_les": time_lesson,
                         "classroom": classrooms[index] || null // Если аудитория отсутствует, ставим null
                     };
                 });
@@ -296,7 +390,33 @@ let parse_officer_vrublevskiy = (async (tg_PersonalID) => {
                     return classrooms; // Массив всех аудиторий
                 };
 
+                // Функция для получения времени тукущей пары
+                function get_time_lesson() {
+                    let time_lesson = [];
+                    let time_elements = element.querySelectorAll('#week1 div.mb-1[style*="font-size: 1.2rem"]');
+                    if (element) {
+                        const text = element.textContent.trim(); // Получить текст
+                        // Извлечь время с помощью регулярного выражения
+                        const matches = text.match(/(\d{2}):(\d{2}) — (\d{2}):(\d{2})/);
+                        if (matches) {
+                            // Преобразовать в формат [[11,30],[13,00]] и добавить ведущие нули
+                            return [
+                                [
+                                    Number(matches[1].padStart(2, '0')), // Преобразуем часы в строку с ведущим нулем
+                                    Number(matches[2].padStart(2, '0'))  // Преобразуем минуты в строку с ведущим нулем
+                                ],
+                                [
+                                    Number(matches[3].padStart(2, '0')), 
+                                    Number(matches[4].padStart(2, '0'))
+                                ]
+                            ];
+                        }
+                    }
+                    return time_lesson;
+                }
+
                 let date_array_for_lessons = [];
+                data.name = get_name_instructor();
                 data.schedule_1th_week = data.schedule_1th_week || []; // Добавляем расписание для первой недели
 
                 // Добавляем дату в массив
@@ -304,12 +424,14 @@ let parse_officer_vrublevskiy = (async (tg_PersonalID) => {
 
                 // Получаем все занятия и аудитории для этого дня
                 let num_lessons = get_num_lessons();
+                let time_lesson = get_time_lesson();
                 let classrooms = get_classrooms();
 
                 // Если количество занятий и аудиторий совпадает, добавляем их в один объект
-                let lessons_info = num_lessons.map((num, index) => {
+                let lessons_info = num_lessons.map((num, index) => {    //time_lesson, 
                     return {
                         "num_les": num,
+                        "time_les": time_lesson,
                         "classroom": classrooms[index] || null // Если аудитория отсутствует, ставим null
                     };
                 });
@@ -347,12 +469,17 @@ let parse_officer_homutov = (async (tg_PersonalID) => {
         function parse_date() {
             
             const data = {
-                name: "Хомутов Андрей Сергеевич",
+                name: null,
                 tg_id: tg_PersonalID,
             };
             
 
-            
+            function get_name_instructor() { // Имя сотрудника информатизации
+                let name_instructor = null;
+                //page-header-name__title
+                name_instructor = document.querySelector(".page-header-name__title").innerText;
+                return name_instructor; 
+            };
 
             // Для второй недели
             let each_day_week_2 = document.querySelectorAll("#week-2 .show");
@@ -376,6 +503,31 @@ let parse_officer_homutov = (async (tg_PersonalID) => {
 
                     return num_lessons; // Массив всех номеров занятий
                 };
+
+                // Функция для получения времени тукущей пары
+                function get_time_lesson() {
+                    let time_lesson = [];
+                    let time_elements = element.querySelectorAll('#week2 div.mb-1[style*="font-size: 1.2rem"]');
+                    if (element) {
+                        const text = element.textContent.trim(); // Получить текст
+                        // Извлечь время с помощью регулярного выражения
+                        const matches = text.match(/(\d{2}):(\d{2}) — (\d{2}):(\d{2})/);
+                        if (matches) {
+                            // Преобразовать в формат [[11,30],[13,00]] и добавить ведущие нули
+                            return [
+                                [
+                                    Number(matches[1].padStart(2, '0')), // Преобразуем часы в строку с ведущим нулем
+                                    Number(matches[2].padStart(2, '0'))  // Преобразуем минуты в строку с ведущим нулем
+                                ],
+                                [
+                                    Number(matches[3].padStart(2, '0')), 
+                                    Number(matches[4].padStart(2, '0'))
+                                ]
+                            ];
+                        }
+                    }
+                    return time_lesson;
+                }
 
                 // Функция для получения всех номеров аудиторий (если их несколько)
                 function get_classrooms() {
@@ -401,12 +553,14 @@ let parse_officer_homutov = (async (tg_PersonalID) => {
 
                 // Получаем все занятия и аудитории для этого дня
                 let num_lessons = get_num_lessons();
+                let time_lesson = get_time_lesson();
                 let classrooms = get_classrooms();
 
                 // Если количество занятий и аудиторий совпадает, добавляем их в один объект
-                let lessons_info = num_lessons.map((num, index) => {
+                let lessons_info = num_lessons.map((num, index) => {    //time_lesson, 
                     return {
                         "num_les": num,
+                        "time_les": time_lesson,
                         "classroom": classrooms[index] || null // Если аудитория отсутствует, ставим null
                     };
                 });
@@ -438,6 +592,31 @@ let parse_officer_homutov = (async (tg_PersonalID) => {
                     return num_lessons; // Массив всех номеров занятий
                 };
 
+                // Функция для получения времени тукущей пары
+                function get_time_lesson() {
+                    let time_lesson = [];
+                    let time_elements = element.querySelectorAll('#week1 div.mb-1[style*="font-size: 1.2rem"]');
+                    if (element) {
+                        const text = element.textContent.trim(); // Получить текст
+                        // Извлечь время с помощью регулярного выражения
+                        const matches = text.match(/(\d{2}):(\d{2}) — (\d{2}):(\d{2})/);
+                        if (matches) {
+                            // Преобразовать в формат [[11,30],[13,00]] и добавить ведущие нули
+                            return [
+                                [
+                                    Number(matches[1].padStart(2, '0')), // Преобразуем часы в строку с ведущим нулем
+                                    Number(matches[2].padStart(2, '0'))  // Преобразуем минуты в строку с ведущим нулем
+                                ],
+                                [
+                                    Number(matches[3].padStart(2, '0')), 
+                                    Number(matches[4].padStart(2, '0'))
+                                ]
+                            ];
+                        }
+                    }
+                    return time_lesson;
+                }
+
                 // Функция для получения всех номеров аудиторий (если их несколько)
                 function get_classrooms() {
                     let classrooms = [];
@@ -455,6 +634,7 @@ let parse_officer_homutov = (async (tg_PersonalID) => {
                 };
 
                 let date_array_for_lessons = [];
+                data.name = get_name_instructor();
                 data.schedule_1th_week = data.schedule_1th_week || []; // Добавляем расписание для первой недели
 
                 // Добавляем дату в массив
@@ -462,12 +642,14 @@ let parse_officer_homutov = (async (tg_PersonalID) => {
 
                 // Получаем все занятия и аудитории для этого дня
                 let num_lessons = get_num_lessons();
+                let time_lesson = get_time_lesson();
                 let classrooms = get_classrooms();
 
                 // Если количество занятий и аудиторий совпадает, добавляем их в один объект
-                let lessons_info = num_lessons.map((num, index) => {
+                let lessons_info = num_lessons.map((num, index) => {    //time_lesson, 
                     return {
                         "num_les": num,
+                        "time_les": time_lesson,
                         "classroom": classrooms[index] || null // Если аудитория отсутствует, ставим null
                     };
                 });

@@ -25,7 +25,7 @@ let comment = "отсутствует";
 bot.command('start', async (ctx) => {
     // Сброс состояния сессии при начале новой заявки
     chatId = ctx.chat.id;
-    ctx.session.step = 'waiting_for_classroom';
+    ctx.session.step = 'waiting_for_pair_number';
     await ctx.reply(`Твой ID ${chatId}`);
     await ctx.reply('Введите номер аудитории, в которой вы находитесь');
 });
@@ -50,19 +50,10 @@ bot.on('message', async (ctx) => {
     const messageText = ctx.message.text;
     console.log(`Received message: ${messageText}, Current step: ${ctx.session.step}`);
 
-    if (ctx.session.step === 'waiting_for_classroom') {
+    if (ctx.session.step === 'waiting_for_pair_number') {
         if (/^\d+$/.test(messageText)) {
             num_classroom = messageText;
-            console.log("num_classroom=", num_classroom);
-            ctx.session.step = 'waiting_for_pair_number';  // Переход к следующему этапу
-            await ctx.reply('Введите номер текущей пары');
-        } else {
-            await ctx.reply('Пожалуйста, введите корректный номер аудитории.');
-        }
-    } else if (ctx.session.step === 'waiting_for_pair_number') {
-        if (/^\d+$/.test(messageText)) {
-            num_study = messageText;
-            console.log("num_study=", num_study);
+            console.log("num_study=", num_classroom);
             ctx.session.step = 'waiting_for_problem';  // Переход к следующему этапу
 
             const problemKeyBoard = new Keyboard().text('Да').row().text('Нет').resized();
