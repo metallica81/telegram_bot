@@ -26,7 +26,7 @@ bot.command('start', async (ctx) => {
     // Сброс состояния сессии при начале новой заявки
     chatId = ctx.chat.id;
     ctx.session.step = 'waiting_for_pair_number';
-    await ctx.reply(`Твой ID ${chatId}`);
+    //await ctx.reply(`Твой ID ${chatId}`);
     await ctx.reply('Введите номер аудитории, в которой вы находитесь');
 });
 

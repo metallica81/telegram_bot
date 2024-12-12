@@ -51,9 +51,6 @@ function formatDateToDBStyle(date) {
     return date.locale('ru').format('D MMMM');  
 }
 
-// let num_study = 1;
-let num_classroom = 3212;
-
 // Создаем стек для очереди преподавателей (FILO)
 const instructorStack = ['data_shatsionok', 'data_vrublevskiy', 'data_homutov']; // Приоритетный порядок преподавателей
 
@@ -67,7 +64,7 @@ function findClosestClassroom(num_classroom) {
     const instructorClassroomsMap = {
         data_shatsionok: shatsionokFixedClassrooms,
         data_vrublevskiy: vrublevskiyFixedClassrooms,
-        data_homutov: homutovFixedClassroms,
+        data_homutov: homutovFixedClassroms
     };
 
     // Определяем, кто закреплён за текущей аудиторией
@@ -83,102 +80,75 @@ function findClosestClassroom(num_classroom) {
     if (associatedInstructor) {
         const instructor = data[associatedInstructor];
         if (instructor) {
-            // Проверяем его расписание
-            for (const scheduleKey of ['schedule_1th_week', 'schedule_2nd_week']) {
-                const schedule = instructor[scheduleKey];
-                if (!schedule) continue;
+            const isBusy = checkIfInstructorBusy(instructor, currentFormattedDate, time24);
 
-                for (const day of schedule) {
-                    const dayOfWeek = Object.keys(day)[0];
-                    const lessonsArray = day[dayOfWeek];
-
-                    if (Array.isArray(lessonsArray) && lessonsArray[0] === currentFormattedDate) {
-                        for (let i = 1; i < lessonsArray.length; i++) {
-                            const lesson = lessonsArray[i];
-                            if (!lesson.time_les || !Array.isArray(lesson.time_les)) continue;
-
-                            const [startTime, endTime] = lesson.time_les;
-                            const isDuringLesson = (
-                                (time24[0] > startTime[0] || (time24[0] === startTime[0] && time24[1] >= startTime[1])) &&
-                                (time24[0] < endTime[0] || (time24[0] === endTime[0] && time24[1] <= endTime[1]))
-                            );
-
-                            if (isDuringLesson) {
-                                // Преподаватель занят
-                                console.log(`Преподаватель ${instructor.name} занят.`);
-                                associatedInstructor = null; // Сбрасываем, так как он занят
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-
-            // Если после проверки занятий преподаватель остаётся свободным
-            if (associatedInstructor) {
-                console.log(`Преподаватель ${instructor.name} свободен и подходит.`);
+            if (!isBusy) {
+                console.log(`Преподаватель ${instructor.name} свободен.`);
                 return [instructor.name, `Этаж ${getFloor(num_classroom)}`, instructor.tg_id];
+            } else {
+                console.log(`Преподаватель ${instructor.name} занят.`);
             }
         }
     }
 
-    // Если преподаватель занят или не найден, ищем ближайшего свободного
-    let closestInstructor = null;
-    let closestFloor = 5; // Начнем с самого высокого этажа (плохо)
-    let closestDistance = Infinity; // Используем для отслеживания ближайшего расстояния
-    let closestClassroom = Infinity; // Для отслеживания ближайшей аудитории
-    let instuct_id = null;
-
+    // UPDATED: Если прикреплённый преподаватель занят, ищем других свободных преподавателей
     for (const instructorKey of instructorStack) {
         const instructor = data[instructorKey];
         if (!instructor) continue;
 
-        for (const scheduleKey of ['schedule_1th_week', 'schedule_2nd_week']) {
-            const schedule = instructor[scheduleKey];
-            if (!schedule) continue;
+        const isBusy = checkIfInstructorBusy(instructor, currentFormattedDate, time24);
+        if (!isBusy) {
+            console.log(`Свободный преподаватель найден: ${instructor.name}`);
+            return [instructor.name, `Этаж ${getFloor(num_classroom)}`, instructor.tg_id];
+        } else {
+            console.log(`Преподаватель ${instructor.name} занят.`);
+        }
+    }
 
-            for (const day of schedule) {
-                const dayOfWeek = Object.keys(day)[0];
-                const lessonsArray = day[dayOfWeek];
+    // UPDATED: Если все преподаватели заняты, отправляем первому из очереди
+    const fallbackInstructorKey = instructorStack[0];
+    const fallbackInstructor = data[fallbackInstructorKey];
+    if (fallbackInstructor) {
+        console.log(`Все преподаватели заняты. Сообщение отправляется первому из очереди: ${fallbackInstructor.name}`);
+        return [fallbackInstructor.name, `Этаж ${getFloor(num_classroom)}`, fallbackInstructor.tg_id];
+    }
 
-                if (Array.isArray(lessonsArray) && lessonsArray[0] === currentFormattedDate) {
-                    for (let i = 1; i < lessonsArray.length; i++) {
-                        const lesson = lessonsArray[i];
-                        if (!lesson.time_les || !Array.isArray(lesson.time_les)) continue;
+    // Если база данных повреждена или преподаватели не найдены
+    console.log("Нет доступных преподавателей.");
+    return "Нет доступных преподавателей.";
+}
 
-                        const classroom = lesson.classroom;
-                        const floor = getFloor(classroom);
-                        const distance = Math.abs(classroom % 100 - num_classroom % 100); // Расстояние по номеру кабинета
+// Функция для проверки занятости преподавателя
+function checkIfInstructorBusy(instructor, currentFormattedDate, time24) {
+    for (const scheduleKey of ['schedule_1th_week', 'schedule_2nd_week']) {
+        const schedule = instructor[scheduleKey];
+        if (!schedule) continue;
 
-                        // Проверяем свободные аудитории и расстояние
-                        if (
-                            floor < closestFloor ||
-                            (floor === closestFloor && distance < closestDistance) ||
-                            (floor === closestFloor && distance === closestDistance && classroom < closestClassroom)
-                        ) {
-                            closestFloor = floor;
-                            closestDistance = distance;
-                            closestClassroom = classroom;
-                            closestInstructor = instructor.name;
-                            instuct_id = instructor.tg_id;
-                        }
+        for (const day of schedule) {
+            const dayOfWeek = Object.keys(day)[0];
+            const lessonsArray = day[dayOfWeek];
+
+            if (Array.isArray(lessonsArray) && lessonsArray[0] === currentFormattedDate) {
+                for (let i = 1; i < lessonsArray.length; i++) {
+                    const lesson = lessonsArray[i];
+                    if (!lesson.time_les || !Array.isArray(lesson.time_les)) continue;
+
+                    const [startTime, endTime] = lesson.time_les;
+                    const isDuringLesson = (
+                        (time24[0] > startTime[0] || (time24[0] === startTime[0] && time24[1] >= startTime[1])) &&
+                        (time24[0] < endTime[0] || (time24[0] === endTime[0] && time24[1] <= endTime[1]))
+                    );
+
+                    if (isDuringLesson) {
+                        return true; // Преподаватель занят
                     }
                 }
             }
         }
     }
-
-    // Обновляем стек преподавателей
-    let newInstructorKey = instructorStack.shift();
-    instructorStack.push(newInstructorKey);
-    console.log("Изменённая очередь:", instructorStack);
-
-    if (closestInstructor) {
-        return [closestInstructor, `Этаж ${closestFloor}`, instuct_id];
-    } else {
-        return "Нет доступных преподавателей.";
-    }
+    return false; // Преподаватель свободен
 }
+
 
    
 
@@ -191,5 +161,4 @@ function getFloor(classroom) {
 }
 
 // Вызов функции после загрузки данных
-//console.log(findClosestClassroom(num_study, num_classroom));
-console.log(findClosestClassroom(3212));
+//console.log(findClosestClassroom(3112));
