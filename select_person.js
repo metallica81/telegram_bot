@@ -157,4 +157,4 @@ function getFloor(classroom) {
 }
 
 // Вызов функции после загрузки данных
-console.log(findClosestClassroom(3412));
+//console.log(findClosestClassroom(3412));
