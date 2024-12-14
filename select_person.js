@@ -52,7 +52,7 @@ function formatDateToDBStyle(date) {
 }
 
 // Создаем стек для очереди преподавателей (FILO)
-const instructorStack = ['data_shatsionok', 'data_vrublevskiy', 'data_homutov']; // Приоритетный порядок преподавателей
+const instructorStack = ['shatsionokSchedule', 'vrublevskiySchedule', 'homutovSchelule']; // Приоритетный порядок преподавателей
 
 // Функция для поиска ближайшей аудитории для заданного преподавателя
 function findClosestClassroom(num_classroom) {
@@ -62,9 +62,9 @@ function findClosestClassroom(num_classroom) {
 
     // Связываем преподавателей с их аудиториями
     const instructorClassroomsMap = {
-        data_shatsionok: shatsionokFixedClassrooms,
-        data_vrublevskiy: vrublevskiyFixedClassrooms,
-        data_homutov: homutovFixedClassroms
+        shatsionokSchedule: shatsionokFixedClassrooms,
+        vrublevskiySchedule: vrublevskiyFixedClassrooms,
+        homutovSchelule: homutovFixedClassroms
     };
 
     // Определяем, кто закреплён за текущей аудиторией
@@ -131,9 +131,9 @@ function checkIfInstructorBusy(instructor, currentFormattedDate, time24) {
             if (Array.isArray(lessonsArray) && lessonsArray[0] === currentFormattedDate) {
                 for (let i = 1; i < lessonsArray.length; i++) {
                     const lesson = lessonsArray[i];
-                    if (!lesson.time_les || !Array.isArray(lesson.time_les)) continue;
+                    if (!lesson.lessonTime || !Array.isArray(lesson.lessonTime)) continue;
 
-                    const [startTime, endTime] = lesson.time_les;
+                    const [startTime, endTime] = lesson.lessonTime;
                     const isDuringLesson = (
                         (time24[0] > startTime[0] || (time24[0] === startTime[0] && time24[1] >= startTime[1])) &&
                         (time24[0] < endTime[0] || (time24[0] === endTime[0] && time24[1] <= endTime[1]))
@@ -149,10 +149,6 @@ function checkIfInstructorBusy(instructor, currentFormattedDate, time24) {
     return false; // Преподаватель свободен
 }
 
-
-   
-
-
 module.exports = { findClosestClassroom }; // Экспортирую функцию для использозвания внутри бота
 
 // Функция для получения этажа из номера аудитории
@@ -161,4 +157,4 @@ function getFloor(classroom) {
 }
 
 // Вызов функции после загрузки данных
-//console.log(findClosestClassroom(3112));
+console.log(findClosestClassroom(3412));
