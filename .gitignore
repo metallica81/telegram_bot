@@ -1,6 +1,7 @@
 # Игнорировать директории .VirtualBox и .vscode
 .VirtualBox/
 .vscode/
+node_modules/
 
 # Игнорировать временные файлы системы
 *.log
