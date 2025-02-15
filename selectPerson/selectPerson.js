@@ -17,8 +17,6 @@ const __dirname = path.dirname(__filename);
 // Используем path.resolve для корректного формирования пути
 const dataPath = path.resolve(__dirname, '..', 'dataBase/', 'dataBase.json');  // Путь к файлу
 
-let countCommonOrders = 0;
-
 // Загрузка базы данных (синхронно, чтобы гарантировать доступность данных)
 let data;
 try {

@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import { Bot, Keyboard, MemorySessionStorage, session } from 'grammy';
 import { findStaff } from './selectPerson/selectPerson.js'; // Импортирую файл для получения нужного преподавателя
+import { sendOrder } from './sendMessage.js';
 
 // Создаем бота
 const bot = new Bot(process.env.BOT_API_KEY);
@@ -15,6 +16,7 @@ bot.use(session({ initial: () => ({ step: 'waiting_for_classroom' }), storage })
 
 // Глобальные переменные
 let chatId; //1140094825        //885326963
+let countCommonOrders = 0;
 let num_study;
 let num_classroom;
 let problem_case_1;
@@ -31,20 +33,7 @@ bot.command('start', async (ctx) => {
     await ctx.reply('Введите номер аудитории, в которой вы находитесь');
 });
 
-// Функция для отправки сообщения пользователю по `chat_id`
-async function sendMessageToUser(chatId, message) {
-    if (!chatId || isNaN(chatId)) {
-        console.error("Некорректный chatId:", chatId);
-        return;
-    }
 
-    try {
-        await bot.api.sendMessage(chatId, message);
-        console.log("Сообщение отправлено!");
-    } catch (error) {
-        console.error("Ошибка при отправке сообщения:", error);
-    }
-}
 
 // Обработчик для обычных кнопок
 bot.on('message', async (ctx) => {
@@ -134,8 +123,9 @@ bot.on('message', async (ctx) => {
             await ctx.reply(`Сотрудник будет вызван: ${closestInstructor}. Спасибо за заявку!`, { reply_markup: { remove_keyboard: true } });
     
             // Отправляем сообщение с назначением сотрудника
-            await sendMessageToUser(instuct_id, `Примите заявку, аудитория ${num_classroom}\n${global_problem}\nПримечание: ${comment}`);
+            await sendOrder(instuct_id, `Примите заявку, аудитория ${num_classroom}\n${global_problem}\nПримечание: ${comment}`);
             ctx.session.step = 'completed';  // Завершаем заявку
+            countCommonOrders++;
         } else if (messageText === 'Не вызываем') {
             // Обработка отказа от вызова сотрудника
             await ctx.reply('Заявка не будет продолжена. Всего доброго!', { reply_markup: { remove_keyboard: true } });
