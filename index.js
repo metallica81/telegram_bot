@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import { Bot, Keyboard, MemorySessionStorage, session } from 'grammy';
-import { findStaff } from './selectPerson/select_person.js'; // Импортирую файл для получения нужного преподавателя
+import { findStaff } from './selectPerson/selectPerson.js'; // Импортирую файл для получения нужного преподавателя
 
 // Создаем бота
 const bot = new Bot(process.env.BOT_API_KEY);

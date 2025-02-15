@@ -5,7 +5,7 @@ import moment from 'moment';
 import 'moment/locale/ru.js';  // русская локализация
 
 // импорты из своих модулей
-import { homutovFixedClassroms, shatsionokFixedClassrooms, vrublevskiyFixedClassrooms } from './connectClassroom.js'; // класс для препода
+import { shatsionokFixedClassrooms, homutovFixedClassroms, vrublevskiyFixedClassrooms } from './connectClassroom.js'; // класс для препода
 import {isInstructorBusy} from './isInstructorBusy.js';
 import {convertDate} from './convertDate.js';
 
@@ -15,7 +15,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Используем path.resolve для корректного формирования пути
-const dataPath = path.resolve(__dirname, '..', 'data_base_new.json');  // Путь к файлу
+const dataPath = path.resolve(__dirname, '..', 'dataBase/', 'dataBase.json');  // Путь к файлу
 
 let countCommonOrders = 0;
 
@@ -94,4 +94,4 @@ export function findStaff(num_classroom) {
     return "база данных повреждена или преподаватели не найдены";
 }
 
-//console.log(findClosestClassroom(3412));
+//console.log(findStaff(3112));
