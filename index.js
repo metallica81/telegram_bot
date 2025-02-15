@@ -1,6 +1,7 @@
-require('dotenv').config();
-const { Bot, Keyboard, MemorySessionStorage, session } = require('grammy');
-const { findClosestClassroom } = require('./select_person.js'); // Импортирую файл для получения нужного преподавателя
+import dotenv from 'dotenv';
+dotenv.config();
+import { Bot, Keyboard, MemorySessionStorage, session } from 'grammy';
+import { findStaff } from './selectPerson/select_person.js'; // Импортирую файл для получения нужного преподавателя
 
 // Создаем бота
 const bot = new Bot(process.env.BOT_API_KEY);
@@ -127,7 +128,7 @@ bot.on('message', async (ctx) => {
     } else if (ctx.session.step === 'waiting_for_employee_call') {
         if (messageText === 'Вызываем') {
             // Вызываем функцию для поиска ближайшего преподавателя
-            const [closestInstructor, closestFloor, instuct_id] = findClosestClassroom(num_study, num_classroom);
+            const [closestInstructor, instuct_id] = findStaff(num_study, num_classroom);
     
             // Убираем кнопки и завершаем диалог
             await ctx.reply(`Сотрудник будет вызван: ${closestInstructor}. Спасибо за заявку!`, { reply_markup: { remove_keyboard: true } });
