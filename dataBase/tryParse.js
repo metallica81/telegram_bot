@@ -2,9 +2,12 @@ import puppeteer from 'puppeteer';
 import { promises as fs } from 'fs';
 // const data_base_info = require("./data_base_new");
 
-const tgPersonalID = 885326963; // мой id
+const tgPersonalID = 7458287339;
+
+//885326963; // мой id
 //1140094825 - Валерий id 
 //5428269745 - id Павла Васильевича
+//7458287339 - second acc
 
 const fixedTimes = {
     1: [[8, 30], [9, 50]],
@@ -288,7 +291,7 @@ async function writeDataToFile() {
         };
 
         // Преобразуем объект в JSON и записываем в файл
-        await fs.writeFile('dataBase.json', JSON.stringify(combinedData, null, 4));
+        await fs.writeFile('dataBase/dataBase.json', JSON.stringify(combinedData, null, 4));
         console.log('File successfully written');
     } catch (err) {
         console.log('Error writing file:', err);
@@ -300,7 +303,7 @@ async function printData() {
         await writeDataToFile();
   
         // Читаем данные из файла после записи
-        const data = await fs.readFile('dataBase.json', 'utf8');
+        const data = await fs.readFile('dataBase/dataBase.json', 'utf8');
 
         // Парсим JSON-данные и выводим их в консоль
         console.log(JSON.stringify(JSON.parse(data), null, 2));

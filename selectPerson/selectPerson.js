@@ -29,7 +29,7 @@ try {
 // Создаем стек для очереди преподавателей (FILO)
 const instructorStack = ['shatsionokSchedule', 'vrublevskiySchedule', 'homutovSchelule'];
 
-// Функция для поиска ближайшей аудитории для заданного преподавателя
+// Функция для поиска сотрудника
 export function findStaff(num_classroom) {
     const today = moment(); // Используем текущую дату
     const time24 = [Number(moment().format('HH')), Number(moment().format('mm'))];

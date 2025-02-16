@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import { Bot, Keyboard, MemorySessionStorage, session } from 'grammy';
 import { findStaff } from './selectPerson/selectPerson.js'; // Импортирую файл для получения нужного преподавателя
-import { sendOrder } from './sendMessage.js';
+import { contactWithInstructor } from './contactWithInstructor.js';
 
 // Создаем бота
 const bot = new Bot(process.env.BOT_API_KEY);
@@ -29,7 +29,7 @@ bot.command('start', async (ctx) => {
     // Сброс состояния сессии при начале новой заявки
     chatId = ctx.chat.id;
     ctx.session.step = 'waiting_for_pair_number';
-    //await ctx.reply(`Твой ID ${chatId}`);
+    // await ctx.reply(`Твой ID ${chatId}`);
     await ctx.reply('Введите номер аудитории, в которой вы находитесь');
 });
 
@@ -37,6 +37,7 @@ bot.command('start', async (ctx) => {
 
 // Обработчик для обычных кнопок
 bot.on('message', async (ctx) => {
+    console.log('Преподаватель отвечает:', ctx.chat.id, 'Шаг у него при ответе:', ctx.session.step);
     const messageText = ctx.message.text;
     console.log(`Received message: ${messageText}, Current step: ${ctx.session.step}`);
 
@@ -51,9 +52,12 @@ bot.on('message', async (ctx) => {
                 reply_markup: problemKeyBoard
             });
         } else {
-            await ctx.reply('Пожалуйста, введите корректный номер текущей пары.');
+            await ctx.reply('Пожалуйста, введите корректный номер аудитории.');
         }
-    } else if (ctx.session.step === 'waiting_for_problem') {
+    } 
+    
+    
+    else if (ctx.session.step === 'waiting_for_problem') {
         if (messageText === 'Да') {
             console.log("User selected 'Да' - asking for equipment issues");
 
@@ -78,7 +82,10 @@ bot.on('message', async (ctx) => {
             problem_case_1 = 'Проблемы с программой';
             ctx.session.step = 'problem_program_selected';  // Переход к следующему этапу
         }
-    } else if (ctx.session.step === 'problem_equipment_selected' || ctx.session.step === 'problem_program_selected') {
+    } 
+    
+    
+    else if (ctx.session.step === 'problem_equipment_selected' || ctx.session.step === 'problem_program_selected') {
         problem_case_2 = messageText;
         global_problem = problem_case_1 + ', а именно, ' + problem_case_2;
         console.log("global_problem=", global_problem);
@@ -88,7 +95,10 @@ bot.on('message', async (ctx) => {
             reply_markup: noteKeyboard 
         });
         ctx.session.step = 'waiting_for_note';  // Переход к этапу добавления примечания
-    } else if (ctx.session.step === 'waiting_for_note') {
+    } 
+    
+    
+    else if (ctx.session.step === 'waiting_for_note') {
         if (messageText === 'Добавить') {
             await ctx.reply('Пожалуйста, введите ваше примечание:');
             ctx.session.step = 'waiting_for_comment';
@@ -101,7 +111,10 @@ bot.on('message', async (ctx) => {
             await ctx.reply('Вызываем сотрудника?', { reply_markup: callEmployeeKeyboard });
             ctx.session.step = 'waiting_for_employee_call';  // Переход к запросу о вызове сотрудника
         }
-    } else if (ctx.session.step === 'waiting_for_comment') {
+    } 
+
+    
+    else if (ctx.session.step === 'waiting_for_comment') {
         comment = messageText;
         console.log("comment=", comment);
 
@@ -114,23 +127,34 @@ bot.on('message', async (ctx) => {
 
         // Переход к этапу вызова сотрудника
         ctx.session.step = 'waiting_for_employee_call';  // Переход к запросу о вызове сотрудника
-    } else if (ctx.session.step === 'waiting_for_employee_call') {
+    } 
+
+    
+    else if (ctx.session.step === 'waiting_for_employee_call') {
         if (messageText === 'Вызываем') {
-            // Вызываем функцию для поиска ближайшего преподавателя
-            const [closestInstructor, instuct_id] = findStaff(num_study, num_classroom);
+            // Вызываем функцию для поиска преподавателя
+            const [instuctor_name, instructor_id] = findStaff(num_classroom);
     
             // Убираем кнопки и завершаем диалог
-            await ctx.reply(`Сотрудник будет вызван: ${closestInstructor}. Спасибо за заявку!`, { reply_markup: { remove_keyboard: true } });
-    
+            //await ctx.reply(`Сотрудник будет вызван: ${instuctor}. Спасибо за заявку!`, { reply_markup: { remove_keyboard: true } });
+            ctx.session.step = 'send_order';  // Отправляем сотруднику
             // Отправляем сообщение с назначением сотрудника
-            await sendOrder(instuct_id, `Примите заявку, аудитория ${num_classroom}\n${global_problem}\nПримечание: ${comment}`);
-            ctx.session.step = 'completed';  // Завершаем заявку
+            console.log('Отправитель:', ctx.chat.id, 'Шаг:', ctx.session.step);
+
+            await contactWithInstructor(instructor_id, num_classroom, global_problem, comment, ctx, messageText)
+            
+            console.log('Отправитель:', ctx.chat.id, 'Шаг после отправки:', ctx.session.step);
+
             countCommonOrders++;
         } else if (messageText === 'Не вызываем') {
             // Обработка отказа от вызова сотрудника
             await ctx.reply('Заявка не будет продолжена. Всего доброго!', { reply_markup: { remove_keyboard: true } });
-            ctx.session.step = 'completed';  // Завершаем заявку
+            ctx.session.step = 'discontinue_order';
         }
+    }
+    else if (ctx.session.step === 'get_response') {
+        console.log('get_response')
+        await contactWithInstructor(instructor_id, num_classroom, global_problem, comment, ctx, messageText)
     }
     
 });
