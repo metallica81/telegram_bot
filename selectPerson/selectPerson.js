@@ -58,22 +58,22 @@ export function findStaff(num_classroom) {
             const isBusy = isInstructorBusy(instructor, currentFormattedDate, time24);
 
             if (!isBusy) {
-                console.log(`Преподаватель ${instructor.name} свободен.`);
+                console.log(`Прикреплённый преподаватель ${instructor.name} свободен.`);
                 return [instructor.name, instructor.tg_id];
             } else {
-                console.log(`Преподаватель ${instructor.name} занят.`);
+                console.log(`Прикреплённый преподаватель ${instructor.name} занят.`);
             }
         }
     }
 
-    // Если прикреплённый преподаватель занят, ищем других свободных преподавателей
+    // Если прикреплённый преподаватель занят, ищем первого свободного из очереди
     for (const instructorKey of instructorStack) {
         const instructor = data[instructorKey];
         if (!instructor) continue;
 
         const isBusy = isInstructorBusy(instructor, currentFormattedDate, time24);
         if (!isBusy) {
-            console.log(`Свободный преподаватель найден: ${instructor.name}`);
+            console.log(`Свободный и первый из очереди найден: ${instructor.name}`);
             return [instructor.name, instructor.tg_id];
         } else {
             console.log(`Преподаватель ${instructor.name} занят.`);

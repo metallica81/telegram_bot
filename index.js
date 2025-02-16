@@ -4,6 +4,7 @@ import { Bot, Keyboard } from 'grammy';
 import { findStaff } from './selectPerson/selectPerson.js'; // Импорт функции для получения нужного преподавателя
 import { startConnectWithInsctructor } from './connectingWithInstructor/startConnectWithInsctructor.js';
 import { continueWithInstructor } from './connectingWithInstructor/continueWithInstructor.js';
+import { redirectOrder } from './connectingWithInstructor/redirectOrder.js';
 
 // Создаем бота
 const bot = new Bot(process.env.BOT_API_KEY);
@@ -120,7 +121,11 @@ bot.on('message', async (ctx) => {
             // Убираем кнопки и завершаем диалог
             await ctx.reply(`Отправляем заявку сотруднику`, { reply_markup: { remove_keyboard: true } });
             userSteps.set(ctx.chat.id, 'waiting_for_send_order'); // Шаг отправки заявки сотруднику
-            await startConnectWithInsctructor(instructor_id, num_classroom, global_problem, comment, ctx, messageText, userSteps);
+
+            const requestData =  [instructor_id, num_classroom, global_problem, comment, messageText];
+            await startConnectWithInsctructor(ctx, userSteps, ...requestData);
+
+
 
             countCommonOrders++;
         } else if (messageText === 'Не вызываем') {
@@ -131,8 +136,14 @@ bot.on('message', async (ctx) => {
     } 
     
     else if (currentStep === 'waiting_for_response') {
-        await continueWithInstructor(chatId, ctx, userSteps, instructor_name);
-        
+        if (messageText == 'Принять') {
+            await continueWithInstructor(chatId, ctx, userSteps, instructor_name);
+        }
+
+        else if (messageText == 'Перенаправить') {
+            const params = [instructor_id, num_classroom, global_problem, comment, messageText]
+            await redirectOrder(ctx, userSteps, ...params);
+        }
     }
 });
 

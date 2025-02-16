@@ -4,7 +4,8 @@ dotenv.config();
 const bot = new Bot(process.env.BOT_API_KEY);
 
 // Функция для отправки сообщения сотруднику
-export async function startConnectWithInsctructor(instructor_id, num_classroom, global_problem, comment, ctx, messageText, userSteps) {
+export async function startConnectWithInsctructor(ctx, userSteps, ...params) {
+    const [instructor_id, num_classroom, global_problem, comment, messageText] = params; // rest-оператор
 
     const currentStep = userSteps.get(ctx.chat.id);
 
