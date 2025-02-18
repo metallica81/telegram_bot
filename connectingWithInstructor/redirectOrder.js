@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 const bot = new Bot(process.env.BOT_API_KEY);
 
+import { getRestPersons } from './getRestPersons.js';
+
 // Функция для отправки сообщения сотруднику
 export async function redirectOrder(ctx, userSteps, ...params) {
 

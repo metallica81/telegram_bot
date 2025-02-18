@@ -61,7 +61,10 @@ bot.on('message', async (ctx) => {
         } else {
             await ctx.reply('Пожалуйста, введите корректный номер аудитории.');
         }
-    } else if (currentStep === 'waiting_for_problem') {
+    } 
+    
+    
+    else if (currentStep === 'waiting_for_problem') {
         if (messageText === 'Да') {
             console.log("User selected 'Да' - asking for equipment issues");
 
@@ -86,7 +89,11 @@ bot.on('message', async (ctx) => {
             problem_case_1 = 'Проблемы с программой';
             userSteps.set(ctx.chat.id, 'problem_program_selected');
         }
-    } else if (currentStep === 'problem_equipment_selected' || currentStep === 'problem_program_selected') {
+    } 
+    
+    
+    
+    else if (currentStep === 'problem_equipment_selected' || currentStep === 'problem_program_selected') {
         problem_case_2 = messageText;
         global_problem = problem_case_1 + ', а именно, ' + problem_case_2;
         console.log("global_problem=", global_problem);
@@ -96,7 +103,11 @@ bot.on('message', async (ctx) => {
             reply_markup: noteKeyboard 
         });
         userSteps.set(ctx.chat.id, 'waiting_for_note');
-    } else if (currentStep === 'waiting_for_note') {
+    } 
+    
+    
+    
+    else if (currentStep === 'waiting_for_note') {
         if (messageText === 'Добавить') {
             await ctx.reply('Пожалуйста, введите ваше примечание:');
             userSteps.set(ctx.chat.id, 'waiting_for_comment');
@@ -109,7 +120,10 @@ bot.on('message', async (ctx) => {
             await ctx.reply('Вызываем сотрудника?', { reply_markup: callEmployeeKeyboard });
             userSteps.set(ctx.chat.id, 'waiting_for_employee_call');
         }
-    } else if (currentStep === 'waiting_for_comment') {
+    } 
+    
+    
+    else if (currentStep === 'waiting_for_comment') {
         comment = messageText;
         console.log("comment=", comment);
 
@@ -121,7 +135,11 @@ bot.on('message', async (ctx) => {
         await ctx.reply('Вызываем сотрудника?', { reply_markup: callEmployeeKeyboard });
 
         userSteps.set(ctx.chat.id, 'waiting_for_employee_call');
-    } else if (currentStep === 'waiting_for_employee_call') {
+    } 
+    
+    
+    
+    else if (currentStep === 'waiting_for_employee_call') {
         if (messageText === 'Вызываем') {
             // Вызываем функцию для поиска преподавателя
             [instructor_name, instructor_id, isChangeQueue, instructorKey] = findStaff(num_classroom);
