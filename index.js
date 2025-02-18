@@ -6,6 +6,9 @@ import { startConnectWithInsctructor } from './connectingWithInstructor/startCon
 import { continueWithInstructor } from './connectingWithInstructor/continueWithInstructor.js';
 import { redirectOrder } from './connectingWithInstructor/redirectOrder.js';
 
+// Очередь для сотрудников
+import { instructorStack } from './selectPerson/selectPerson.js';
+
 // Создаем бота
 const bot = new Bot(process.env.BOT_API_KEY);
 bot.api.setMyCommands([
@@ -36,7 +39,7 @@ let [instructor_name, instructor_id] = [null, null];
 bot.on('message', async (ctx) => {
     // console.log('Преподаватель отвечает:', ctx.chat.id, 'Шаг у него при ответе:', userSteps.get(ctx.chat.id));
     const messageText = ctx.message.text;
-    console.log(`Received message: ${messageText}, Current step: ${userSteps.get(ctx.chat.id)}`);
+    //console.log(`Received message: ${messageText}, Current step: ${userSteps.get(ctx.chat.id)}`);
 
     const currentStep = userSteps.get(ctx.chat.id);
 
@@ -138,6 +141,15 @@ bot.on('message', async (ctx) => {
     else if (currentStep === 'waiting_for_response') {
         if (messageText == 'Принять') {
             await continueWithInstructor(chatId, ctx, userSteps, instructor_name);
+            
+            //Перемещаем выбранного инструктора в конец очереди
+            const index = instructorStack.indexOf(instructorKey);
+            if (index !== -1) {
+                console.log(`Перемещаем ${instructorKey} в конец очереди`);
+                instructorStack.splice(index, 1); // Удаляем из текущего места
+                instructorStack.push(instructorKey); // Добавляем в конец
+                console.log('Обновленная очередь:', [...instructorStack]); // Логируем обновленный порядок
+            } 
         }
 
         else if (messageText == 'Перенаправить') {

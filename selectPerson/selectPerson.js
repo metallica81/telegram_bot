@@ -4,10 +4,11 @@ import fs from 'fs';
 import moment from 'moment';
 import 'moment/locale/ru.js';  // русская локализация
 
-// импорты из своих модулей
-import { shatsionokFixedClassrooms, homutovFixedClassroms, vrublevskiyFixedClassrooms } from './connectClassroom.js'; // класс для препода
-import {isInstructorBusy} from './isInstructorBusy.js';
-import {convertDate} from './convertDate.js';
+// импорты своих модулей
+import { instructorClassroomsMap } from './connectClassroom.js'; // класс для препода
+import { isInstructorBusy } from './isInstructorBusy.js';
+import { convertDate } from './convertDate.js';
+import { getAssociatedInstructor } from './getAssociatedInstructor.js';
 
 // Путь к текущему файлу
 const __filename = fileURLToPath(import.meta.url);
@@ -27,7 +28,7 @@ try {
 }
 
 // Создаем стек для очереди преподавателей (FILO)
-const instructorStack = ['shatsionokSchedule', 'vrublevskiySchedule', 'homutovSchelule'];
+export const instructorStack = ['shatsionokSchedule', 'vrublevskiySchedule', 'homutovSchelule'];
 
 // Функция для поиска сотрудника
 export function findStaff(num_classroom) {
@@ -35,21 +36,8 @@ export function findStaff(num_classroom) {
     const time24 = [Number(moment().format('HH')), Number(moment().format('mm'))];
     const currentFormattedDate = convertDate(today); // Форматируем дату для поиска в базе
 
-    // Связываем преподавателей с их аудиториями
-    const instructorClassroomsMap = {
-        shatsionokSchedule: shatsionokFixedClassrooms,
-        vrublevskiySchedule: vrublevskiyFixedClassrooms,
-        homutovSchelule: homutovFixedClassroms
-    };
-
     // Определяем, кто закреплён за текущей аудиторией
-    let associatedInstructor = null;
-    for (const [instructorKey, classrooms] of Object.entries(instructorClassroomsMap)) {
-        if (classrooms.includes(num_classroom)) {
-            associatedInstructor = instructorKey;
-            break;
-        }
-    }
+    let associatedInstructor = getAssociatedInstructor(num_classroom, instructorClassroomsMap)
 
     // Если прикреплённый преподаватель найден, проверяем, занят ли он
     if (associatedInstructor) {
@@ -65,7 +53,7 @@ export function findStaff(num_classroom) {
             }
         }
     }
-
+    console.log(`Начальная очередь`, [...instructorStack])
     // Если прикреплённый преподаватель занят, ищем первого свободного из очереди
     for (const instructorKey of instructorStack) {
         const instructor = data[instructorKey];
@@ -73,8 +61,10 @@ export function findStaff(num_classroom) {
 
         const isBusy = isInstructorBusy(instructor, currentFormattedDate, time24);
         if (!isBusy) {
+            
             console.log(`Свободный и первый из очереди найден: ${instructor.name}`);
-            return [instructor.name, instructor.tg_id];
+
+            return [instructor.name, instructor.tg_id, true, instructorKey];
         } else {
             console.log(`Преподаватель ${instructor.name} занят.`);
         }
@@ -85,11 +75,11 @@ export function findStaff(num_classroom) {
     const fallbackInstructor = data[fallbackInstructorKey];
     if (fallbackInstructor) {
         console.log(`Все преподаватели заняты. Сообщение отправляется первому из очереди: ${fallbackInstructor.name}`);
-        return [fallbackInstructor.name, fallbackInstructor.tg_id];
+        return [fallbackInstructor.name, fallbackInstructor.tg_id, true, fallbackInstructorKey];
     }
 
     console.log("база данных повреждена или преподаватели не найдены");
     return "база данных повреждена или преподаватели не найдены";
 }
 
-//console.log(findStaff(3112));
+//console.log(findStaff(212));

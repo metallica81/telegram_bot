@@ -28,4 +28,10 @@ const homutovFixedClassroms = [
     3513, 3514, 3515, 3516
 ];
 
-export {shatsionokFixedClassrooms, vrublevskiyFixedClassrooms, homutovFixedClassroms}
+const instructorClassroomsMap = {
+    shatsionokSchedule: shatsionokFixedClassrooms,
+    vrublevskiySchedule: vrublevskiyFixedClassrooms,
+    homutovSchelule: homutovFixedClassroms
+};
+
+export { instructorClassroomsMap }
