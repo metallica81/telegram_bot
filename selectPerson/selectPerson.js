@@ -1,6 +1,3 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
-import fs from 'fs';
 import moment from 'moment';
 import 'moment/locale/ru.js';  // русская локализация
 
@@ -9,23 +6,9 @@ import { instructorClassroomsMap } from './connectClassroom.js'; // класс �
 import { isInstructorBusy } from './isInstructorBusy.js';
 import { convertDate } from './convertDate.js';
 import { getAssociatedInstructor } from './getAssociatedInstructor.js';
+import { getDataBase } from '../dataBase/getDataBase.js';
 
-// Путь к текущему файлу
-const __filename = fileURLToPath(import.meta.url);
-// Путь к директории текущего файла
-const __dirname = path.dirname(__filename);
-
-// Используем path.resolve для корректного формирования пути
-const dataPath = path.resolve(__dirname, '..', 'dataBase/', 'dataBase.json');  // Путь к файлу
-
-// Загрузка базы данных (синхронно, чтобы гарантировать доступность данных)
-let data;
-try {
-    const jsonData = fs.readFileSync(dataPath, 'utf8');
-    data = JSON.parse(jsonData);
-} catch (err) {
-    console.error("Ошибка при чтении файла базы данных", err);
-}
+let data = getDataBase(); // Вызвали базу данных
 
 // Создаем стек для очереди преподавателей (FILO)
 export const instructorStack = ['shatsionokSchedule', 'vrublevskiySchedule', 'homutovSchelule'];
@@ -85,4 +68,4 @@ export function findStaff(num_classroom) {
     return "база данных повреждена или преподаватели не найдены";
 }
 
-//console.log(findStaff(212));
+console.log(findStaff(212));
