@@ -34,7 +34,12 @@ bot.command('start', async (ctx) => {
     userSteps.set(chatId, 'waiting_for_classroom'); // Устанавливаем начальный шаг
     await ctx.reply('Введите номер аудитории, в которой вы находитесь');
 });
-let [instructor_name, instructor_id] = [null, null];
+
+
+let [instructor_name, instructor_id, isChangeQueue, instructorKey] = [null, null, null, null];
+
+
+
 // Обработчик для обычных сообщений
 bot.on('message', async (ctx) => {
     // console.log('Преподаватель отвечает:', ctx.chat.id, 'Шаг у него при ответе:', userSteps.get(ctx.chat.id));
@@ -119,7 +124,7 @@ bot.on('message', async (ctx) => {
     } else if (currentStep === 'waiting_for_employee_call') {
         if (messageText === 'Вызываем') {
             // Вызываем функцию для поиска преподавателя
-            [instructor_name, instructor_id] = findStaff(num_classroom);
+            [instructor_name, instructor_id, isChangeQueue, instructorKey] = findStaff(num_classroom);
             
             // Убираем кнопки и завершаем диалог
             await ctx.reply(`Отправляем заявку сотруднику`, { reply_markup: { remove_keyboard: true } });
@@ -141,15 +146,19 @@ bot.on('message', async (ctx) => {
     else if (currentStep === 'waiting_for_response') {
         if (messageText == 'Принять') {
             await continueWithInstructor(chatId, ctx, userSteps, instructor_name);
+
+            if (isChangeQueue) {
+
+                //Перемещаем выбранного инструктора в конец очереди
+                const index = instructorStack.indexOf(instructorKey);
+                if (index !== -1) {
+                    //console.log(`Перемещаем ${instructorKey} в конец очереди`);
+                    instructorStack.splice(index, 1); // Удаляем из текущего места
+                    instructorStack.push(instructorKey); // Добавляем в конец
+                    //console.log('Обновленная очередь:', [...instructorStack]); // Логируем обновленный порядок
+                } 
+            }
             
-            //Перемещаем выбранного инструктора в конец очереди
-            const index = instructorStack.indexOf(instructorKey);
-            if (index !== -1) {
-                console.log(`Перемещаем ${instructorKey} в конец очереди`);
-                instructorStack.splice(index, 1); // Удаляем из текущего места
-                instructorStack.push(instructorKey); // Добавляем в конец
-                console.log('Обновленная очередь:', [...instructorStack]); // Логируем обновленный порядок
-            } 
         }
 
         else if (messageText == 'Перенаправить') {

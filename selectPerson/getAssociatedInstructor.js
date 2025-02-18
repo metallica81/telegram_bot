@@ -2,7 +2,7 @@
 export function getAssociatedInstructor(num_classroom, instructorClassroomsMap) {
     let associatedInstructor = null;
     for (const [instructorKey, classrooms] of Object.entries(instructorClassroomsMap)) {
-        if (classrooms.includes(num_classroom)) {
+        if (classrooms.includes(+num_classroom)) {
             return associatedInstructor = instructorKey;
         }
     }

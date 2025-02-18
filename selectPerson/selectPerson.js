@@ -41,21 +41,23 @@ export function findStaff(num_classroom) {
 
     // Если прикреплённый преподаватель найден, проверяем, занят ли он
     if (associatedInstructor) {
+        console.log(`Начальная очередь`, [...instructorStack])
         const instructor = data[associatedInstructor];
         if (instructor) {
             const isBusy = isInstructorBusy(instructor, currentFormattedDate, time24);
 
             if (!isBusy) {
                 console.log(`Прикреплённый преподаватель ${instructor.name} свободен.`);
-                return [instructor.name, instructor.tg_id];
+                return [instructor.name, instructor.tg_id, false, associatedInstructor];
             } else {
                 console.log(`Прикреплённый преподаватель ${instructor.name} занят.`);
             }
         }
     }
-    console.log(`Начальная очередь`, [...instructorStack])
+    
     // Если прикреплённый преподаватель занят, ищем первого свободного из очереди
     for (const instructorKey of instructorStack) {
+        console.log(`Начальная очередь`, [...instructorStack])
         const instructor = data[instructorKey];
         if (!instructor) continue;
 
@@ -70,12 +72,13 @@ export function findStaff(num_classroom) {
         }
     }
 
+    console.log(`Начальная очередь`, [...instructorStack])
     // Если все преподаватели заняты, отправляем первому из очереди
-    const fallbackInstructorKey = instructorStack[0];
-    const fallbackInstructor = data[fallbackInstructorKey];
-    if (fallbackInstructor) {
-        console.log(`Все преподаватели заняты. Сообщение отправляется первому из очереди: ${fallbackInstructor.name}`);
-        return [fallbackInstructor.name, fallbackInstructor.tg_id, true, fallbackInstructorKey];
+    const instructorKey = instructorStack[0];
+    const instructor = data[instructorKey];
+    if (instructor) {
+        console.log(`Все преподаватели заняты. Сообщение отправляется первому из очереди: ${instructor.name}`);
+        return [instructor.name, instructor.tg_id, true, instructorKey];
     }
 
     console.log("база данных повреждена или преподаватели не найдены");
