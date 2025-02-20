@@ -5,6 +5,8 @@ import { findStaff } from './selectPerson/selectPerson.js'; // Импорт фу
 import { startConnectWithInsctructor } from './connectingWithInstructor/startConnectWithInsctructor.js';
 import { continueWithInstructor } from './connectingWithInstructor/continueWithInstructor.js';
 import { redirectOrder } from './connectingWithInstructor/redirectOrder.js';
+import { getEnName } from './selectPerson/getEnName.js';
+import { getDataBase } from './dataBase/getDataBase.js';
 
 // Очередь для сотрудников
 import { instructorStack } from './selectPerson/selectPerson.js';
@@ -26,6 +28,7 @@ let problem_case_1;
 let problem_case_2;
 let global_problem;
 let comment = "отсутствует";
+const data = getDataBase();
 
 // Команда /start для начала диалога
 bot.command('start', async (ctx) => {
@@ -146,14 +149,10 @@ bot.on('message', async (ctx) => {
             
             // Убираем кнопки и завершаем диалог
             await ctx.reply(`Отправляем заявку сотруднику`, { reply_markup: { remove_keyboard: true } });
-            userSteps.set(ctx.chat.id, 'waiting_for_send_order'); // Шаг отправки заявки сотруднику
 
             const requestData =  [instructor_id, num_classroom, global_problem, comment, messageText];
             await startConnectWithInsctructor(ctx, userSteps, ...requestData);
 
-
-
-            countCommonOrders++;
         } else if (messageText === 'Не вызываем') {
             // Обработка отказа от вызова сотрудника
             await ctx.reply('Заявка не будет продолжена. Всего доброго!', { reply_markup: { remove_keyboard: true } });
@@ -161,10 +160,9 @@ bot.on('message', async (ctx) => {
         }
     } 
     
-    else if (currentStep === 'waiting_for_response') {
+    else if (currentStep === 'waiting_for_instructor_response') {
         if (messageText == 'Принять') {
             await continueWithInstructor(chatId, ctx, userSteps, instructor_name);
-
             if (isChangeQueue) {
 
                 //Перемещаем выбранного инструктора в конец очереди
@@ -176,13 +174,26 @@ bot.on('message', async (ctx) => {
                     //console.log('Обновленная очередь:', [...instructorStack]); // Логируем обновленный порядок
                 } 
             }
-            
         }
 
         else if (messageText == 'Перенаправить') {
             const params = [instructor_id, instructorKey, instructor_name, 
                 num_classroom, global_problem, comment, messageText]
             await redirectOrder(ctx, userSteps, ...params);
+        }
+
+        else {
+            try {
+                let instructor = getEnName(messageText, data);
+                console.log(`instructorEN:${instructor}`);
+                console.log(instructor_name)
+                if (instructorStack.includes(instructor)) {
+                    const requestData =  [instructor_id, num_classroom, global_problem, comment, messageText];
+                    await startConnectWithInsctructor(ctx, userSteps, ...requestData);
+                }
+            } catch (error) {
+                console.error(`Ошибка: ${error}`)
+            }
         }
     }
 });

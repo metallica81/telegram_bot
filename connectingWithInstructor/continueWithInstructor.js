@@ -20,16 +20,11 @@ export async function continueWithInstructor(chatId, ctx, userSteps, instructor_
 
         await bot.api.sendMessage(chatId, message);
         console.log("Сообщение отправлено заказчику!");
-        
-        // Обновляем шаг сессии
-        userSteps.set(chatId, 'waiting_for_response'); // Сохраняем шаг для преподавателя
-        // console.log('Получатель (заказчик):', chatId, 'Шаг после отправки:', userSteps.get(ctx.chat.id));
 
-        
+        // Обновляем шаг сессии
+        userSteps.set(instructor_id, 'waiting_for_instructor_response');
 
     } catch (error) {
         console.error("Ошибка при отправке сообщения:", error);
     }
-    
-    
 }

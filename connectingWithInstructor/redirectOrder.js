@@ -3,9 +3,12 @@ import dotenv from 'dotenv';
 
 import { getRestPersons } from './getRestPersons.js';
 import { instructorStack } from '../selectPerson/selectPerson.js'
+import { getInstructorNameFromEn } from '../selectPerson/getEnName.js';
+import { getDataBase } from '../dataBase/getDataBase.js';
 
 dotenv.config();
 const bot = new Bot(process.env.BOT_API_KEY);
+const data = getDataBase();
 
 // Функция для отправки сообщения сотруднику
 export async function redirectOrder(ctx, userSteps, ...params) {
@@ -22,13 +25,22 @@ export async function redirectOrder(ctx, userSteps, ...params) {
 
     try {
         // Обновляем шаг сессии
-        userSteps.set(instructor_id, 'waiting_for_redirect_order'); // Сохраняем шаг для преподавателя
+        userSteps.set(instructor_id, 'waiting_for_instructor_response'); // Сохраняем шаг для преподавателя
         const restPersons = getRestPersons(instructorKey, instructorStack);
 
-        // Кнопки для принятия заявки
-        const problemKeyBoard = new Keyboard()
-        .text(restPersons[0]).row()
-        .text(restPersons[1]).resized();
+         // Создаем клавиатуру
+        const problemKeyBoard = new Keyboard();
+
+        // Добавляем кнопки динамически
+        restPersons.forEach((person, index) => {
+            if (index % 2 === 0) {
+                problemKeyBoard.row(); // Начинаем новую строку после каждых двух кнопок
+            }
+            problemKeyBoard.text(getInstructorNameFromEn(person, data));
+        });
+
+        // Устанавливаем размер клавиатуры
+        problemKeyBoard.resized();
 
         await bot.api.sendMessage(instructor_id, 'Кому перенаправим?', {
             reply_markup: problemKeyBoard
