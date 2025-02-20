@@ -7,6 +7,8 @@ import { isInstructorBusy } from './isInstructorBusy.js';
 import { convertDate } from './convertDate.js';
 import { getAssociatedInstructor } from './getAssociatedInstructor.js';
 import { getDataBase } from '../dataBase/getDataBase.js';
+import { getRestPersons } from '../connectingWithInstructor/getRestPersons.js';
+import { getEnName } from './getEnName.js';
 
 let data = getDataBase(); // Вызвали базу данных
 
@@ -68,4 +70,6 @@ export function findStaff(num_classroom) {
     return "база данных повреждена или преподаватели не найдены";
 }
 
-console.log(findStaff(212));
+// console.log(getRestPersons('vrublevskiySchedule', instructorStack))
+// console.log(getEnName(findStaff(212)[0], data));
+

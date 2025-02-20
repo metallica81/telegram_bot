@@ -180,7 +180,8 @@ bot.on('message', async (ctx) => {
         }
 
         else if (messageText == 'Перенаправить') {
-            const params = [instructor_id, num_classroom, global_problem, comment, messageText]
+            const params = [instructor_id, instructorKey, instructor_name, 
+                num_classroom, global_problem, comment, messageText]
             await redirectOrder(ctx, userSteps, ...params);
         }
     }

@@ -12,7 +12,7 @@ const currentFormattedDate = convertDate(today); // Форматируем да�
 
 let data = getDataBase();
 
-const instructorStack = ['shatsionokSchedule', 'vrublevskiySchedule', 'homutovSchelule'];
+// const instructorStack = ['shatsionokSchedule', 'vrublevskiySchedule', 'homutovSchelule'];
 
 export function getRestPersons(instructor_name, instructor_stack) {
     if (instructor_stack && instructor_name.length !== 0) {
@@ -25,4 +25,4 @@ export function getRestPersons(instructor_name, instructor_stack) {
     }
 }
 
-console.log(getRestPersons('vrublevskiySchedule', instructorStack))
+//console.log(getRestPersons('vrublevskiySchedule', instructorStack))

@@ -1,3 +1,5 @@
+// import {instructorClassroomsMap} from './connectClassroom.js';
+
 // Определяем, кто закреплён за текущей аудиторией
 export function getAssociatedInstructor(num_classroom, instructorClassroomsMap) {
     let associatedInstructor = null;
@@ -9,4 +11,4 @@ export function getAssociatedInstructor(num_classroom, instructorClassroomsMap) 
      
 }
 
-// console.log(associatedInstructor(3401, instructorClassroomsMap));
+// console.log(getAssociatedInstructor(3401, instructorClassroomsMap));
