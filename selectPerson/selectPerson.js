@@ -26,7 +26,7 @@ export function findStaff(num_classroom) {
 
     // Если прикреплённый преподаватель найден, проверяем, занят ли он
     if (associatedInstructor) {
-        console.log(`Начальная очередь`, [...instructorStack])
+        console.log(`Начальная очередь из selectPerson`, [...instructorStack])
         const instructor = data[associatedInstructor];
         if (instructor) {
             const isBusy = isInstructorBusy(instructor, currentFormattedDate, time24);
@@ -42,7 +42,7 @@ export function findStaff(num_classroom) {
     
     // Если прикреплённый преподаватель занят, ищем первого свободного из очереди
     for (const instructorKey of instructorStack) {
-        console.log(`Начальная очередь`, [...instructorStack])
+        console.log(`Начальная очередь из selectPeson`, [...instructorStack])
         const instructor = data[instructorKey];
         if (!instructor) continue;
 
@@ -57,7 +57,7 @@ export function findStaff(num_classroom) {
         }
     }
 
-    console.log(`Начальная очередь`, [...instructorStack])
+    console.log(`Начальная очередь selectPeson`, [...instructorStack])
     // Если все преподаватели заняты, отправляем первому из очереди
     const instructorKey = instructorStack[0];
     const instructor = data[instructorKey];

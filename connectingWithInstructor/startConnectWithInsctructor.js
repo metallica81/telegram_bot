@@ -18,7 +18,7 @@ export async function startConnectWithInsctructor(ctx, userSteps, ...params) {
         // console.log('Получатель (преподаватель):', instructor_id, 'Шаг у него перед отправкой:', currentStep);
 
         await bot.api.sendMessage(instructor_id, message);
-        console.log("Сообщение отправлено сотруднику!");
+        //console.log("Сообщение отправлено сотруднику!");
 
         // Кнопки для принятия заявки
         const problemKeyBoard = new Keyboard().text('Принять').row().text('Перенаправить').resized();

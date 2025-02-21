@@ -30,8 +30,15 @@ let nextInstructorKey = null;
 
 export let stackForKeyBoard = instructorStack;
 
+function resetStack() {
+    stackForKeyBoard = instructorStack; // Создаём новый массив с актуальными значениями
+    console.log(`stackForKeyBoard:`, stackForKeyBoard)
+}
+
 // Команда /start для начала диалога
 bot.command('start', async (ctx) => {
+    nextInstructorKey = null;
+    resetStack(); // Обновляем stackForKeyBoard при каждом новом запуске
     // Сброс состояния сессии при начале новой заявки
     chatId = ctx.chat.id;
     userSteps.set(chatId, 'waiting_for_classroom'); // Устанавливаем начальный шаг
@@ -168,15 +175,29 @@ bot.on('message', async (ctx) => {
             await continueWithInstructor(chatId, ctx, userSteps, instructor_name);
 
             if (isChangeQueue) {
+                //console.log(nextInstructorKey)
+                function changeStack(stack, commonKey, redirectionKey) {
+                    // Если есть 
+                    const key = redirectionKey ? redirectionKey : commonKey;
 
-                //Перемещаем выбранного инструктора в конец очереди
-                const index = instructorStack.indexOf(instructorKey);
-                if (index !== -1) {
+                    //Перемещаем выбранного инструктора в конец очереди
+                    const index = stack.indexOf(key);
+                    if (index !== -1) {
                     //console.log(`Перемещаем ${instructorKey} в конец очереди`);
-                    instructorStack.splice(index, 1); // Удаляем из текущего места
-                    instructorStack.push(instructorKey); // Добавляем в конец
-                    //console.log('Обновленная очередь:', [...instructorStack]); // Логируем обновленный порядок
-                } 
+                    stack.splice(index, 1); // Удаляем из текущего места
+                    stack.push(key); // Добавляем в конец
+                    console.log('Обновленная очередь:', [...stack]); // Логируем обновленный порядок
+                    } 
+                }
+                changeStack(instructorStack, instructorKey, nextInstructorKey)
+                //Перемещаем выбранного инструктора в конец очереди
+                // const index = instructorStack.indexOf(nextInstructorKey ? nextInstructorKey : instructorKey);
+                // if (index !== -1) {
+                //     //console.log(`Перемещаем ${instructorKey} в конец очереди`);
+                //     instructorStack.splice(index, 1); // Удаляем из текущего места
+                //     instructorStack.push(instructorKey); // Добавляем в конец
+                //     console.log('Обновленная очередь:', [...instructorStack]); // Логируем обновленный порядок
+                // } 
             }
         }
 
@@ -184,7 +205,8 @@ bot.on('message', async (ctx) => {
 
             const params = [instructor_name, 
                 num_classroom, global_problem, comment, messageText]
-            nextInstructorKey ? 
+            nextInstructorKey ? // В первый раз отправляем автоматически выбранному сотруднику, а
+                                // в следующий раз уже перенаправляем нужному
             await redirectOrder(ctx, userSteps, instructor_id, nextInstructorKey, ...params):
             await redirectOrder(ctx, userSteps, instructor_id, instructorKey, ...params);
         }
@@ -193,8 +215,8 @@ bot.on('message', async (ctx) => {
             try {
                 nextInstructorKey = getEnName(messageText, data);
                 const newInstuctor = data[nextInstructorKey];
-                console.log(newInstuctor)
-                console.log(newInstuctor.tg_id)
+                //console.log(newInstuctor)
+                //console.log(newInstuctor.tg_id)
                 if (instructorStack.includes(nextInstructorKey)) {
                     const requestData =  [newInstuctor.tg_id, num_classroom, global_problem, comment, messageText];
                     await startConnectWithInsctructor(ctx, userSteps, ...requestData);
