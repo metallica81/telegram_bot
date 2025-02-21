@@ -2,7 +2,7 @@ import { Bot, Keyboard } from 'grammy';
 import dotenv from 'dotenv';
 
 import { getRestPersons } from './getRestPersons.js';
-import { instructorStack } from '../selectPerson/selectPerson.js'
+import { stackForKeyBoard } from '../index.js'
 import { getInstructorNameFromEn } from '../selectPerson/getEnName.js';
 import { getDataBase } from '../dataBase/getDataBase.js';
 
@@ -26,7 +26,7 @@ export async function redirectOrder(ctx, userSteps, ...params) {
     try {
         // Обновляем шаг сессии
         userSteps.set(instructor_id, 'waiting_for_instructor_response'); // Сохраняем шаг для преподавателя
-        const restPersons = getRestPersons(instructorKey, instructorStack);
+        const restPersons = getRestPersons(instructorKey, stackForKeyBoard);
 
          // Создаем клавиатуру
         const problemKeyBoard = new Keyboard();

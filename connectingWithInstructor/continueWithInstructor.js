@@ -6,7 +6,7 @@ const bot = new Bot(process.env.BOT_API_KEY);
 // Функция для отправки сообщения сотруднику
 export async function continueWithInstructor(chatId, ctx, userSteps, instructor_name) {
 
-    const currentStep = userSteps.get(ctx.chat.id);
+    //const currentStep = userSteps.get(ctx.chat.id);
 
     if (!chatId || isNaN(chatId)) {
         console.error("Некорректный chatId:", chatId);
@@ -22,7 +22,7 @@ export async function continueWithInstructor(chatId, ctx, userSteps, instructor_
         console.log("Сообщение отправлено заказчику!");
 
         // Обновляем шаг сессии
-        userSteps.set(instructor_id, 'waiting_for_instructor_response');
+        userSteps.set(chatId, 'waiting_for_instructor_response');
 
     } catch (error) {
         console.error("Ошибка при отправке сообщения:", error);

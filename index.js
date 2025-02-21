@@ -1,15 +1,12 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import { Bot, Keyboard } from 'grammy';
-import { findStaff } from './selectPerson/selectPerson.js'; // Импорт функции для получения нужного преподавателя
+import { findStaff, instructorStack } from './selectPerson/selectPerson.js'; // Импорт функции для получения нужного преподавателя
 import { startConnectWithInsctructor } from './connectingWithInstructor/startConnectWithInsctructor.js';
 import { continueWithInstructor } from './connectingWithInstructor/continueWithInstructor.js';
 import { redirectOrder } from './connectingWithInstructor/redirectOrder.js';
 import { getEnName } from './selectPerson/getEnName.js';
 import { getDataBase } from './dataBase/getDataBase.js';
-
-// Очередь для сотрудников
-import { instructorStack } from './selectPerson/selectPerson.js';
 
 // Создаем бота
 const bot = new Bot(process.env.BOT_API_KEY);
@@ -29,6 +26,9 @@ let problem_case_2;
 let global_problem;
 let comment = "отсутствует";
 const data = getDataBase();
+let nextInstructorKey = null;
+
+export let stackForKeyBoard = instructorStack;
 
 // Команда /start для начала диалога
 bot.command('start', async (ctx) => {
@@ -162,7 +162,11 @@ bot.on('message', async (ctx) => {
     
     else if (currentStep === 'waiting_for_instructor_response') {
         if (messageText == 'Принять') {
+            console.log(nextInstructorKey)
+            nextInstructorKey ? 
+            await continueWithInstructor(chatId, ctx, userSteps, data[nextInstructorKey].name):
             await continueWithInstructor(chatId, ctx, userSteps, instructor_name);
+
             if (isChangeQueue) {
 
                 //Перемещаем выбранного инструктора в конец очереди
@@ -177,18 +181,22 @@ bot.on('message', async (ctx) => {
         }
 
         else if (messageText == 'Перенаправить') {
-            const params = [instructor_id, instructorKey, instructor_name, 
+
+            const params = [instructor_name, 
                 num_classroom, global_problem, comment, messageText]
-            await redirectOrder(ctx, userSteps, ...params);
+            nextInstructorKey ? 
+            await redirectOrder(ctx, userSteps, instructor_id, nextInstructorKey, ...params):
+            await redirectOrder(ctx, userSteps, instructor_id, instructorKey, ...params);
         }
 
         else {
             try {
-                let instructor = getEnName(messageText, data);
-                console.log(`instructorEN:${instructor}`);
-                console.log(instructor_name)
-                if (instructorStack.includes(instructor)) {
-                    const requestData =  [instructor_id, num_classroom, global_problem, comment, messageText];
+                nextInstructorKey = getEnName(messageText, data);
+                const newInstuctor = data[nextInstructorKey];
+                console.log(newInstuctor)
+                console.log(newInstuctor.tg_id)
+                if (instructorStack.includes(nextInstructorKey)) {
+                    const requestData =  [newInstuctor.tg_id, num_classroom, global_problem, comment, messageText];
                     await startConnectWithInsctructor(ctx, userSteps, ...requestData);
                 }
             } catch (error) {
