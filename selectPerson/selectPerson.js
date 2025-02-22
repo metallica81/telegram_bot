@@ -33,7 +33,7 @@ export function findStaff(num_classroom) {
 
             if (!isBusy) {
                 console.log(`Прикреплённый преподаватель ${instructor.name} свободен.`);
-                return [instructor.name, instructor.tg_id, false, associatedInstructor];
+                return [instructor.name, instructor.tg_id, false, associatedInstructor, true];
             } else {
                 console.log(`Прикреплённый преподаватель ${instructor.name} занят.`);
             }

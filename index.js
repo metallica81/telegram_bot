@@ -7,6 +7,7 @@ import { continueWithInstructor } from './connectingWithInstructor/continueWithI
 import { redirectOrder } from './connectingWithInstructor/redirectOrder.js';
 import { getEnName } from './selectPerson/getEnName.js';
 import { getDataBase } from './dataBase/getDataBase.js';
+import { changeStack } from './connectingWithInstructor/changeStack.js'
 
 // Создаем бота
 const bot = new Bot(process.env.BOT_API_KEY);
@@ -39,6 +40,7 @@ function resetStack() {
 bot.command('start', async (ctx) => {
     nextInstructorKey = null;
     resetStack(); // Обновляем stackForKeyBoard при каждом новом запуске
+
     // Сброс состояния сессии при начале новой заявки
     chatId = ctx.chat.id;
     userSteps.set(chatId, 'waiting_for_classroom'); // Устанавливаем начальный шаг
@@ -46,7 +48,7 @@ bot.command('start', async (ctx) => {
 });
 
 
-let [instructor_name, instructor_id, isChangeQueue, instructorKey] = [null, null, null, null];
+let [instructor_name, instructor_id, isChangeQueue, instructorKey, isLinkedInstuctor] = [null, null, null, null, null];
 
 
 
@@ -152,8 +154,8 @@ bot.on('message', async (ctx) => {
     else if (currentStep === 'waiting_for_employee_call') {
         if (messageText === 'Вызываем') {
             // Вызываем функцию для поиска преподавателя
-            [instructor_name, instructor_id, isChangeQueue, instructorKey] = findStaff(num_classroom);
-            
+            [instructor_name, instructor_id, isChangeQueue, instructorKey, isLinkedInstuctor] = findStaff(num_classroom);
+            console.log(`получаем isLinked: ${isLinkedInstuctor}`)
             // Убираем кнопки и завершаем диалог
             await ctx.reply(`Отправляем заявку сотруднику`, { reply_markup: { remove_keyboard: true } });
 
@@ -169,40 +171,20 @@ bot.on('message', async (ctx) => {
     
     else if (currentStep === 'waiting_for_instructor_response') {
         if (messageText == 'Принять') {
-            console.log(nextInstructorKey)
+            //console.log(nextInstructorKey)
             nextInstructorKey ? 
             await continueWithInstructor(chatId, ctx, userSteps, data[nextInstructorKey].name):
             await continueWithInstructor(chatId, ctx, userSteps, instructor_name);
 
-            if (isChangeQueue) {
-                //console.log(nextInstructorKey)
-                function changeStack(stack, commonKey, redirectionKey) {
-                    // Если есть 
-                    const key = redirectionKey ? redirectionKey : commonKey;
-
-                    //Перемещаем выбранного инструктора в конец очереди
-                    const index = stack.indexOf(key);
-                    if (index !== -1) {
-                    //console.log(`Перемещаем ${instructorKey} в конец очереди`);
-                    stack.splice(index, 1); // Удаляем из текущего места
-                    stack.push(key); // Добавляем в конец
-                    console.log('Обновленная очередь:', [...stack]); // Логируем обновленный порядок
-                    } 
-                }
-                changeStack(instructorStack, instructorKey, nextInstructorKey)
-                //Перемещаем выбранного инструктора в конец очереди
-                // const index = instructorStack.indexOf(nextInstructorKey ? nextInstructorKey : instructorKey);
-                // if (index !== -1) {
-                //     //console.log(`Перемещаем ${instructorKey} в конец очереди`);
-                //     instructorStack.splice(index, 1); // Удаляем из текущего места
-                //     instructorStack.push(instructorKey); // Добавляем в конец
-                //     console.log('Обновленная очередь:', [...instructorStack]); // Логируем обновленный порядок
-                // } 
+            if (isChangeQueue || !isLinkedInstuctor) { // меняем очередь, если препода брали из очереди или
+                changeStack(instructorStack, instructorKey, nextInstructorKey)  // если прикреплённый перенаправил
             }
+            // isChangeQueue ? isChangeQueue : isChangeQueue = true
         }
 
         else if (messageText == 'Перенаправить') {
-
+            isLinkedInstuctor = false;
+            console.log(`меняем isLinked на false`)
             const params = [instructor_name, 
                 num_classroom, global_problem, comment, messageText]
             nextInstructorKey ? // В первый раз отправляем автоматически выбранному сотруднику, а
@@ -215,8 +197,6 @@ bot.on('message', async (ctx) => {
             try {
                 nextInstructorKey = getEnName(messageText, data);
                 const newInstuctor = data[nextInstructorKey];
-                //console.log(newInstuctor)
-                //console.log(newInstuctor.tg_id)
                 if (instructorStack.includes(nextInstructorKey)) {
                     const requestData =  [newInstuctor.tg_id, num_classroom, global_problem, comment, messageText];
                     await startConnectWithInsctructor(ctx, userSteps, ...requestData);
