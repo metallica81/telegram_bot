@@ -74,8 +74,9 @@ let parseOfficerShatsionok = (async (tgPersonalID) => {
             const data = {
                 name: null,
                 tg_id: tgPersonalID,
+                order_count: 0,
                 schedule_1th_week: [],
-                schedule_2nd_week: []
+                schedule_2nd_week: [],
             };
             
             function parse_week(weekSelector, scheduleKey) {
@@ -151,8 +152,9 @@ let parseOfficerVrublevskiy = (async (tg_PersonalID) => {
             const data = {
                 name: null,
                 tg_id: tgPersonalID,
+                order_count: 0,
                 schedule_1th_week: [],
-                schedule_2nd_week: []
+                schedule_2nd_week: [],
             };
             
             function parse_week(weekSelector, scheduleKey) {
@@ -227,8 +229,9 @@ let parseOfficerHomutov = (async (tg_PersonalID) => {
             const data = {
                 name: null,
                 tg_id: tgPersonalID,
+                order_count: 0,
                 schedule_1th_week: [],
-                schedule_2nd_week: []
+                schedule_2nd_week: [],
             };
             
             function parse_week(weekSelector, scheduleKey) {
@@ -285,6 +288,8 @@ async function writeDataToFile() {
 
         // Создаем объект с данными
         const combinedData = {
+            countCommonOrders: 0,
+            countRedirectedOrders: 0,
             shatsionokSchedule: dataShatsionok,
             vrublevskiySchedule: dataVrublevskiy,
             homutovSchelule: dataHomutov

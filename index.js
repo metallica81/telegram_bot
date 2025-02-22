@@ -6,8 +6,9 @@ import { startConnectWithInsctructor } from './connectingWithInstructor/startCon
 import { continueWithInstructor } from './connectingWithInstructor/continueWithInstructor.js';
 import { redirectOrder } from './connectingWithInstructor/redirectOrder.js';
 import { getEnName } from './selectPerson/getEnName.js';
-import { getDataBase } from './dataBase/getDataBase.js';
+import { setDataBase, getDataBase } from './dataBase/getDataBase.js';
 import { changeStack } from './connectingWithInstructor/changeStack.js'
+import { countOrders } from './countOrders.js';
 
 // Создаем бота
 const bot = new Bot(process.env.BOT_API_KEY);
@@ -20,12 +21,12 @@ const userSteps = new Map();
 
 // Глобальные переменные для хранения информации по заявке
 let chatId; // Пример chatId
-let countCommonOrders = 0;
 let num_classroom;
 let problem_case_1;
 let problem_case_2;
 let global_problem;
 let comment = "отсутствует";
+
 const data = getDataBase();
 let nextInstructorKey = null;
 
@@ -172,18 +173,30 @@ bot.on('message', async (ctx) => {
     else if (currentStep === 'waiting_for_instructor_response') {
         if (messageText == 'Принять') {
             //console.log(nextInstructorKey)
-            nextInstructorKey ? 
-            await continueWithInstructor(chatId, ctx, userSteps, data[nextInstructorKey].name):
-            await continueWithInstructor(chatId, ctx, userSteps, instructor_name);
+            if (nextInstructorKey) {
+                await continueWithInstructor(chatId, ctx, userSteps, data[nextInstructorKey].name);
+                await countOrders(nextInstructorKey, data);
+            } else {
+                await continueWithInstructor(chatId, ctx, userSteps, instructor_name);
+                await countOrders(instructorKey, data);
+            }
 
             if (isChangeQueue || !isLinkedInstuctor) { // меняем очередь, если препода брали из очереди или
                 changeStack(instructorStack, instructorKey, nextInstructorKey)  // если прикреплённый перенаправил
             }
             // isChangeQueue ? isChangeQueue : isChangeQueue = true
+            data.countCommonOrders++;
+            console.log(`все принятые заявки: ${data.countCommonOrders}`)
+            setDataBase(data); // Сохраняем изменения обратно
+            
         }
 
         else if (messageText == 'Перенаправить') {
             isLinkedInstuctor = false;
+
+            // data.countRedirectedOrders++;
+            // console.log(`перенаправленные заявки: ${data.countRedirectedOrders}`)
+            // setDataBase(data); // Сохраняем изменения обратно
             console.log(`меняем isLinked на false`)
             const params = [instructor_name, 
                 num_classroom, global_problem, comment, messageText]
@@ -191,6 +204,8 @@ bot.on('message', async (ctx) => {
                                 // в следующий раз уже перенаправляем нужному
             await redirectOrder(ctx, userSteps, instructor_id, nextInstructorKey, ...params):
             await redirectOrder(ctx, userSteps, instructor_id, instructorKey, ...params);
+
+            
         }
 
         else {
