@@ -300,6 +300,7 @@ async function writeDataToFile() {
         const combinedData = {
             countCommonOrders: allData.countCommonOrders,
             countRedirectedOrders: allData.countRedirectedOrders,
+            countOfEachClickRedirect: allData.countOfEachClickRedirect,
             shatsionokSchedule: dataShatsionok,
             vrublevskiySchedule: dataVrublevskiy,
             homutovSchelule: dataHomutov

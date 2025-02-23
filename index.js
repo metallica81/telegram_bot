@@ -30,7 +30,7 @@ let comment = "отсутствует";
 const data = getDataBase();
 let nextInstructorKey = null;
 
-export let stackForKeyBoard = instructorStack;
+export let stackForKeyBoard = instructorStack;  // отдельная очередь для распределения имён по redirect buttons
 
 function resetStack() {
     stackForKeyBoard = instructorStack; // Создаём новый массив с актуальными значениями
@@ -176,17 +176,20 @@ bot.on('message', async (ctx) => {
             if (nextInstructorKey) {
                 await continueWithInstructor(chatId, ctx, userSteps, data[nextInstructorKey].name);
                 await countOrders(nextInstructorKey, data);
+                data.countRedirectedOrders++;
             } else {
                 await continueWithInstructor(chatId, ctx, userSteps, instructor_name);
                 await countOrders(instructorKey, data);
             }
-
+            console.log(`isChangeQueue и !isLinkedInstuctor: ${isChangeQueue} || ${!isLinkedInstuctor} : ${isChangeQueue || !isLinkedInstuctor}`)
             if (isChangeQueue || !isLinkedInstuctor) { // меняем очередь, если препода брали из очереди или
                 changeStack(instructorStack, instructorKey, nextInstructorKey)  // если прикреплённый перенаправил
             }
             // isChangeQueue ? isChangeQueue : isChangeQueue = true
             data.countCommonOrders++;
             console.log(`все принятые заявки: ${data.countCommonOrders}`)
+            console.log(`redirected orders: ${data.countRedirectedOrders}`)
+            console.log(`each clickredirect: ${data.countOfEachClickRedirect}`)
             setDataBase(data); // Сохраняем изменения обратно
             
         }
@@ -194,7 +197,7 @@ bot.on('message', async (ctx) => {
         else if (messageText == 'Перенаправить') {
             isLinkedInstuctor = false;
 
-            data.countRedirectedOrders++;
+            data.countOfEachClickRedirect++;
             //console.log(`перенаправленные заявки: ${data.countRedirectedOrders}`);
 
             //console.log(`меняем isLinked на false`)
