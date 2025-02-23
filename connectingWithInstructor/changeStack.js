@@ -1,14 +1,16 @@
-export function changeStack(stack, commonKey, redirectionKey) {
-    //console.log(nextInstructorKey)
-    // Если нажали перенаправить кому-либо
-    const key = redirectionKey ? redirectionKey : commonKey;
+import { setDataBase } from '../dataBase/getDataBase.js';
 
-    //Перемещаем выбранного инструктора в конец очереди
+export function changeStack(data, commonKey, redirectionKey) {
+    const key = redirectionKey || commonKey;
+    if (!key || !data.instructorStack) return;
+
+    const stack = data.instructorStack; // Получаем массив из базы данных
     const index = stack.indexOf(key);
+
     if (index !== -1) {
-    //console.log(`Перемещаем ${instructorKey} в конец очереди`);
-    stack.splice(index, 1); // Удаляем из текущего места
-    stack.push(key); // Добавляем в конец
-    console.log('Обновленная очередь:', [...stack]); // Логируем обновленный порядок
-    } 
+        stack.push(stack.splice(index, 1)[0]); // Перемещаем в конец
+        console.log('Обновленная очередь:', [...stack]);
+
+        setDataBase(data); // Сохраняем изменения обратно в базу
+    }
 }

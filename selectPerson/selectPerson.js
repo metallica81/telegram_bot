@@ -6,15 +6,15 @@ import { instructorClassroomsMap } from './connectClassroom.js'; // класс �
 import { isInstructorBusy } from './isInstructorBusy.js';
 import { convertDate } from './convertDate.js';
 import { getAssociatedInstructor } from './getAssociatedInstructor.js';
-import { getDataBase } from '../dataBase/getDataBase.js';
+import { getDataBase, setDataBase } from '../dataBase/getDataBase.js';
 import { getRestPersons } from '../connectingWithInstructor/getRestPersons.js';
 import { getEnName } from './getEnName.js';
 
 let data = getDataBase(); // Вызвали базу данных
 
 // Создаем стек для очереди преподавателей (FILO)
-export const instructorStack = ['shatsionokSchedule', 'vrublevskiySchedule', 'homutovSchelule'];
-
+export const instructorStack = data.instructorStack;
+console.log(`instructorStack`, instructorStack)
 // Функция для поиска сотрудника
 export function findStaff(num_classroom) {
     const today = moment(); // Используем текущую дату

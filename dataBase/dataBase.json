@@ -1,11 +1,16 @@
 {
-    "countCommonOrders": 10,
+    "countCommonOrders": 17,
     "countRedirectedOrders": 4,
     "countOfEachClickRedirect": 7,
+    "instructorStack": [
+        "shatsionokSchedule",
+        "vrublevskiySchedule",
+        "homutovSchelule"
+    ],
     "shatsionokSchedule": {
         "name": "Шационок Павел Васильевич",
         "tg_id": 7458287339,
-        "order_count": 7,
+        "order_count": 12,
         "schedule_1th_week": [
             {
                 "Понедельник": [
@@ -474,7 +479,7 @@
     "vrublevskiySchedule": {
         "name": "Врублевский Константин Эдуардович",
         "tg_id": 7458287339,
-        "order_count": 1,
+        "order_count": 2,
         "schedule_1th_week": [
             {
                 "Среда": [
@@ -548,7 +553,7 @@
     "homutovSchelule": {
         "name": "Хомутов Андрей Сергеевич",
         "tg_id": 7458287339,
-        "order_count": 1,
+        "order_count": 2,
         "schedule_1th_week": [
             {
                 "Понедельник": [

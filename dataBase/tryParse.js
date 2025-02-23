@@ -301,6 +301,7 @@ async function writeDataToFile() {
             countCommonOrders: allData.countCommonOrders,
             countRedirectedOrders: allData.countRedirectedOrders,
             countOfEachClickRedirect: allData.countOfEachClickRedirect,
+            instructorStack: allData.instructorStack,
             shatsionokSchedule: dataShatsionok,
             vrublevskiySchedule: dataVrublevskiy,
             homutovSchelule: dataHomutov

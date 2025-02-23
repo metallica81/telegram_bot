@@ -183,7 +183,7 @@ bot.on('message', async (ctx) => {
             }
             console.log(`isChangeQueue и !isLinkedInstuctor: ${isChangeQueue} || ${!isLinkedInstuctor} : ${isChangeQueue || !isLinkedInstuctor}`)
             if (isChangeQueue || !isLinkedInstuctor) { // меняем очередь, если препода брали из очереди или
-                changeStack(instructorStack, instructorKey, nextInstructorKey)  // если прикреплённый перенаправил
+                changeStack(data, instructorKey, nextInstructorKey)  // если прикреплённый перенаправил
             }
             // isChangeQueue ? isChangeQueue : isChangeQueue = true
             data.countCommonOrders++;
