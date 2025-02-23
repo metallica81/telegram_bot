@@ -1,10 +1,10 @@
 {
-    "countCommonOrders": 4,
-    "countRedirectedOrders": 5,
+    "countCommonOrders": 1,
+    "countRedirectedOrders": 3,
     "shatsionokSchedule": {
         "name": "Шационок Павел Васильевич",
         "tg_id": 7458287339,
-        "order_count": 5,
+        "order_count": 0,
         "schedule_1th_week": [
             {
                 "Понедельник": [
@@ -547,7 +547,7 @@
     "homutovSchelule": {
         "name": "Хомутов Андрей Сергеевич",
         "tg_id": 7458287339,
-        "order_count": 1,
+        "order_count": 0,
         "schedule_1th_week": [
             {
                 "Понедельник": [

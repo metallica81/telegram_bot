@@ -1,7 +1,10 @@
 import puppeteer from 'puppeteer';
 import { promises as fs } from 'fs';
-// const data_base_info = require("./data_base_new");
 
+import { getDataBase } from './getDataBase.js';
+//import { instructorClassroomsMap } from '../selectPerson/connectClassroom.js';
+
+const allData = getDataBase();
 const tgPersonalID = 7458287339;
 
 //885326963; // мой id
@@ -62,32 +65,34 @@ let parseOfficerShatsionok = (async (tgPersonalID) => {
 
     let objectInstructorSchedule = await page.evaluate((
         tgPersonalID, getInstructorNameStr, 
-        getLessonsStr, getClassroomsStr, fixedTimesStr) => {
-
-        // Восстанавливаем функцию в контексте страницы
+        getLessonsStr, getClassroomsStr, 
+        fixedTimesStr, allDataStr) => {
+    
+        // Восстанавливаем функции в контексте браузера
         const getInstructorName = eval(`(${getInstructorNameStr})`);
         const getLessons = eval(`(${getLessonsStr})`);
         const getClassrooms = eval(`(${getClassroomsStr})`);
-        const fixedTimes = eval(`(${fixedTimesStr})`);
-
-        function parseSchedule() {
+        const fixedTimes = JSON.parse(fixedTimesStr);
+        const allData = JSON.parse(allDataStr); // Декодируем allData
+    
+        function parseSchedule(allData) {
             const data = {
                 name: null,
                 tg_id: tgPersonalID,
-                order_count: 0,
+                order_count: allData.shatsionokSchedule.order_count, 
                 schedule_1th_week: [],
                 schedule_2nd_week: [],
             };
-            
+    
             function parse_week(weekSelector, scheduleKey) {
                 const days = document.querySelectorAll(`${weekSelector} .show`);
                 days.forEach(day => {
                     const day_week = day.querySelector(".info-block__header-text").childNodes[0].textContent.trim();
                     const date = day.querySelector(".info-block__header-text :first-child").textContent.trim();
-
+    
                     const lessons = getLessons(day);
                     const classrooms = getClassrooms(day);
-
+    
                     // Преобразование номеров занятий в соответствующие временные интервалы
                     const lessonsInfo = lessons.map((num, index) => {
                         return {
@@ -96,29 +101,30 @@ let parseOfficerShatsionok = (async (tgPersonalID) => {
                             "classroom": classrooms[index] || null // Кабинет назначается по индексу
                         };
                     });
-
+    
                     // Добавляем расписание дня в итоговую структуру данных
                     data[scheduleKey].push({
                         [day_week]: [date].concat(lessonsInfo)
                     });
                 });
             }
-
+    
             data.name = getInstructorName();
             parse_week("#week-1", "schedule_1th_week");
             parse_week("#week-2", "schedule_2nd_week");
-
+    
             return data;
         }
-
-        return parseSchedule();
+    
+        return parseSchedule(allData);
     },
     tgPersonalID,
     allFunctions.getInstructorName.toString(),
     allFunctions.getLessons.toString(),
     allFunctions.getClassrooms.toString(),
-    JSON.stringify(fixedTimes)// Передаем объект как параметр
-    ); 
+    JSON.stringify(fixedTimes),  
+    JSON.stringify(allData) 
+    );  
 
     await browser.close();
     return objectInstructorSchedule;
@@ -140,19 +146,20 @@ let parseOfficerVrublevskiy = (async (tg_PersonalID) => {
 
     let objectInstructorSchedule = await page.evaluate((
         tgPersonalID, getInstructorNameStr, 
-        getLessonsStr, getClassroomsStr, fixedTimesStr) => {
+        getLessonsStr, getClassroomsStr, fixedTimesStr, allDataStr) => {
 
         // Восстанавливаем функцию в контексте страницы
         const getInstructorName = eval(`(${getInstructorNameStr})`);
         const getLessons = eval(`(${getLessonsStr})`);
         const getClassrooms = eval(`(${getClassroomsStr})`);
         const fixedTimes = eval(`(${fixedTimesStr})`);
+        const allData = JSON.parse(allDataStr); // Декодируем allData
 
         function parseSchedule() {
             const data = {
                 name: null,
                 tg_id: tgPersonalID,
-                order_count: 0,
+                order_count: allData.vrublevskiySchedule.order_count,
                 schedule_1th_week: [],
                 schedule_2nd_week: [],
             };
@@ -189,13 +196,14 @@ let parseOfficerVrublevskiy = (async (tg_PersonalID) => {
             return data;
         }
 
-        return parseSchedule();
+        return parseSchedule(allData);
     },
     tgPersonalID,
     allFunctions.getInstructorName.toString(),
     allFunctions.getLessons.toString(),
     allFunctions.getClassrooms.toString(),
-    JSON.stringify(fixedTimes)// Передаем объект как параметр
+    JSON.stringify(fixedTimes),
+    JSON.stringify(allData) 
     ); 
 
     await browser.close();
@@ -217,19 +225,20 @@ let parseOfficerHomutov = (async (tg_PersonalID) => {
 
     let objectInstructorSchedule = await page.evaluate((
         tgPersonalID, getInstructorNameStr, 
-        getLessonsStr, getClassroomsStr, fixedTimesStr) => {
+        getLessonsStr, getClassroomsStr, fixedTimesStr, allDataStr) => {
 
         // Восстанавливаем функцию в контексте страницы
         const getInstructorName = eval(`(${getInstructorNameStr})`);
         const getLessons = eval(`(${getLessonsStr})`);
         const getClassrooms = eval(`(${getClassroomsStr})`);
         const fixedTimes = eval(`(${fixedTimesStr})`);
+        const allData = JSON.parse(allDataStr); // Декодируем allData
 
         function parseSchedule() {
             const data = {
                 name: null,
                 tg_id: tgPersonalID,
-                order_count: 0,
+                order_count: allData.vrublevskiySchedule.order_count,
                 schedule_1th_week: [],
                 schedule_2nd_week: [],
             };
@@ -266,13 +275,14 @@ let parseOfficerHomutov = (async (tg_PersonalID) => {
             return data;
         }
 
-        return parseSchedule();
+        return parseSchedule(allData);
     },
     tgPersonalID,
     allFunctions.getInstructorName.toString(),
     allFunctions.getLessons.toString(),
     allFunctions.getClassrooms.toString(),
-    JSON.stringify(fixedTimes)// Передаем объект как параметр
+    JSON.stringify(fixedTimes),
+    JSON.stringify(allData) 
     ); 
 
     await browser.close();
@@ -288,8 +298,8 @@ async function writeDataToFile() {
 
         // Создаем объект с данными
         const combinedData = {
-            countCommonOrders: 0,
-            countRedirectedOrders: 0,
+            countCommonOrders: allData.countCommonOrders,
+            countRedirectedOrders: allData.countRedirectedOrders,
             shatsionokSchedule: dataShatsionok,
             vrublevskiySchedule: dataVrublevskiy,
             homutovSchelule: dataHomutov
@@ -319,5 +329,3 @@ async function printData() {
 }
 
 printData();
-
-console.log()

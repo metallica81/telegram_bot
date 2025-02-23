@@ -194,10 +194,10 @@ bot.on('message', async (ctx) => {
         else if (messageText == 'Перенаправить') {
             isLinkedInstuctor = false;
 
-            // data.countRedirectedOrders++;
-            // console.log(`перенаправленные заявки: ${data.countRedirectedOrders}`)
-            // setDataBase(data); // Сохраняем изменения обратно
-            console.log(`меняем isLinked на false`)
+            data.countRedirectedOrders++;
+            //console.log(`перенаправленные заявки: ${data.countRedirectedOrders}`);
+
+            //console.log(`меняем isLinked на false`)
             const params = [instructor_name, 
                 num_classroom, global_problem, comment, messageText]
             nextInstructorKey ? // В первый раз отправляем автоматически выбранному сотруднику, а
