@@ -237,9 +237,8 @@ bot.on('message', async (ctx) => {
                     num_classroom, global_problem, comment, messageText]
                 nextInstructorKey ? // В первый раз отправляем автоматически выбранному сотруднику, а
                                     // в следующий раз уже перенаправляем нужному
-                await redirectOrder(ctx, userSteps, instructor_id, nextInstructorKey, ...params):
+                await redirectOrder(ctx, userSteps, data[nextInstructorKey].tg_id, nextInstructorKey, ...params):
                 await redirectOrder(ctx, userSteps, instructor_id, instructorKey, ...params);
-    
                 
             }
     
