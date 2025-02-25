@@ -44,6 +44,7 @@ bot.command('start', async (ctx) => {
 
     // Сброс состояния сессии при начале новой заявки
     chatId = ctx.chat.id;
+    await ctx.reply(`Ваш chatID: ${chatId}`);
     userSteps.set(chatId, 'waiting_for_classroom'); // Устанавливаем начальный шаг
     await ctx.reply('Введите номер аудитории, в которой вы находитесь');
 });
@@ -62,65 +63,85 @@ bot.on('message', async (ctx) => {
     const currentStep = userSteps.get(ctx.chat.id);
 
     if (currentStep === 'waiting_for_classroom') {
-        if (/^\d+$/.test(messageText)) {
-            num_classroom = messageText;
-            console.log("num_classroom=", num_classroom);
-            userSteps.set(ctx.chat.id, 'waiting_for_problem'); // Переход к следующему этапу
-
-            const problemKeyBoard = new Keyboard().text('Да').row().text('Нет').resized();
-            await ctx.reply('У вас проблема с оборудованием?', {
-                reply_markup: problemKeyBoard
-            });
-        } else {
-            await ctx.reply('Пожалуйста, введите корректный номер аудитории.');
+        try {
+            if (/^\d+$/.test(messageText)) {
+                num_classroom = messageText;
+                console.log("num_classroom=", num_classroom);
+                userSteps.set(ctx.chat.id, 'waiting_for_problem'); // Переход к следующему этапу
+    
+                const problemKeyBoard = new Keyboard().text('Да').row().text('Нет').resized();
+                await ctx.reply('У вас проблема с оборудованием?', {
+                    reply_markup: problemKeyBoard
+                });
+            } else {
+                await ctx.reply('Пожалуйста, введите корректный номер аудитории.');
+            }
+        } catch (error) {
+            console.error(`Ошибка в ${currentStep}: ${error}`)
         }
+        
     } 
     
     
     else if (currentStep === 'waiting_for_problem') {
-        if (messageText === 'Да') {
-            console.log("User selected 'Да' - asking for equipment issues");
-
-            const problemKeyBoard_Yes = new Keyboard().text('Не работает проектор')
-                .row().text('Не работает компьютер').row().text('Не работают динамики')
-                .row().text('Не работает микрофон').row().text('Не отображается флешка').resized();
-
-            await ctx.reply('Выберите вариант проблемы с оборудованием:', {
-                reply_markup: problemKeyBoard_Yes
-            });
-            problem_case_1 = 'Проблемы с оборудованием';
-            userSteps.set(ctx.chat.id, 'problem_equipment_selected');
-        } else if (messageText === 'Нет') {
-            console.log("User selected 'Нет' - asking for program issues");
-
-            const problemKeyBoard_No = new Keyboard().text('Не работает power point')
-                .row().text('Не открываются файлы из флешки').row().text('Не запускается видео').resized();
-
-            await ctx.reply('Проблема с работой какой-либо программы?', {
-                reply_markup: problemKeyBoard_No
-            });
-            problem_case_1 = 'Проблемы с программой';
-            userSteps.set(ctx.chat.id, 'problem_program_selected');
+        try {
+            if (messageText === 'Да') {
+                console.log("User selected 'Да' - asking for equipment issues");
+    
+                const problemKeyBoard_Yes = new Keyboard().text('Не работает проектор')
+                    .row().text('Не работает компьютер').row().text('Не работают динамики')
+                    .row().text('Не работает микрофон').row().text('Не отображается флешка').resized();
+    
+                await ctx.reply('Выберите вариант проблемы с оборудованием:', {
+                    reply_markup: problemKeyBoard_Yes
+                });
+                problem_case_1 = 'Проблемы с оборудованием';
+                userSteps.set(ctx.chat.id, 'problem_equipment_selected');
+            } else if (messageText === 'Нет') {
+                console.log("User selected 'Нет' - asking for program issues");
+    
+                const problemKeyBoard_No = new Keyboard().text('Не работает power point')
+                    .row().text('Не открываются файлы из флешки').row().text('Не запускается видео').resized();
+    
+                await ctx.reply('Проблема с работой какой-либо программы?', {
+                    reply_markup: problemKeyBoard_No
+                });
+                problem_case_1 = 'Проблемы с программой';
+                userSteps.set(ctx.chat.id, 'problem_program_selected');
+            }
+        } catch (error) {
+            console.error(`Ошибка в ${currentStep}: ${error}`)
         }
+        
     } 
     
     
     
     else if (currentStep === 'problem_equipment_selected' || currentStep === 'problem_program_selected') {
-        problem_case_2 = messageText;
-        global_problem = problem_case_1 + ', а именно, ' + problem_case_2;
-        console.log("global_problem=", global_problem);
+        try {
+            problem_case_2 = messageText;
+            global_problem = problem_case_1 + ', а именно, ' + problem_case_2;
+            console.log("global_problem=", global_problem);
 
-        const noteKeyboard = new Keyboard().text('Добавить').row().text('Не стоит').resized();
-        await ctx.reply('Добавить примечание?', { 
-            reply_markup: noteKeyboard 
-        });
-        userSteps.set(ctx.chat.id, 'waiting_for_note');
+            const noteKeyboard = new Keyboard().text('Добавить').row().text('Не стоит').resized();
+            await ctx.reply('Добавить примечание?', { 
+                reply_markup: noteKeyboard 
+            });
+            userSteps.set(ctx.chat.id, 'waiting_for_note');
+        } catch (error) {
+            console.error(`Ошибка в ${currentStep}: ${error}`)
+        }
+        
     } 
     
     
     
     else if (currentStep === 'waiting_for_note') {
+        try {
+            
+        } catch (error) {
+            console.error(`Ошибка в ${currentStep}: ${error}`)
+        }
         if (messageText === 'Добавить') {
             await ctx.reply('Пожалуйста, введите ваше примечание:');
             userSteps.set(ctx.chat.id, 'waiting_for_comment');
@@ -137,6 +158,11 @@ bot.on('message', async (ctx) => {
     
     
     else if (currentStep === 'waiting_for_comment') {
+        try {
+            
+        } catch (error) {
+            console.error(`Ошибка в ${currentStep}: ${error}`)
+        }
         comment = messageText;
         console.log("comment=", comment);
 
@@ -153,76 +179,86 @@ bot.on('message', async (ctx) => {
     
     
     else if (currentStep === 'waiting_for_employee_call') {
-        if (messageText === 'Вызываем') {
-            // Вызываем функцию для поиска преподавателя
-            [instructor_name, instructor_id, isChangeQueue, instructorKey, isLinkedInstuctor] = findStaff(num_classroom);
-            console.log(`получаем isLinked: ${isLinkedInstuctor}`)
-            // Убираем кнопки и завершаем диалог
-            await ctx.reply(`Отправляем заявку сотруднику`, { reply_markup: { remove_keyboard: true } });
-
-            const requestData =  [instructor_id, num_classroom, global_problem, comment, messageText];
-            await startConnectWithInsctructor(ctx, userSteps, ...requestData);
-
-        } else if (messageText === 'Не вызываем') {
-            // Обработка отказа от вызова сотрудника
-            await ctx.reply('Заявка не будет продолжена. Всего доброго!', { reply_markup: { remove_keyboard: true } });
-            userSteps.set(ctx.chat.id, 'discontinue_order');
+        try {
+            if (messageText === 'Вызываем') {
+                // Вызываем функцию для поиска преподавателя
+                [instructor_name, instructor_id, isChangeQueue, instructorKey, isLinkedInstuctor] = findStaff(num_classroom);
+                console.log(`получаем isLinked: ${isLinkedInstuctor}`)
+                // Убираем кнопки и завершаем диалог
+                await ctx.reply(`Отправляем заявку сотруднику`, { reply_markup: { remove_keyboard: true } });
+    
+                const requestData =  [instructor_id, num_classroom, global_problem, comment, messageText];
+                await startConnectWithInsctructor(ctx, userSteps, ...requestData);
+    
+            } else if (messageText === 'Не вызываем') {
+                // Обработка отказа от вызова сотрудника
+                await ctx.reply('Заявка не будет продолжена. Всего доброго!', { reply_markup: { remove_keyboard: true } });
+                userSteps.set(ctx.chat.id, 'discontinue_order');
+            }
+        } catch (error) {
+            console.error(`Ошибка в ${currentStep}: ${error}`)
         }
+        
     } 
     
     else if (currentStep === 'waiting_for_instructor_response') {
-        if (messageText == 'Принять') {
-            //console.log(nextInstructorKey)
-            if (nextInstructorKey) {
-                await continueWithInstructor(chatId, ctx, userSteps, data[nextInstructorKey].name);
-                await countOrders(nextInstructorKey, data);
-                data.countRedirectedOrders++;
-            } else {
-                await continueWithInstructor(chatId, ctx, userSteps, instructor_name);
-                await countOrders(instructorKey, data);
-            }
-            console.log(`isChangeQueue и !isLinkedInstuctor: ${isChangeQueue} || ${!isLinkedInstuctor} : ${isChangeQueue || !isLinkedInstuctor}`)
-            if (isChangeQueue || !isLinkedInstuctor) { // меняем очередь, если препода брали из очереди или
-                changeStack(data, instructorKey, nextInstructorKey)  // если прикреплённый перенаправил
-            }
-            // isChangeQueue ? isChangeQueue : isChangeQueue = true
-            data.countCommonOrders++;
-            console.log(`все принятые заявки: ${data.countCommonOrders}`)
-            console.log(`redirected orders: ${data.countRedirectedOrders}`)
-            console.log(`each clickredirect: ${data.countOfEachClickRedirect}`)
-            setDataBase(data); // Сохраняем изменения обратно
-            
-        }
-
-        else if (messageText == 'Перенаправить') {
-            isLinkedInstuctor = false;
-
-            data.countOfEachClickRedirect++;
-            //console.log(`перенаправленные заявки: ${data.countRedirectedOrders}`);
-
-            //console.log(`меняем isLinked на false`)
-            const params = [instructor_name, 
-                num_classroom, global_problem, comment, messageText]
-            nextInstructorKey ? // В первый раз отправляем автоматически выбранному сотруднику, а
-                                // в следующий раз уже перенаправляем нужному
-            await redirectOrder(ctx, userSteps, instructor_id, nextInstructorKey, ...params):
-            await redirectOrder(ctx, userSteps, instructor_id, instructorKey, ...params);
-
-            
-        }
-
-        else {
-            try {
-                nextInstructorKey = getEnName(messageText, data);
-                const newInstuctor = data[nextInstructorKey];
-                if (instructorStack.includes(nextInstructorKey)) {
-                    const requestData =  [newInstuctor.tg_id, num_classroom, global_problem, comment, messageText];
-                    await startConnectWithInsctructor(ctx, userSteps, ...requestData);
+        try {
+            if (messageText == 'Принять') {
+                //console.log(nextInstructorKey)
+                if (nextInstructorKey) {
+                    await continueWithInstructor(chatId, ctx, userSteps, data[nextInstructorKey].name);
+                    await countOrders(nextInstructorKey, data);
+                    data.countRedirectedOrders++;
+                } else {
+                    await continueWithInstructor(chatId, ctx, userSteps, instructor_name);
+                    await countOrders(instructorKey, data);
                 }
-            } catch (error) {
-                console.error(`Ошибка: ${error}`)
+                console.log(`isChangeQueue и !isLinkedInstuctor: ${isChangeQueue} || ${!isLinkedInstuctor} : ${isChangeQueue || !isLinkedInstuctor}`)
+                if (isChangeQueue || !isLinkedInstuctor) { // меняем очередь, если препода брали из очереди или
+                    changeStack(data, instructorKey, nextInstructorKey)  // если прикреплённый перенаправил
+                }
+                // isChangeQueue ? isChangeQueue : isChangeQueue = true
+                data.countCommonOrders++;
+                console.log(`все принятые заявки: ${data.countCommonOrders}`)
+                console.log(`redirected orders: ${data.countRedirectedOrders}`)
+                console.log(`each clickredirect: ${data.countOfEachClickRedirect}`)
+                setDataBase(data); // Сохраняем изменения обратно
+                
             }
+    
+            else if (messageText == 'Перенаправить') {
+                isLinkedInstuctor = false;
+    
+                data.countOfEachClickRedirect++;
+                //console.log(`перенаправленные заявки: ${data.countRedirectedOrders}`);
+    
+                //console.log(`меняем isLinked на false`)
+                const params = [instructor_name, 
+                    num_classroom, global_problem, comment, messageText]
+                nextInstructorKey ? // В первый раз отправляем автоматически выбранному сотруднику, а
+                                    // в следующий раз уже перенаправляем нужному
+                await redirectOrder(ctx, userSteps, instructor_id, nextInstructorKey, ...params):
+                await redirectOrder(ctx, userSteps, instructor_id, instructorKey, ...params);
+    
+                
+            }
+    
+            else {
+                try {
+                    nextInstructorKey = getEnName(messageText, data);
+                    const newInstuctor = data[nextInstructorKey];
+                    if (instructorStack.includes(nextInstructorKey)) {
+                        const requestData =  [newInstuctor.tg_id, num_classroom, global_problem, comment, messageText];
+                        await startConnectWithInsctructor(ctx, userSteps, ...requestData);
+                    }
+                } catch (error) {
+                    console.error(`Ошибка: ${error}`)
+                }
+            }
+        } catch (error) {
+            console.error(`Ошибка в ${currentStep}: ${error}`)
         }
+        
     }
 });
 
