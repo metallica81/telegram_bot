@@ -1,7 +1,7 @@
 {
-    "countCommonOrders": 30,
-    "countRedirectedOrders": 9,
-    "countOfEachClickRedirect": 17,
+    "countCommonOrders": 31,
+    "countRedirectedOrders": 10,
+    "countOfEachClickRedirect": 18,
     "instructorStack": [
         "homutovSchelule",
         "vrublevskiySchedule",
@@ -479,7 +479,7 @@
     "vrublevskiySchedule": {
         "name": "Врублевский Константин Эдуардович",
         "tg_id": 7458287339,
-        "order_count": 6,
+        "order_count": 7,
         "schedule_1th_week": [
             {
                 "Среда": [

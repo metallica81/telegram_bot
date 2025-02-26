@@ -13,19 +13,21 @@
     BOT_TOKEN=your_telegram_token
     ```
 3. Запустите бота:
-```
-npm start
-```
+    ```
+    npm start
+    ```
 
 
 📂 Структура проекта
 
 📦 bot-project
  ┣ 📂 src
- ┃ ┣ 📂 commands       # Файлы команд бота
- ┃ ┣ 📂 database       # Работа с БД
- ┃ ┣ 📂 utils          # Утилиты и вспомогательные функции
- ┃ ┗ index.js          # Главный файл бота
- ┣ 📜 README.md        # Основная документация
+ ┃ ┣ 📂 connectingWithInstructor       # Логика отправления сообщений сотруднику и обратно
+ ┃ ┣ 📂 database       # Генерация базы данных с расписанием и заявками сотрудников
+ ┃ ┣ 📂 selectPerson   # Выбор преподавателя исходя из расписания
+ ┃ ┣ countOrders.js    # Увеличение кол-ва заявок
+ ┃ ┗ index.js          # Главный файл бота 
+ ┣ 📜 .gitIgnore       
  ┣ 📜 package.json
- ┗ 📜 .env
+ ┣ 📜 package-lock.json
+ ┗ 📜 ReadMe.md        # Основная документация
