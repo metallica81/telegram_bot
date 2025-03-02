@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import { Bot, Keyboard } from 'grammy';
-import { findStaff, instructorStack } from './selectPerson/selectPerson.js'; // Импорт функции для получения нужного преподавателя
+import { findStaff, availableInstructorStack } from './selectPerson/selectPerson.js'; // Импорт функции для получения нужного преподавателя
 import { startConnectWithInsctructor } from './connectingWithInstructor/startConnectWithInsctructor.js';
 import { continueWithInstructor } from './connectingWithInstructor/continueWithInstructor.js';
 import { redirectOrder } from './connectingWithInstructor/redirectOrder.js';
@@ -30,10 +30,13 @@ let comment = "отсутствует";
 const data = getDataBase();
 let nextInstructorKey = null;
 
-export let stackForKeyBoard = instructorStack;  // отдельная очередь для распределения имён по redirect buttons
+export let stackForKeyBoard = availableInstructorStack;  // отдельная очередь для распределения имён по redirect buttons
 
 function resetStack() {
-    stackForKeyBoard = instructorStack; // Создаём новый массив с актуальными значениями
+    stackForKeyBoard = availableInstructorStack; // Создаём новый массив с актуальными значениями
+    if (!stackForKeyBoard.includes('backUpSchedule')) {
+        stackForKeyBoard.push('backUpSchedule')
+    }
     console.log(`stackForKeyBoard:`, stackForKeyBoard)
 }
 
@@ -246,7 +249,7 @@ bot.on('message', async (ctx) => {
                 try {
                     nextInstructorKey = getEnName(messageText, data);
                     const newInstuctor = data[nextInstructorKey];
-                    if (instructorStack.includes(nextInstructorKey)) {
+                    if (availableInstructorStack.includes(nextInstructorKey)) {
                         const requestData =  [newInstuctor.tg_id, num_classroom, global_problem, comment, messageText];
                         await startConnectWithInsctructor(ctx, userSteps, ...requestData);
                     }

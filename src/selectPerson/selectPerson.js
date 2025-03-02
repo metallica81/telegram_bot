@@ -7,14 +7,19 @@ import { isInstructorBusy } from './isInstructorBusy.js';
 import { convertDate } from './convertDate.js';
 import { getAssociatedInstructor } from './getAssociatedInstructor.js';
 import { getDataBase, setDataBase } from '../dataBase/getDataBase.js';
+import { getAvailableStack } from './getAvailableStack.js';
 import { getRestPersons } from '../connectingWithInstructor/getRestPersons.js';
 import { getEnName } from './getEnName.js';
 
 let data = getDataBase(); // Вызвали базу данных
 
 // Создаем стек для очереди преподавателей (FILO)
-export const instructorStack = data.instructorStack;
+const instructorStack = data.instructorStack;
 console.log(`instructorStack`, instructorStack)
+
+export const availableInstructorStack = getAvailableStack(data.instructorStack);
+console.log(`availableInstructorStack`, availableInstructorStack)
+
 // Функция для поиска сотрудника
 export function findStaff(num_classroom) {
     const today = moment(); // Используем текущую дату
