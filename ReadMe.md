@@ -18,18 +18,18 @@
     ```
 
 
-📂 Структура проекта
-
-📦 bot-project
- ┣ 📂 src
- ┃ ┣ 📂 connectingWithInstructor       # Логика отправления сообщений сотруднику и обратно
- ┃ ┣ 📂 database       # Генерация базы данных с расписанием и заявками сотрудников
- ┃ ┣ 📂 selectPerson   # Выбор преподавателя исходя из расписания
- ┃ ┣ countOrders.js    # Увеличение кол-ва заявок
- ┃ ┗ index.js          # Главный файл бота 
- ┣ 📜 .gitIgnore       
- ┣ 📜 package.json
- ┣ 📜 package-lock.json
- ┗ 📜 ReadMe.md        # Основная документация
-
+## 📂 Структура проекта
+```
+    📦 bot-project
+    ┣ 📂 src
+    ┃ ┣ 📂 connectingWithInstructor       # Логика отправления сообщений сотруднику и обратно
+    ┃ ┣ 📂 database       # Генерация базы данных с расписанием и заявками сотрудников
+    ┃ ┣ 📂 selectPerson   # Выбор преподавателя исходя из расписания
+    ┃ ┣ countOrders.js    # Увеличение кол-ва заявок
+    ┃ ┗ index.js          # Главный файл бота 
+    ┣ 📜 .gitIgnore       
+    ┣ 📜 package.json
+    ┣ 📜 package-lock.json
+    ┗ 📜 ReadMe.md        # Основная документация
+```
 
