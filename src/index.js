@@ -115,68 +115,104 @@ bot.on('message', async (ctx) => {
         } catch (error) {
             console.error(`Ошибка в ${currentStep}: ${error}`)
         }
-        
     } 
     
-    
-    
-    else if (currentStep === 'problem_equipment_selected' || currentStep === 'problem_program_selected') {
+    // Ответы на проблемы с оборудованием
+    else if (currentStep === 'problem_equipment_selected') {
         try {
-            problem_case_2 = messageText;
-            global_problem = problem_case_1 + ', а именно, ' + problem_case_2;
-            console.log("global_problem=", global_problem);
-
+            switch (messageText) {
+                case 'Не работает проектор':
+                    await ctx.reply('Проверьте подключение проектора к электросети и компьютеру. Если не помогает, обратитесь в техподдержку.');
+                    break;
+                case 'Не работает компьютер':
+                    await ctx.reply('Попробуйте перезагрузить компьютер. Если проблема не исчезла, проверьте подключение к электросети.');
+                    break;
+                case 'Не работают динамики':
+                    await ctx.reply('Проверьте, включены ли динамики и корректно ли выставлен уровень громкости.');
+                    break;
+                case 'Не работает микрофон':
+                    await ctx.reply('Убедитесь, что микрофон включен и выбрана правильная аудиовходная настройка в системе.');
+                    break;
+                case 'Не отображается флешка':
+                    await ctx.reply('Попробуйте вставить флешку в другой USB-порт или перезапустить компьютер.');
+                    break;
+                default:
+                    await ctx.reply('Пожалуйста, выберите один из предложенных вариантов.');
+            }
+            // Переход к шагу 'waiting_for_note'
             const noteKeyboard = new Keyboard().text('Добавить').row().text('Не стоит').resized();
             await ctx.reply('Добавить примечание?', { 
                 reply_markup: noteKeyboard 
             });
             userSteps.set(ctx.chat.id, 'waiting_for_note');
         } catch (error) {
-            console.error(`Ошибка в ${currentStep}: ${error}`)
+            console.error(`Ошибка в ${currentStep}: ${error}`);
         }
-        
-    } 
-    
-    
+    }
+
+    // Ответы на проблемы с программами
+    else if (currentStep === 'problem_program_selected') {
+        try {
+            switch (messageText) {
+                case 'Не работает power point':
+                    await ctx.reply('Попробуйте перезапустить программу. Если не помогает, проверьте наличие обновлений Microsoft Office.');
+                    break;
+                case 'Не открываются файлы из флешки':
+                    await ctx.reply('Проверьте, распознается ли флешка системой. Если нет, попробуйте другой USB-порт.');
+                    break;
+                case 'Не запускается видео':
+                    await ctx.reply('Проверьте, установлен ли необходимый кодек для воспроизведения видео. Попробуйте открыть файл в другом плеере.');
+                    break;
+                default:
+                    await ctx.reply('Пожалуйста, выберите один из предложенных вариантов.');
+            }
+            // Переход к шагу 'waiting_for_note'
+            userSteps.set(ctx.chat.id, 'waiting_for_note');
+            const noteKeyboard = new Keyboard().text('Добавить').row().text('Не стоит').resized();
+            await ctx.reply('Добавить примечание?', { 
+                reply_markup: noteKeyboard 
+            });
+        } catch (error) {
+            console.error(`Ошибка в ${currentStep}: ${error}`);
+        }
+    }
     
     else if (currentStep === 'waiting_for_note') {
         try {
-            
+            if (messageText === 'Добавить') {
+                await ctx.reply('Пожалуйста, введите ваше примечание:');
+                userSteps.set(ctx.chat.id, 'waiting_for_comment');
+            } else if (messageText === 'Не стоит') {
+                // Скрываем клавиатуру, когда она больше не нужна
+                await ctx.reply('Без примечания', { reply_markup: { remove_keyboard: true } });
+    
+                // Запрос на вызов сотрудника (выводим текст и кнопки)
+                const callEmployeeKeyboard = new Keyboard().text('Вызываем').row().text('Не вызываем').resized();
+                await ctx.reply('Вызываем сотрудника?', { reply_markup: callEmployeeKeyboard });
+                userSteps.set(ctx.chat.id, 'waiting_for_employee_call');
+            }
         } catch (error) {
             console.error(`Ошибка в ${currentStep}: ${error}`)
-        }
-        if (messageText === 'Добавить') {
-            await ctx.reply('Пожалуйста, введите ваше примечание:');
-            userSteps.set(ctx.chat.id, 'waiting_for_comment');
-        } else if (messageText === 'Не стоит') {
-            // Скрываем клавиатуру, когда она больше не нужна
-            await ctx.reply('Без примечания', { reply_markup: { remove_keyboard: true } });
-
-            // Запрос на вызов сотрудника (выводим текст и кнопки)
-            const callEmployeeKeyboard = new Keyboard().text('Вызываем').row().text('Не вызываем').resized();
-            await ctx.reply('Вызываем сотрудника?', { reply_markup: callEmployeeKeyboard });
-            userSteps.set(ctx.chat.id, 'waiting_for_employee_call');
         }
     } 
     
     
     else if (currentStep === 'waiting_for_comment') {
         try {
-            
+            comment = messageText;
+            console.log("comment=", comment);
+
+            // Скрываем клавиатуру после ввода примечания
+            await ctx.reply('Примечание добавлено.', { reply_markup: { remove_keyboard: true } });
+
+            // Отправляем сообщение и кнопки с вопросом о вызове сотрудника
+            const callEmployeeKeyboard = new Keyboard().text('Вызываем').row().text('Не вызываем').resized();
+            await ctx.reply('Вызываем сотрудника?', { reply_markup: callEmployeeKeyboard });
+
+            userSteps.set(ctx.chat.id, 'waiting_for_employee_call');
         } catch (error) {
             console.error(`Ошибка в ${currentStep}: ${error}`)
         }
-        comment = messageText;
-        console.log("comment=", comment);
-
-        // Скрываем клавиатуру после ввода примечания
-        await ctx.reply('Примечание добавлено.', { reply_markup: { remove_keyboard: true } });
-
-        // Отправляем сообщение и кнопки с вопросом о вызове сотрудника
-        const callEmployeeKeyboard = new Keyboard().text('Вызываем').row().text('Не вызываем').resized();
-        await ctx.reply('Вызываем сотрудника?', { reply_markup: callEmployeeKeyboard });
-
-        userSteps.set(ctx.chat.id, 'waiting_for_employee_call');
     } 
     
     
