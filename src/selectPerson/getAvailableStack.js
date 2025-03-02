@@ -10,17 +10,18 @@ const currentFormattedDate = convertDate(today); // Форматируем да�
 // export const availableInstructorStack = data.instructorStack;
 
 export function getAvailableStack(stack) {
-    for (let officer of stack) {
-        if (isInstructorBusy(officer, currentFormattedDate, time24)) {
+
+    return stack.filter(officer => {
+        const busy = isInstructorBusy(officer, currentFormattedDate, time24);
+        if (busy) {
             console.log(`${officer} занят`);
-            let busyIndex = stack.indexOf(officer);
-            stack.splice(busyIndex, 1);
         } else {
-            continue;
+            console.log(`${officer} свободен`);
         }
-    }
-    return stack
+        return !busy; // Оставляем только свободных преподавателей
+    });
 }
+
 
 // console.log(availableInstructorStack)
 // console.log(getAvailableStack(availableInstructorStack))
