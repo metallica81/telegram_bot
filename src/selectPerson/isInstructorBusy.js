@@ -2,7 +2,9 @@
 export function isInstructorBusy(instructor, currentFormattedDate, time24) {
     for (const scheduleKey of ['schedule_1th_week', 'schedule_2nd_week']) {
         const schedule = instructor[scheduleKey];
-        if (!schedule) continue; // у препода нет пар на это неделе
+        if (!schedule) {
+            continue
+        }; // у препода нет пар на это неделе
 
         for (const day of schedule) {
             const dayOfWeek = Object.keys(day)[0];

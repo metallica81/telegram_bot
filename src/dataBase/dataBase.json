@@ -7,10 +7,10 @@
         "vrublevskiySchedule",
         "shatsionokSchedule"
     ],
-    "backUpSchedule": {
-        "name": "Николай",
+    "osipovSchedule": {
+        "name": "Степан Осипов",
         "tg_id": 7458287339,
-        "order_count": 1
+        "order_count": 0
     },
     "shatsionokSchedule": {
         "name": "Шационок Павел Васильевич",
@@ -223,7 +223,7 @@
         "schedule_2nd_week": [
             {
                 "Понедельник": [
-                    "24 февраля",
+                    "10 марта",
                     {
                         "lessonNumber": 3,
                         "lessonTime": [
@@ -284,7 +284,7 @@
             },
             {
                 "Вторник": [
-                    "25 февраля",
+                    "11 марта",
                     {
                         "lessonNumber": 1,
                         "lessonTime": [
@@ -359,7 +359,7 @@
             },
             {
                 "Среда": [
-                    "26 февраля",
+                    "12 марта",
                     {
                         "lessonNumber": 3,
                         "lessonTime": [
@@ -420,7 +420,7 @@
             },
             {
                 "Четверг": [
-                    "27 февраля",
+                    "13 марта",
                     {
                         "lessonNumber": 1,
                         "lessonTime": [
@@ -488,7 +488,7 @@
         "schedule_1th_week": [
             {
                 "Среда": [
-                    "26 февраля",
+                    "5 марта",
                     {
                         "lessonNumber": 5,
                         "lessonTime": [
@@ -521,7 +521,7 @@
             },
             {
                 "Пятница": [
-                    "28 февраля",
+                    "7 марта",
                     {
                         "lessonNumber": 4,
                         "lessonTime": [
@@ -558,7 +558,7 @@
     "homutovSchelule": {
         "name": "Хомутов Андрей Сергеевич",
         "tg_id": 7458287339,
-        "order_count": 11,
+        "order_count": 12,
         "schedule_1th_week": [
             {
                 "Понедельник": [
@@ -743,7 +743,7 @@
         "schedule_2nd_week": [
             {
                 "Понедельник": [
-                    "24 февраля",
+                    "10 марта",
                     {
                         "lessonNumber": 3,
                         "lessonTime": [
@@ -790,7 +790,7 @@
             },
             {
                 "Вторник": [
-                    "25 февраля",
+                    "11 марта",
                     {
                         "lessonNumber": 4,
                         "lessonTime": [
@@ -809,7 +809,7 @@
             },
             {
                 "Среда": [
-                    "26 февраля",
+                    "12 марта",
                     {
                         "lessonNumber": 1,
                         "lessonTime": [
@@ -842,7 +842,7 @@
             },
             {
                 "Четверг": [
-                    "27 февраля",
+                    "13 марта",
                     {
                         "lessonNumber": 4,
                         "lessonTime": [
@@ -889,7 +889,7 @@
             },
             {
                 "Пятница": [
-                    "28 февраля",
+                    "14 марта",
                     {
                         "lessonNumber": 3,
                         "lessonTime": [

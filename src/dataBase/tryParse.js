@@ -304,13 +304,14 @@ async function writeDataToFile() {
             countRedirectedOrders: allData.countRedirectedOrders,
             countOfEachClickRedirect: allData.countOfEachClickRedirect,
             instructorStack: allData.instructorStack,
+            osipovSchedule: allData.osipovSchedule,
             shatsionokSchedule: dataShatsionok,
             vrublevskiySchedule: dataVrublevskiy,
             homutovSchelule: dataHomutov
         };
 
         // Преобразуем объект в JSON и записываем в файл
-        await fs.writeFile('dataBase/dataBase.json', JSON.stringify(combinedData, null, 4));
+        await fs.writeFile('src/dataBase/dataBase.json', JSON.stringify(combinedData, null, 4));
         console.log('File successfully written');
     } catch (err) {
         console.log('Error writing file:', err);
@@ -322,7 +323,7 @@ async function printData() {
         await writeDataToFile();
   
         // Читаем данные из файла после записи
-        const data = await fs.readFile('dataBase/dataBase.json', 'utf8');
+        const data = await fs.readFile('src/dataBase/dataBase.json', 'utf8');
 
         // Парсим JSON-данные и выводим их в консоль
         console.log(JSON.stringify(JSON.parse(data), null, 2));
