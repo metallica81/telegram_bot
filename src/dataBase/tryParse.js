@@ -1,85 +1,13 @@
 import puppeteer from 'puppeteer';
-import { promises as fs } from 'fs';
+import { fixedTimes } from './fixedTimes.js';   // время пар
+import { allFunctions } from './allFunctions.js';
+import { printData } from './printData.js';
+import { writeDataToFile } from './writeDataToFile.js';
+import { allData } from './getDataBase.js';
 
-import { getDataBase } from './getDataBase.js';
-//import { instructorClassroomsMap } from '../selectPerson/connectClassroom.js';
+export const tgPersonalID = 7458287339;
 
-const allData = getDataBase();
-const tgPersonalID = 7458287339;
-
-//885326963; // мой id
-//1140094825 - Валерий id 
-//5428269745 - id Павла Васильевича
-//7458287339 - second acc
-//1311307294 - Яся
-
-
-
-
-const fixedTimes = {
-    1: [[8, 30], [9, 50]],
-    2: [[10, 5], [11, 25]],
-    3: [[11, 40], [13, 0]],
-    4: [[13, 45], [15, 5]],
-    5: [[15, 20], [16, 40]],
-    6: [[16, 55], [18, 15]],
-    7: [[18, 30], [19, 50]],
-    8: [[20, 0], [21, 20]]
-};
-
-const allFunctions = {
-    getInstructorName: function() {
-        return document.querySelector(".page-header-name__title").innerText;
-    },
-
-    getLessons: function(element) {
-        let num_lessons = [];
-        const lesson_elements = element.querySelectorAll(".mb-1");
-        lesson_elements.forEach(lesson => {
-            const match = lesson.textContent.trim().match(/^\d+/);
-            if (match) {
-                num_lessons.push(Number(match[0]));
-            }
-        });
-        return num_lessons;
-    },
-
-    getClassrooms: function(element) {
-        let classrooms = [];
-        const classroom_elements = element.querySelectorAll(".mb-2");
-        classroom_elements.forEach(classroom => {
-            const match = classroom.textContent.trim().match(/\d+$/);
-            if (match) {
-                classrooms.push(parseInt(match[0], 10));
-            }
-        });
-        return classrooms;
-    }
-}
-
-const parseData = {
-    staffMenu: 'https://www.miit.ru/depts/21123/people',
-    shatsionok: {
-        instructorKey: "shatsionokSchedule",
-        instructorPage: 'a[href="/people/27900"]',
-        infoMenu: '.page__sub-menu-header__title',
-        schedulePart: 'a[href="/people/27900/timetable"]'
-    },
-    vrublevskiy: {
-        instructorKey: "vrublevskiySchedule",
-        instructorPage: 'a[href="/people/405"]',
-        infoMenu: '.page__sub-menu-header__title',
-        schedulePart: 'a[href="/people/405/timetable"]'
-    },
-    homutov: {
-        instructorKey: "homutovSchelule",
-        instructorPage: 'a[href="/people/488332"]',
-        infoMenu: '.page__sub-menu-header__title',
-        schedulePart: 'a[href="/people/488332/timetable"]'
-    }
-}
-
-async function parseStaff(tgPersonalID, staffList, instructorPage, infoMenu, schedulePart, instructorKey) {
+export async function parseStaff(tgPersonalID, staffList, instructorPage, infoMenu, schedulePart, instructorKey) {
     const browser = await puppeteer.launch({ headless: false }); // headless - открытие в фоновом режиме
     const page = await browser.newPage();
     await page.goto(staffList); // переходим в раздел сотрудников отдела
@@ -153,67 +81,6 @@ async function parseStaff(tgPersonalID, staffList, instructorPage, infoMenu, sch
 
     await browser.close();
     return objectInstructorSchedule;
-}
-
-async function writeDataToFile() {
-    try {
-        // Дожидаемся данных от обеих функций
-        const dataShatsionok = await parseStaff(tgPersonalID, 
-            parseData.staffMenu, 
-            parseData.shatsionok.instructorPage,
-            parseData.shatsionok.infoMenu,
-            parseData.shatsionok.schedulePart,
-            parseData.shatsionok.instructorKey
-        ); 
-        const dataVrublevskiy = await parseStaff(tgPersonalID, 
-            parseData.staffMenu, 
-            parseData.vrublevskiy.instructorPage,
-            parseData.vrublevskiy.infoMenu,
-            parseData.vrublevskiy.schedulePart,
-            parseData.vrublevskiy.instructorKey
-        ); 
-        const dataHomutov = await parseStaff(tgPersonalID, 
-            parseData.staffMenu, 
-            parseData.homutov.instructorPage,
-            parseData.homutov.infoMenu,
-            parseData.homutov.schedulePart,
-            parseData.homutov.instructorKey
-        );
-
-        // Создаем объект с данными
-        const combinedData = {
-            countCommonOrders: allData.countCommonOrders,
-            countRedirectedOrders: allData.countRedirectedOrders,
-            countOfEachClickRedirect: allData.countOfEachClickRedirect,
-            instructorStack: allData.instructorStack,
-            osipovSchedule: allData.osipovSchedule,
-            egorovSchedule: allData.egorovSchedule,
-            shatsionokSchedule: dataShatsionok,
-            vrublevskiySchedule: dataVrublevskiy,
-            homutovSchelule: dataHomutov
-        };
-
-        // Преобразуем объект в JSON и записываем в файл
-        await fs.writeFile('src/dataBase/dataBase.json', JSON.stringify(combinedData, null, 4));
-        console.log('File successfully written');
-    } catch (err) {
-        console.log('Error writing file:', err);
-    }
-}
-
-async function printData() {
-    try {
-        await writeDataToFile();
-  
-        // Читаем данные из файла после записи
-        const data = await fs.readFile('src/dataBase/dataBase.json', 'utf8');
-
-        // Парсим JSON-данные и выводим их в консоль
-        console.log(JSON.stringify(JSON.parse(data), null, 2));
-
-    } catch (err) {
-        console.log('Error rading file:', err);
-    }
 }
 
 printData();
