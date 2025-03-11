@@ -6,16 +6,22 @@ export const parseData = {
         infoMenu: '.page__sub-menu-header__title',
         schedulePart: 'a[href="/people/27900/timetable"]'
     },
-    vrublevskiy: {
-        instructorKey: "vrublevskiySchedule",
-        instructorPage: 'a[href="/people/405"]',
-        infoMenu: '.page__sub-menu-header__title',
-        schedulePart: 'a[href="/people/405/timetable"]'
-    },
     homutov: {
         instructorKey: "homutovSchelule",
         instructorPage: 'a[href="/people/488332"]',
         infoMenu: '.page__sub-menu-header__title',
         schedulePart: 'a[href="/people/488332/timetable"]'
+    },
+    titov: {
+        instructorKey: "titovSchelule",
+        instructorPage: 'a[href="/people/68203"]',
+        infoMenu: '.page__sub-menu-header__title',
+        schedulePart: 'a[href="/people/68203/timetable"]'
+    },
+    vrublevskiy: {
+        instructorKey: "vrublevskiySchedule",
+        instructorPage: 'a[href="/people/405"]',
+        infoMenu: '.page__sub-menu-header__title',
+        schedulePart: 'a[href="/people/405/timetable"]'
     }
 }

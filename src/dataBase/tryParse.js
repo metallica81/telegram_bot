@@ -5,9 +5,7 @@ import { printData } from './printData.js';
 import { writeDataToFile } from './writeDataToFile.js';
 import { allData } from './getDataBase.js';
 
-export const tgPersonalID = 7458287339;
-
-export async function parseStaff(tgPersonalID, staffList, instructorPage, infoMenu, schedulePart, instructorKey) {
+export async function parseStaff(staffList, instructorPage, infoMenu, schedulePart, instructorKey) {
     const browser = await puppeteer.launch({ headless: false }); // headless - открытие в фоновом режиме
     const page = await browser.newPage();
     await page.goto(staffList); // переходим в раздел сотрудников отдела
@@ -16,7 +14,7 @@ export async function parseStaff(tgPersonalID, staffList, instructorPage, infoMe
     await page.click(schedulePart); // переходим в расписание
 
     let objectInstructorSchedule = await page.evaluate((
-        tgPersonalID, getInstructorNameStr, 
+        getInstructorNameStr, 
         getLessonsStr, getClassroomsStr, 
         fixedTimesStr, allDataStr, instructorKey) => {
     
@@ -30,7 +28,7 @@ export async function parseStaff(tgPersonalID, staffList, instructorPage, infoMe
         function parseSchedule(instructorSchedule) {
             const data = {
                 name: null,
-                tg_id: tgPersonalID,
+                tg_id: instructorSchedule.tg_id,
                 order_count: instructorSchedule.order_count, 
                 schedule_1th_week: [],
                 schedule_2nd_week: [],
@@ -70,7 +68,6 @@ export async function parseStaff(tgPersonalID, staffList, instructorPage, infoMe
     
         return parseSchedule(allData[instructorKey]);
     },
-    tgPersonalID,
     allFunctions.getInstructorName.toString(),
     allFunctions.getLessons.toString(),
     allFunctions.getClassrooms.toString(),
@@ -82,6 +79,6 @@ export async function parseStaff(tgPersonalID, staffList, instructorPage, infoMe
     await browser.close();
     return objectInstructorSchedule;
 }
-
-printData();
+writeDataToFile();
+//printData();
 
