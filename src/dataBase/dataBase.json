@@ -1,12 +1,12 @@
 {
-    "countCommonOrders": 44,
-    "countRedirectedOrders": 14,
-    "countOfEachClickRedirect": 27,
+    "countCommonOrders": 55,
+    "countRedirectedOrders": 16,
+    "countOfEachClickRedirect": 32,
     "instructorStack": [
-        "homutovSchelule",
+        "titovSchelule",
         "vrublevskiySchedule",
-        "shatsionokSchedule",
-        "titovSchelule"
+        "homutovSchelule",
+        "shatsionokSchedule"
     ],
     "osipovSchedule": {
         "name": "Осипов Степан Евгеньевич",
@@ -16,12 +16,12 @@
     "egorovSchedule": {
         "name": "Егоров Сергей Владимирович",
         "tg_id": 7458287339,
-        "order_count": 0
+        "order_count": 1
     },
     "shatsionokSchedule": {
         "name": "Шационок Павел Васильевич",
         "tg_id": 7458287339,
-        "order_count": 18,
+        "order_count": 19,
         "schedule_1th_week": [
             {
                 "Понедельник": [
@@ -490,7 +490,7 @@
     "homutovSchelule": {
         "name": "Хомутов Андрей Сергеевич",
         "tg_id": 7458287339,
-        "order_count": 13,
+        "order_count": 16,
         "schedule_1th_week": [
             {
                 "Понедельник": [
@@ -857,7 +857,7 @@
     "titovSchelule": {
         "name": "Титов Руслан Анатольевич",
         "tg_id": 7458287339,
-        "order_count": 13,
+        "order_count": 16,
         "schedule_1th_week": [
             {
                 "Понедельник": [
@@ -1190,7 +1190,7 @@
     "vrublevskiySchedule": {
         "name": "Врублевский Константин Эдуардович",
         "tg_id": 7458287339,
-        "order_count": 13,
+        "order_count": 16,
         "schedule_1th_week": [
             {
                 "Среда": [

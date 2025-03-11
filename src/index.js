@@ -92,6 +92,8 @@ bot.on('message', async (ctx) => {
     else if (currentStep === 'waiting_for_problem') {
         try {
             if (messageText === 'Да') {
+                problem_case_1 = 'Проблема с оборудованием';
+                console.log(problem_case_1)
                 console.log("User selected 'Да' - asking for equipment issues");
     
                 const problemKeyBoard_Yes = new Keyboard().text('Не работает проектор')
@@ -104,6 +106,8 @@ bot.on('message', async (ctx) => {
                 problem_case_1 = 'Проблемы с оборудованием';
                 userSteps.set(ctx.chat.id, 'problem_equipment_selected');
             } else if (messageText === 'Нет') {
+                problem_case_1 = 'Проблемма с программой';
+                console.log(problem_case_1)
                 console.log("User selected 'Нет' - asking for program issues");
     
                 const problemKeyBoard_No = new Keyboard().text('Не работает power point')
@@ -124,6 +128,7 @@ bot.on('message', async (ctx) => {
     else if (currentStep === 'problem_equipment_selected') {
         try {
             problem_case_2 = messageText;
+            console.log(problem_case_2)
             switch (messageText) {
                 case 'Не работает проектор':
                     await ctx.reply('Проверьте подключение проектора к электросети и компьютеру. Если не помогает, обратитесь в техподдержку.');
@@ -183,6 +188,7 @@ bot.on('message', async (ctx) => {
     
     else if (currentStep === 'waiting_for_note') {
         try {
+            global_problem = `${problem_case_1}, а именно ${problem_case_2.charAt(0).toLowerCase() + problem_case_2.slice(1)}`;
             if (messageText === 'Добавить') {
                 await ctx.reply('Пожалуйста, введите ваше примечание:');
                 userSteps.set(ctx.chat.id, 'waiting_for_comment');
@@ -203,6 +209,8 @@ bot.on('message', async (ctx) => {
     
     else if (currentStep === 'waiting_for_comment') {
         try {
+            
+            console.log('global problem', global_problem)
             comment = messageText;
             console.log("comment=", comment);
 
