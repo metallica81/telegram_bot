@@ -8,18 +8,23 @@
         "shatsionokSchedule"
     ],
     "osipovSchedule": {
-        "name": "Степан Осипов",
+        "name": "Осипов Степан Евгеньевич",
+        "tg_id": 7458287339,
+        "order_count": 0
+    },
+    "egorovSchedule": {
+        "name": "Егоров Сергей Владимирович",
         "tg_id": 7458287339,
         "order_count": 0
     },
     "shatsionokSchedule": {
         "name": "Шационок Павел Васильевич",
-        "tg_id": 5315674916,
+        "tg_id": 7458287339,
         "order_count": 18,
         "schedule_1th_week": [
             {
                 "Понедельник": [
-                    "3 марта",
+                    "17 марта",
                     {
                         "lessonNumber": 4,
                         "lessonTime": [
@@ -66,7 +71,7 @@
             },
             {
                 "Вторник": [
-                    "4 марта",
+                    "18 марта",
                     {
                         "lessonNumber": 2,
                         "lessonTime": [
@@ -127,7 +132,7 @@
             },
             {
                 "Среда": [
-                    "5 марта",
+                    "19 марта",
                     {
                         "lessonNumber": 4,
                         "lessonTime": [
@@ -146,7 +151,7 @@
             },
             {
                 "Четверг": [
-                    "6 марта",
+                    "20 марта",
                     {
                         "lessonNumber": 1,
                         "lessonTime": [
@@ -483,12 +488,12 @@
     },
     "vrublevskiySchedule": {
         "name": "Врублевский Константин Эдуардович",
-        "tg_id": 5315674916,
+        "tg_id": 7458287339,
         "order_count": 13,
         "schedule_1th_week": [
             {
                 "Среда": [
-                    "5 марта",
+                    "12 марта",
                     {
                         "lessonNumber": 5,
                         "lessonTime": [
@@ -521,7 +526,7 @@
             },
             {
                 "Пятница": [
-                    "7 марта",
+                    "14 марта",
                     {
                         "lessonNumber": 4,
                         "lessonTime": [
@@ -557,12 +562,12 @@
     },
     "homutovSchelule": {
         "name": "Хомутов Андрей Сергеевич",
-        "tg_id": 5315674916,
-        "order_count": 12,
+        "tg_id": 7458287339,
+        "order_count": 13,
         "schedule_1th_week": [
             {
                 "Понедельник": [
-                    "3 марта",
+                    "17 марта",
                     {
                         "lessonNumber": 3,
                         "lessonTime": [
@@ -609,7 +614,7 @@
             },
             {
                 "Вторник": [
-                    "4 марта",
+                    "18 марта",
                     {
                         "lessonNumber": 4,
                         "lessonTime": [
@@ -628,7 +633,7 @@
             },
             {
                 "Среда": [
-                    "5 марта",
+                    "19 марта",
                     {
                         "lessonNumber": 1,
                         "lessonTime": [
@@ -675,7 +680,7 @@
             },
             {
                 "Четверг": [
-                    "6 марта",
+                    "20 марта",
                     {
                         "lessonNumber": 5,
                         "lessonTime": [
@@ -708,7 +713,7 @@
             },
             {
                 "Пятница": [
-                    "7 марта",
+                    "21 марта",
                     {
                         "lessonNumber": 3,
                         "lessonTime": [

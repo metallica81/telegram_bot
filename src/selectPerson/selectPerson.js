@@ -14,11 +14,11 @@ import { getEnName } from './getEnName.js';
 let data = getDataBase(); // Вызвали базу данных
 
 export const availableInstructorStack = getAvailableStack(data.instructorStack);
-console.log(`availableInstructorStack`, availableInstructorStack)
+console.log(`стек свободных преподавателей`, availableInstructorStack)
 
 // Создаем стек для очереди преподавателей (FILO)
 const instructorStack = data.instructorStack;
-console.log(`instructorStack`, instructorStack)
+console.log(`стек всех преподаватей`, instructorStack)
 
 // Функция для поиска сотрудника
 export function findStaff(num_classroom) {

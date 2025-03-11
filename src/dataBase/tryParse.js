@@ -12,7 +12,6 @@ const tgPersonalID = 7458287339;
 //5428269745 - id Павла Васильевича
 //7458287339 - second acc
 //1311307294 - Яся
-//7458287339
 
 
 
@@ -58,20 +57,40 @@ const allFunctions = {
     }
 }
 
+const parseData = {
+    staffMenu: 'https://www.miit.ru/depts/21123/people',
+    shatsionok: {
+        instructorKey: "shatsionokSchedule",
+        instructorPage: 'a[href="/people/27900"]',
+        infoMenu: '.page__sub-menu-header__title',
+        schedulePart: 'a[href="/people/27900/timetable"]'
+    },
+    vrublevskiy: {
+        instructorKey: "vrublevskiySchedule",
+        instructorPage: 'a[href="/people/405"]',
+        infoMenu: '.page__sub-menu-header__title',
+        schedulePart: 'a[href="/people/405/timetable"]'
+    },
+    homutov: {
+        instructorKey: "homutovSchelule",
+        instructorPage: 'a[href="/people/488332"]',
+        infoMenu: '.page__sub-menu-header__title',
+        schedulePart: 'a[href="/people/488332/timetable"]'
+    }
+}
 
-let parseOfficerShatsionok = (async (tgPersonalID) => {
+async function parseStaff(tgPersonalID, staffList, instructorPage, infoMenu, schedulePart, instructorKey) {
     const browser = await puppeteer.launch({ headless: false }); // headless - открытие в фоновом режиме
     const page = await browser.newPage();
-    await page.goto('https://www.miit.ru/depts/21123/people'); // переходим в раздел сотрудников отдела
-
-    await page.click('a[href="/people/27900"]'); // переходим на страницу Павла Васильевича
-    await page.click('.page__sub-menu-header__title'); // раскрываем меню информации
-    await page.click('a[href="/people/27900/timetable"]'); // переходим в расписание
+    await page.goto(staffList); // переходим в раздел сотрудников отдела
+    await page.click(instructorPage); // переходим на страницу сотрудника
+    await page.click(infoMenu); // раскрываем меню информации
+    await page.click(schedulePart); // переходим в расписание
 
     let objectInstructorSchedule = await page.evaluate((
         tgPersonalID, getInstructorNameStr, 
         getLessonsStr, getClassroomsStr, 
-        fixedTimesStr, allDataStr) => {
+        fixedTimesStr, allDataStr, instructorKey) => {
     
         // Восстанавливаем функции в контексте браузера
         const getInstructorName = eval(`(${getInstructorNameStr})`);
@@ -80,11 +99,11 @@ let parseOfficerShatsionok = (async (tgPersonalID) => {
         const fixedTimes = JSON.parse(fixedTimesStr);
         const allData = JSON.parse(allDataStr); // Декодируем allData
     
-        function parseSchedule(allData) {
+        function parseSchedule(instructorSchedule) {
             const data = {
                 name: null,
                 tg_id: tgPersonalID,
-                order_count: allData.shatsionokSchedule.order_count, 
+                order_count: instructorSchedule.order_count, 
                 schedule_1th_week: [],
                 schedule_2nd_week: [],
             };
@@ -121,185 +140,45 @@ let parseOfficerShatsionok = (async (tgPersonalID) => {
             return data;
         }
     
-        return parseSchedule(allData);
+        return parseSchedule(allData[instructorKey]);
     },
     tgPersonalID,
     allFunctions.getInstructorName.toString(),
     allFunctions.getLessons.toString(),
     allFunctions.getClassrooms.toString(),
     JSON.stringify(fixedTimes),  
-    JSON.stringify(allData) 
+    JSON.stringify(allData),
+    instructorKey 
     );  
 
     await browser.close();
     return objectInstructorSchedule;
-});
-
-
-let parseOfficerVrublevskiy = (async (tg_PersonalID) => {
-
-    const browser = await puppeteer.launch({headless: false}); // headless - opening in the background
-    const page = await browser.newPage();
-    await page.goto('https://www.miit.ru/depts/21123/people'); // navigating to the department's employees section
-
-    await page.click('a[href="/people/405"]'); // navigating to Pavel Vasilievich's page
-    // Homutov's href="/people/488332"
-
-    await page.click('.page__sub-menu-header__title'); // expanding the info menu
-
-    await page.click('a[href="/people/405/timetable"]'); // navigating to the timetable
-
-    let objectInstructorSchedule = await page.evaluate((
-        tgPersonalID, getInstructorNameStr, 
-        getLessonsStr, getClassroomsStr, fixedTimesStr, allDataStr) => {
-
-        // Восстанавливаем функцию в контексте страницы
-        const getInstructorName = eval(`(${getInstructorNameStr})`);
-        const getLessons = eval(`(${getLessonsStr})`);
-        const getClassrooms = eval(`(${getClassroomsStr})`);
-        const fixedTimes = eval(`(${fixedTimesStr})`);
-        const allData = JSON.parse(allDataStr); // Декодируем allData
-
-        function parseSchedule() {
-            const data = {
-                name: null,
-                tg_id: tgPersonalID,
-                order_count: allData.vrublevskiySchedule.order_count,
-                schedule_1th_week: [],
-                schedule_2nd_week: [],
-            };
-            
-            function parse_week(weekSelector, scheduleKey) {
-                const days = document.querySelectorAll(`${weekSelector} .show`);
-                days.forEach(day => {
-                    const day_week = day.querySelector(".info-block__header-text").childNodes[0].textContent.trim();
-                    const date = day.querySelector(".info-block__header-text :first-child").textContent.trim();
-
-                    const lessons = getLessons(day);
-                    const classrooms = getClassrooms(day);
-
-                    // Преобразование номеров занятий в соответствующие временные интервалы
-                    const lessonsInfo = lessons.map((num, index) => {
-                        return {
-                            "lessonNumber": num,
-                            "lessonTime": fixedTimes[num] || null, // Назначаем время для конкретного занятия
-                            "classroom": classrooms[index] || null // Кабинет назначается по индексу
-                        };
-                    });
-
-                    // Добавляем расписание дня в итоговую структуру данных
-                    data[scheduleKey].push({
-                        [day_week]: [date].concat(lessonsInfo)
-                    });
-                });
-            }
-
-            data.name = getInstructorName();
-            parse_week("#week-1", "schedule_1th_week");
-            parse_week("#week-2", "schedule_2nd_week");
-
-            return data;
-        }
-
-        return parseSchedule(allData);
-    },
-    tgPersonalID,
-    allFunctions.getInstructorName.toString(),
-    allFunctions.getLessons.toString(),
-    allFunctions.getClassrooms.toString(),
-    JSON.stringify(fixedTimes),
-    JSON.stringify(allData) 
-    ); 
-
-    await browser.close();
-    return objectInstructorSchedule;
-});
-
-
-let parseOfficerHomutov = (async (tg_PersonalID) => {
-
-    const browser = await puppeteer.launch({ headless: false }); // Открытие в видимом режиме для отладки
-    const page = await browser.newPage();
-    await page.goto('https://www.miit.ru/depts/21123/people'); // Переход на страницу сотрудников
-
-    await page.click('a[href="/people/488332"]'); // Переход на страницу конкретного сотрудника
-
-    await page.click('.page__sub-menu-header__title'); // Раскрытие меню информации
-
-    await page.click('a[href="/people/488332/timetable"]'); // Переход в раздел расписания
-
-    let objectInstructorSchedule = await page.evaluate((
-        tgPersonalID, getInstructorNameStr, 
-        getLessonsStr, getClassroomsStr, fixedTimesStr, allDataStr) => {
-
-        // Восстанавливаем функцию в контексте страницы
-        const getInstructorName = eval(`(${getInstructorNameStr})`);
-        const getLessons = eval(`(${getLessonsStr})`);
-        const getClassrooms = eval(`(${getClassroomsStr})`);
-        const fixedTimes = eval(`(${fixedTimesStr})`);
-        const allData = JSON.parse(allDataStr); // Декодируем allData
-
-        function parseSchedule() {
-            const data = {
-                name: null,
-                tg_id: tgPersonalID,
-                order_count: allData.vrublevskiySchedule.order_count,
-                schedule_1th_week: [],
-                schedule_2nd_week: [],
-            };
-            
-            function parse_week(weekSelector, scheduleKey) {
-                const days = document.querySelectorAll(`${weekSelector} .show`);
-                days.forEach(day => {
-                    const day_week = day.querySelector(".info-block__header-text").childNodes[0].textContent.trim();
-                    const date = day.querySelector(".info-block__header-text :first-child").textContent.trim();
-
-                    const lessons = getLessons(day);
-                    const classrooms = getClassrooms(day);
-
-                    // Преобразование номеров занятий в соответствующие временные интервалы
-                    const lessonsInfo = lessons.map((num, index) => {
-                        return {
-                            "lessonNumber": num,
-                            "lessonTime": fixedTimes[num] || null, // Назначаем время для конкретного занятия
-                            "classroom": classrooms[index] || null // Кабинет назначается по индексу
-                        };
-                    });
-
-                    // Добавляем расписание дня в итоговую структуру данных
-                    data[scheduleKey].push({
-                        [day_week]: [date].concat(lessonsInfo)
-                    });
-                });
-            }
-
-            data.name = getInstructorName();
-            parse_week("#week-1", "schedule_1th_week");
-            parse_week("#week-2", "schedule_2nd_week");
-
-            return data;
-        }
-
-        return parseSchedule(allData);
-    },
-    tgPersonalID,
-    allFunctions.getInstructorName.toString(),
-    allFunctions.getLessons.toString(),
-    allFunctions.getClassrooms.toString(),
-    JSON.stringify(fixedTimes),
-    JSON.stringify(allData) 
-    ); 
-
-    await browser.close();
-    return objectInstructorSchedule;
-});
+}
 
 async function writeDataToFile() {
     try {
         // Дожидаемся данных от обеих функций
-        const dataShatsionok = await parseOfficerShatsionok(tgPersonalID); 
-        const dataVrublevskiy = await parseOfficerVrublevskiy(tgPersonalID); 
-        const dataHomutov = await parseOfficerHomutov(tgPersonalID);
+        const dataShatsionok = await parseStaff(tgPersonalID, 
+            parseData.staffMenu, 
+            parseData.shatsionok.instructorPage,
+            parseData.shatsionok.infoMenu,
+            parseData.shatsionok.schedulePart,
+            parseData.shatsionok.instructorKey
+        ); 
+        const dataVrublevskiy = await parseStaff(tgPersonalID, 
+            parseData.staffMenu, 
+            parseData.vrublevskiy.instructorPage,
+            parseData.vrublevskiy.infoMenu,
+            parseData.vrublevskiy.schedulePart,
+            parseData.vrublevskiy.instructorKey
+        ); 
+        const dataHomutov = await parseStaff(tgPersonalID, 
+            parseData.staffMenu, 
+            parseData.homutov.instructorPage,
+            parseData.homutov.infoMenu,
+            parseData.homutov.schedulePart,
+            parseData.homutov.instructorKey
+        );
 
         // Создаем объект с данными
         const combinedData = {
@@ -308,6 +187,7 @@ async function writeDataToFile() {
             countOfEachClickRedirect: allData.countOfEachClickRedirect,
             instructorStack: allData.instructorStack,
             osipovSchedule: allData.osipovSchedule,
+            egorovSchedule: allData.egorovSchedule,
             shatsionokSchedule: dataShatsionok,
             vrublevskiySchedule: dataVrublevskiy,
             homutovSchelule: dataHomutov
@@ -337,3 +217,4 @@ async function printData() {
 }
 
 printData();
+

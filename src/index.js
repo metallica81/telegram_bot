@@ -34,10 +34,13 @@ export let stackForKeyBoard = availableInstructorStack;  // отдельная �
 
 function resetStack() {
     stackForKeyBoard = availableInstructorStack; // Создаём новый массив с актуальными значениями
-    if (!stackForKeyBoard.includes('backUpSchedule')) {
-        stackForKeyBoard.push('backUpSchedule')
+    if (!stackForKeyBoard.includes('osipovSchedule')) {
+        stackForKeyBoard.push('osipovSchedule')
     }
-    console.log(`stackForKeyBoard:`, stackForKeyBoard)
+    if (!stackForKeyBoard.includes('egorovSchedule')) {
+        stackForKeyBoard.push('egorovSchedule')
+    }
+    console.log(`стек всех преподавателей, включая Егорова и Осипова, для того чтобы перенаправить заявку`, stackForKeyBoard)
 }
 
 // Команда /start для начала диалога
@@ -120,6 +123,7 @@ bot.on('message', async (ctx) => {
     // Ответы на проблемы с оборудованием
     else if (currentStep === 'problem_equipment_selected') {
         try {
+            problem_case_2 = messageText;
             switch (messageText) {
                 case 'Не работает проектор':
                     await ctx.reply('Проверьте подключение проектора к электросети и компьютеру. Если не помогает, обратитесь в техподдержку.');

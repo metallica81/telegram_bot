@@ -15,15 +15,15 @@ export function getAvailableStack(stack) {
 
     return stack.filter(officer => {
         const busy = isInstructorBusy(data[officer], currentFormattedDate, time24);
-        if (busy) {
-            console.log(`${officer} занят`);
-        } else {
-            console.log(`${officer} свободен`);
-        }
+        // if (busy) {
+        //     console.log(`${officer} занят`);
+        // } else {
+        //     console.log(`${officer} свободен`);
+        // }
         return !busy; // Оставляем только свободных преподавателей
     });
 }
 
 
-console.log(availableInstructorStack)
-console.log(getAvailableStack(availableInstructorStack))
+//console.log(availableInstructorStack)
+//console.log(getAvailableStack(availableInstructorStack))
