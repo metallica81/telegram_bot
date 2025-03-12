@@ -264,15 +264,15 @@ bot.on('message', async (ctx) => {
                     await continueWithInstructor(chatId, ctx, userSteps, instructor_name);
                     await countOrders(instructorKey, data);
                 }
-                console.log(`isChangeQueue и !isLinkedInstuctor: ${isChangeQueue} || ${!isLinkedInstuctor} : ${isChangeQueue || !isLinkedInstuctor}`)
+                //console.log(`isChangeQueue и !isLinkedInstuctor: ${isChangeQueue} || ${!isLinkedInstuctor} : ${isChangeQueue || !isLinkedInstuctor}`)
                 if (isChangeQueue || !isLinkedInstuctor) { // меняем очередь, если препода брали из очереди или
                     changeStack(data, instructorKey, nextInstructorKey)  // если прикреплённый перенаправил
                 }
                 // isChangeQueue ? isChangeQueue : isChangeQueue = true
                 data.countCommonOrders++;
-                console.log(`все принятые заявки: ${data.countCommonOrders}`)
-                console.log(`redirected orders: ${data.countRedirectedOrders}`)
-                console.log(`each clickredirect: ${data.countOfEachClickRedirect}`)
+                // console.log(`все принятые заявки: ${data.countCommonOrders}`)
+                // console.log(`redirected orders: ${data.countRedirectedOrders}`)
+                // console.log(`each clickredirect: ${data.countOfEachClickRedirect}`)
                 setDataBase(data); // Сохраняем изменения обратно
                 
             }
