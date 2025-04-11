@@ -34,10 +34,13 @@ export let stackForKeyBoard = availableInstructorStack;  // отдельная �
 
 function resetStack() {
     stackForKeyBoard = availableInstructorStack; // Создаём новый массив с актуальными значениями
-    if (!stackForKeyBoard.includes('backUpSchedule')) {
-        stackForKeyBoard.push('backUpSchedule')
+    if (!stackForKeyBoard.includes('osipovSchedule')) {
+        stackForKeyBoard.push('osipovSchedule')
     }
-    console.log(`stackForKeyBoard:`, stackForKeyBoard)
+    if (!stackForKeyBoard.includes('egorovSchedule')) {
+        stackForKeyBoard.push('egorovSchedule')
+    }
+    console.log(`стек всех преподавателей, включая Егорова и Осипова, для того чтобы перенаправить заявку`, stackForKeyBoard)
 }
 
 // Команда /start для начала диалога
@@ -89,6 +92,8 @@ bot.on('message', async (ctx) => {
     else if (currentStep === 'waiting_for_problem') {
         try {
             if (messageText === 'Да') {
+                problem_case_1 = 'Проблема с оборудованием';
+                console.log(problem_case_1)
                 console.log("User selected 'Да' - asking for equipment issues");
     
                 const problemKeyBoard_Yes = new Keyboard().text('Не работает проектор')
@@ -101,6 +106,8 @@ bot.on('message', async (ctx) => {
                 problem_case_1 = 'Проблемы с оборудованием';
                 userSteps.set(ctx.chat.id, 'problem_equipment_selected');
             } else if (messageText === 'Нет') {
+                problem_case_1 = 'Проблемма с программой';
+                console.log(problem_case_1)
                 console.log("User selected 'Нет' - asking for program issues");
     
                 const problemKeyBoard_No = new Keyboard().text('Не работает power point')
@@ -120,6 +127,8 @@ bot.on('message', async (ctx) => {
     // Ответы на проблемы с оборудованием
     else if (currentStep === 'problem_equipment_selected') {
         try {
+            problem_case_2 = messageText;
+            console.log(problem_case_2)
             switch (messageText) {
                 case 'Не работает проектор':
                     await ctx.reply('Проверьте подключение проектора к электросети и компьютеру. Если не помогает, обратитесь в техподдержку.');
@@ -179,6 +188,7 @@ bot.on('message', async (ctx) => {
     
     else if (currentStep === 'waiting_for_note') {
         try {
+            global_problem = `${problem_case_1}, а именно ${problem_case_2.charAt(0).toLowerCase() + problem_case_2.slice(1)}`;
             if (messageText === 'Добавить') {
                 await ctx.reply('Пожалуйста, введите ваше примечание:');
                 userSteps.set(ctx.chat.id, 'waiting_for_comment');
@@ -199,6 +209,8 @@ bot.on('message', async (ctx) => {
     
     else if (currentStep === 'waiting_for_comment') {
         try {
+            
+            console.log('global problem', global_problem)
             comment = messageText;
             console.log("comment=", comment);
 
@@ -252,15 +264,15 @@ bot.on('message', async (ctx) => {
                     await continueWithInstructor(chatId, ctx, userSteps, instructor_name);
                     await countOrders(instructorKey, data);
                 }
-                console.log(`isChangeQueue и !isLinkedInstuctor: ${isChangeQueue} || ${!isLinkedInstuctor} : ${isChangeQueue || !isLinkedInstuctor}`)
+                //console.log(`isChangeQueue и !isLinkedInstuctor: ${isChangeQueue} || ${!isLinkedInstuctor} : ${isChangeQueue || !isLinkedInstuctor}`)
                 if (isChangeQueue || !isLinkedInstuctor) { // меняем очередь, если препода брали из очереди или
                     changeStack(data, instructorKey, nextInstructorKey)  // если прикреплённый перенаправил
                 }
                 // isChangeQueue ? isChangeQueue : isChangeQueue = true
                 data.countCommonOrders++;
-                console.log(`все принятые заявки: ${data.countCommonOrders}`)
-                console.log(`redirected orders: ${data.countRedirectedOrders}`)
-                console.log(`each clickredirect: ${data.countOfEachClickRedirect}`)
+                // console.log(`все принятые заявки: ${data.countCommonOrders}`)
+                // console.log(`redirected orders: ${data.countRedirectedOrders}`)
+                // console.log(`each clickredirect: ${data.countOfEachClickRedirect}`)
                 setDataBase(data); // Сохраняем изменения обратно
                 
             }

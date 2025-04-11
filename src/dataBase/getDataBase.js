@@ -26,3 +26,5 @@ export function setDataBase(updatedData) {
         console.error("Ошибка при записи в файл базы данных:", err);
     }
 }
+
+export const allData = getDataBase();
