@@ -25,7 +25,7 @@ let num_classroom;
 let problem_case_1;
 let problem_case_2;
 let global_problem;
-let comment = "отсутствует";
+let comment = null;
 
 const data = getDataBase();
 let nextInstructorKey = null;
@@ -41,6 +41,7 @@ function resetStack() {
         stackForKeyBoard.push('egorovSchedule')
     }
     console.log(`стек всех преподавателей, включая Егорова и Осипова, для того чтобы перенаправить заявку`, stackForKeyBoard)
+    comment = "отсутствует";
 }
 
 // Команда /start для начала диалога

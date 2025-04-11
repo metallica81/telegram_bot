@@ -1,12 +1,11 @@
 {
-    "countCommonOrders": 0,
+    "countCommonOrders": 1,
     "countRedirectedOrders": 0,
     "countOfEachClickRedirect": 0,
     "instructorStack": [
-        "vrublevskiySchedule",
-        "titovSchelule",
         "shatsionokSchedule",
-        "homutovSchelule"
+        "homutovSchelule",
+        "titovSchelule"
     ],
     "osipovSchedule": {
         "name": "Осипов Степан Евгеньевич",
