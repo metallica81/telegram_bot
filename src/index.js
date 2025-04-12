@@ -21,10 +21,10 @@ const userSteps = new Map();
 
 // Глобальные переменные для хранения информации по заявке
 let chatId; // Пример chatId
-let num_classroom;
-let problem_case_1;
-let problem_case_2;
-let global_problem;
+let num_classroom = null;
+let problem_case_1 = null;
+let problem_case_2 = null;
+let global_problem = null;
 let comment = null;
 
 const data = getDataBase();
@@ -41,6 +41,9 @@ function resetStack() {
         stackForKeyBoard.push('egorovSchedule')
     }
     console.log(`стек всех преподавателей, включая Егорова и Осипова, для того чтобы перенаправить заявку`, stackForKeyBoard)
+    problem_case_1 = null;
+    problem_case_2 = null;
+    global_problem = null;
     comment = "отсутствует";
 }
 
@@ -51,7 +54,7 @@ bot.command('start', async (ctx) => {
 
     // Сброс состояния сессии при начале новой заявки
     chatId = ctx.chat.id;
-    await ctx.reply(`Ваш chatID: ${chatId}`);
+    // await ctx.reply(`Ваш chatID: ${chatId}`);
     userSteps.set(chatId, 'waiting_for_classroom'); // Устанавливаем начальный шаг
     await ctx.reply('Введите номер аудитории, в которой вы находитесь');
 });
@@ -76,8 +79,8 @@ bot.on('message', async (ctx) => {
                 console.log("num_classroom=", num_classroom);
                 userSteps.set(ctx.chat.id, 'waiting_for_problem'); // Переход к следующему этапу
     
-                const problemKeyBoard = new Keyboard().text('Да').row().text('Нет').resized();
-                await ctx.reply('У вас проблема с оборудованием?', {
+                const problemKeyBoard = new Keyboard().text('С оборудованием').row().text('С программой').resized();
+                await ctx.reply('У вас проблема с оборудованием или программой?', {
                     reply_markup: problemKeyBoard
                 });
             } else {
@@ -92,7 +95,7 @@ bot.on('message', async (ctx) => {
     
     else if (currentStep === 'waiting_for_problem') {
         try {
-            if (messageText === 'Да') {
+            if (messageText === 'С оборудованием') {
                 problem_case_1 = 'Проблема с оборудованием';
                 console.log(problem_case_1)
                 console.log("User selected 'Да' - asking for equipment issues");
@@ -101,24 +104,27 @@ bot.on('message', async (ctx) => {
                     .row().text('Не работает компьютер').row().text('Не работают динамики')
                     .row().text('Не работает микрофон').row().text('Не отображается флешка').resized();
     
-                await ctx.reply('Выберите вариант проблемы с оборудованием:', {
+                await ctx.reply('Выберите вариант проблемы с оборудованием или напишите свой:', {
                     reply_markup: problemKeyBoard_Yes
                 });
                 problem_case_1 = 'Проблемы с оборудованием';
                 userSteps.set(ctx.chat.id, 'problem_equipment_selected');
-            } else if (messageText === 'Нет') {
+            } else if (messageText === 'С программой') {
                 problem_case_1 = 'Проблемма с программой';
                 console.log(problem_case_1)
                 console.log("User selected 'Нет' - asking for program issues");
     
                 const problemKeyBoard_No = new Keyboard().text('Не работает power point')
-                    .row().text('Не открываются файлы из флешки').row().text('Не запускается видео').resized();
+                    .row().text('Не открываются файлы из флешки').row()
+                    .text('Не запускается видео').resized();
     
-                await ctx.reply('Проблема с работой какой-либо программы?', {
+                await ctx.reply('Выберите вариант проблемы с программой или напишите свой:', {
                     reply_markup: problemKeyBoard_No
                 });
                 problem_case_1 = 'Проблемы с программой';
                 userSteps.set(ctx.chat.id, 'problem_program_selected');
+            } else {
+                await ctx.reply('Пожалуйста, нажмите на кнопку справа от поля ввода и выберите один из пунктов ');
             }
         } catch (error) {
             console.error(`Ошибка в ${currentStep}: ${error}`)
@@ -146,8 +152,6 @@ bot.on('message', async (ctx) => {
                 case 'Не отображается флешка':
                     await ctx.reply('Попробуйте вставить флешку в другой USB-порт или перезапустить компьютер.');
                     break;
-                default:
-                    await ctx.reply('Пожалуйста, выберите один из предложенных вариантов.');
             }
             // Переход к шагу 'waiting_for_note'
             const noteKeyboard = new Keyboard().text('Добавить').row().text('Не стоит').resized();
@@ -163,6 +167,7 @@ bot.on('message', async (ctx) => {
     // Ответы на проблемы с программами
     else if (currentStep === 'problem_program_selected') {
         try {
+            problem_case_2 = messageText;
             switch (messageText) {
                 case 'Не работает power point':
                     await ctx.reply('Попробуйте перезапустить программу. Если не помогает, проверьте наличие обновлений Microsoft Office.');
@@ -173,8 +178,6 @@ bot.on('message', async (ctx) => {
                 case 'Не запускается видео':
                     await ctx.reply('Проверьте, установлен ли необходимый кодек для воспроизведения видео. Попробуйте открыть файл в другом плеере.');
                     break;
-                default:
-                    await ctx.reply('Пожалуйста, выберите один из предложенных вариантов.');
             }
             // Переход к шагу 'waiting_for_note'
             userSteps.set(ctx.chat.id, 'waiting_for_note');
@@ -201,6 +204,8 @@ bot.on('message', async (ctx) => {
                 const callEmployeeKeyboard = new Keyboard().text('Вызываем').row().text('Не вызываем').resized();
                 await ctx.reply('Вызываем сотрудника?', { reply_markup: callEmployeeKeyboard });
                 userSteps.set(ctx.chat.id, 'waiting_for_employee_call');
+            } else {
+                await ctx.reply('Пожалуйста, нажмите на кнопку справа от поля ввода и выберите один из пунктов');
             }
         } catch (error) {
             console.error(`Ошибка в ${currentStep}: ${error}`)
@@ -210,10 +215,7 @@ bot.on('message', async (ctx) => {
     
     else if (currentStep === 'waiting_for_comment') {
         try {
-            
-            console.log('global problem', global_problem)
             comment = messageText;
-            console.log("comment=", comment);
 
             // Скрываем клавиатуру после ввода примечания
             await ctx.reply('Примечание добавлено.', { reply_markup: { remove_keyboard: true } });
@@ -235,7 +237,6 @@ bot.on('message', async (ctx) => {
             if (messageText === 'Вызываем') {
                 // Вызываем функцию для поиска преподавателя
                 [instructor_name, instructor_id, isChangeQueue, instructorKey, isLinkedInstuctor] = findStaff(num_classroom);
-                console.log(`получаем isLinked: ${isLinkedInstuctor}`)
                 // Убираем кнопки и завершаем диалог
                 await ctx.reply(`Отправляем заявку сотруднику`, { reply_markup: { remove_keyboard: true } });
     
@@ -246,6 +247,8 @@ bot.on('message', async (ctx) => {
                 // Обработка отказа от вызова сотрудника
                 await ctx.reply('Заявка не будет продолжена. Всего доброго!', { reply_markup: { remove_keyboard: true } });
                 userSteps.set(ctx.chat.id, 'discontinue_order');
+            } else {
+                await ctx.reply('Пожалуйста, нажмите на кнопку справа от поля ввода и выберите один из пунктов');
             }
         } catch (error) {
             console.error(`Ошибка в ${currentStep}: ${error}`)
