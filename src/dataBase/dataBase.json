@@ -1,11 +1,11 @@
 {
-    "countCommonOrders": 0,
-    "countRedirectedOrders": 0,
-    "countOfEachClickRedirect": 0,
+    "countCommonOrders": 6,
+    "countRedirectedOrders": 2,
+    "countOfEachClickRedirect": 3,
     "instructorStack": [
-        "shatsionokSchedule",
+        "titovSchelule",
         "homutovSchelule",
-        "titovSchelule"
+        "shatsionokSchedule"
     ],
     "osipovSchedule": {
         "name": "Осипов Степан Евгеньевич",
@@ -15,12 +15,12 @@
     "egorovSchedule": {
         "name": "Егоров Сергей Владимирович",
         "tg_id": 338530750,
-        "order_count": 0
+        "order_count": 1
     },
     "shatsionokSchedule": {
         "name": "Шационок Павел Васильевич",
         "tg_id": 5428269745,
-        "order_count": 0,
+        "order_count": 2,
         "schedule_1th_week": [
             {
                 "Понедельник": [
@@ -489,7 +489,7 @@
     "homutovSchelule": {
         "name": "Хомутов Андрей Сергеевич",
         "tg_id": 264982980,
-        "order_count": 0,
+        "order_count": 1,
         "schedule_1th_week": [
             {
                 "Понедельник": [
@@ -1185,5 +1185,79 @@
                 ]
             }
         ]
+    },
+    "vrublevskiySchedule": {
+        "name": "Врублевский Константин Эдуардович",
+        "tg_id": 885326963,
+        "order_count": 20,
+        "schedule_1th_week": [
+            {
+                "Среда": [
+                    "2 апреля",
+                    {
+                        "lessonNumber": 5,
+                        "lessonTime": [
+                            [
+                                15,
+                                20
+                            ],
+                            [
+                                16,
+                                40
+                            ]
+                        ],
+                        "classroom": 3302
+                    },
+                    {
+                        "lessonNumber": 6,
+                        "lessonTime": [
+                            [
+                                16,
+                                55
+                            ],
+                            [
+                                18,
+                                15
+                            ]
+                        ],
+                        "classroom": 3302
+                    }
+                ]
+            },
+            {
+                "Пятница": [
+                    "4 апреля",
+                    {
+                        "lessonNumber": 4,
+                        "lessonTime": [
+                            [
+                                13,
+                                45
+                            ],
+                            [
+                                15,
+                                5
+                            ]
+                        ],
+                        "classroom": 3213
+                    },
+                    {
+                        "lessonNumber": 5,
+                        "lessonTime": [
+                            [
+                                15,
+                                20
+                            ],
+                            [
+                                16,
+                                40
+                            ]
+                        ],
+                        "classroom": 3213
+                    }
+                ]
+            }
+        ],
+        "schedule_2nd_week": []
     }
 }

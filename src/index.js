@@ -10,6 +10,11 @@ import { setDataBase, getDataBase } from './dataBase/getDataBase.js';
 import { changeStack } from './connectingWithInstructor/changeStack.js'
 import { countOrders } from './countOrders.js';
 
+import moment from 'moment';
+import 'moment/locale/ru.js';  // русская локализация
+import { convertDate } from './selectPerson/convertDate.js';
+
+
 // Создаем бота
 const bot = new Bot(process.env.BOT_API_KEY);
 bot.api.setMyCommands([
@@ -71,6 +76,10 @@ bot.on('message', async (ctx) => {
     //console.log(`Received message: ${messageText}, Current step: ${userSteps.get(ctx.chat.id)}`);
 
     const currentStep = userSteps.get(ctx.chat.id);
+
+    const today = moment(); // Используем текущую дату
+    const time24 = [Number(moment().format('HH')), Number(moment().format('mm'))];
+    const currentFormattedDate = convertDate(today); // Форматируем дату для поиска в базе
 
     if (currentStep === 'waiting_for_classroom') {
         try {
@@ -237,7 +246,8 @@ bot.on('message', async (ctx) => {
             if (messageText === 'Вызываем') {
                 // Вызываем функцию для поиска преподавателя
                 [instructor_name, instructor_id, isChangeQueue, instructorKey, isLinkedInstuctor] = findStaff(num_classroom);
-                // Убираем кнопки и завершаем диалог
+                console.log(`Первоначально заявка отправлена ${instructor_name} в ${time24} ${currentFormattedDate}`)
+                
                 await ctx.reply(`Отправляем заявку сотруднику`, { reply_markup: { remove_keyboard: true } });
     
                 const requestData =  [instructor_id, num_classroom, global_problem, comment, messageText];
@@ -264,9 +274,11 @@ bot.on('message', async (ctx) => {
                     await continueWithInstructor(chatId, ctx, userSteps, data[nextInstructorKey].name);
                     await countOrders(nextInstructorKey, data);
                     data.countRedirectedOrders++;
+                    console.log(`заявку принял ${data[nextInstructorKey].name} в ${time24} ${currentFormattedDate}`)
                 } else {
                     await continueWithInstructor(chatId, ctx, userSteps, instructor_name);
                     await countOrders(instructorKey, data);
+                    console.log(`заявку принял ${instructor_name} в ${time24} ${currentFormattedDate}`)
                 }
                 //console.log(`isChangeQueue и !isLinkedInstuctor: ${isChangeQueue} || ${!isLinkedInstuctor} : ${isChangeQueue || !isLinkedInstuctor}`)
                 if (isChangeQueue || !isLinkedInstuctor) { // меняем очередь, если препода брали из очереди или
@@ -278,7 +290,6 @@ bot.on('message', async (ctx) => {
                 // console.log(`redirected orders: ${data.countRedirectedOrders}`)
                 // console.log(`each clickredirect: ${data.countOfEachClickRedirect}`)
                 setDataBase(data); // Сохраняем изменения обратно
-                
             }
     
             else if (messageText == 'Перенаправить') {
@@ -290,11 +301,16 @@ bot.on('message', async (ctx) => {
                 //console.log(`меняем isLinked на false`)
                 const params = [instructor_name, 
                     num_classroom, global_problem, comment, messageText]
-                nextInstructorKey ? // В первый раз отправляем автоматически выбранному сотруднику, а
-                                    // в следующий раз уже перенаправляем нужному
-                await redirectOrder(ctx, userSteps, data[nextInstructorKey].tg_id, nextInstructorKey, ...params):
-                await redirectOrder(ctx, userSteps, instructor_id, instructorKey, ...params);
-                
+
+                if (nextInstructorKey) {
+                    await redirectOrder(ctx, userSteps, data[nextInstructorKey].tg_id, nextInstructorKey, ...params)
+                } else {
+                    await redirectOrder(ctx, userSteps, instructor_id, instructorKey, ...params)
+                }
+                // nextInstructorKey ? // В первый раз отправляем автоматически выбранному сотруднику, а
+                //                     // в следующий раз уже перенаправляем нужному
+                // await redirectOrder(ctx, userSteps, data[nextInstructorKey].tg_id, nextInstructorKey, ...params):
+                // await redirectOrder(ctx, userSteps, instructor_id, instructorKey, ...params);
             }
     
             else {
@@ -304,6 +320,7 @@ bot.on('message', async (ctx) => {
                     if (availableInstructorStack.includes(nextInstructorKey)) {
                         const requestData =  [newInstuctor.tg_id, num_classroom, global_problem, comment, messageText];
                         await startConnectWithInsctructor(ctx, userSteps, ...requestData);
+                        console.log(`заявка перенаправлена ${messageText} в ${time24} ${currentFormattedDate}`)
                     }
                 } catch (error) {
                     console.error(`Ошибка: ${error}`)
