@@ -1,29 +1,14 @@
 import { isInstructorBusy } from './isInstructorBusy.js';
-import moment from 'moment';
-import 'moment/locale/ru.js';  // русская локализация
-import { convertDate } from './convertDate.js';
-import { getDataBase, setDataBase } from '../dataBase/getDataBase.js';
-const time24 = [Number(moment().format('HH')), Number(moment().format('mm'))];
-const today = moment(); // Используем текущую дату
-const currentFormattedDate = convertDate(today); // Форматируем дату для поиска в базе
-
-let data = getDataBase();
-// Создаем стек для очереди только свободный преподавателей преподавателей (FILO)
-export const availableInstructorStack = data.instructorStack;
+import { getDataBase } from '../dataBase/getDataBase.js';
+import { getTime } from './getTime.js';
 
 export function getAvailableStack(stack) {
+    const { time24, currentFormattedDate } = getTime();
 
+    let data = getDataBase();
+    
     return stack.filter(officer => {
         const busy = isInstructorBusy(data[officer], currentFormattedDate, time24);
-        // if (busy) {
-        //     console.log(`${officer} занят`);
-        // } else {
-        //     console.log(`${officer} свободен`);
-        // }
         return !busy; // Оставляем только свободных преподавателей
     });
 }
-
-
-//console.log(availableInstructorStack)
-//console.log(getAvailableStack(availableInstructorStack))

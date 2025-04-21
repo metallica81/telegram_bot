@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
-import { Bot, Keyboard } from 'grammy';
+import { Bot, Keyboard, GrammyError, HttpError } from 'grammy';
 import { findStaff, availableInstructorStack } from './selectPerson/selectPerson.js'; // Импорт функции для получения нужного преподавателя
 import { startConnectWithInsctructor } from './connectingWithInstructor/startConnectWithInsctructor.js';
 import { continueWithInstructor } from './connectingWithInstructor/continueWithInstructor.js';
@@ -9,10 +9,7 @@ import { getEnName } from './selectPerson/getEnName.js';
 import { setDataBase, getDataBase } from './dataBase/getDataBase.js';
 import { changeStack } from './connectingWithInstructor/changeStack.js'
 import { countOrders } from './countOrders.js';
-
-import moment from 'moment';
-import 'moment/locale/ru.js';  // русская локализация
-import { convertDate } from './selectPerson/convertDate.js';
+import { getTime } from './selectPerson/getTime.js';
 
 
 // Создаем бота
@@ -31,21 +28,12 @@ let problem_case_1 = null;
 let problem_case_2 = null;
 let global_problem = null;
 let comment = null;
+let instructorRedirecitonName = null;
 
 const data = getDataBase();
 let nextInstructorKey = null;
 
-export let stackForKeyBoard = availableInstructorStack;  // отдельная очередь для распределения имён по redirect buttons
-
 function resetStack() {
-    stackForKeyBoard = availableInstructorStack; // Создаём новый массив с актуальными значениями
-    if (!stackForKeyBoard.includes('osipovSchedule')) {
-        stackForKeyBoard.push('osipovSchedule')
-    }
-    if (!stackForKeyBoard.includes('egorovSchedule')) {
-        stackForKeyBoard.push('egorovSchedule')
-    }
-    console.log(`стек всех преподавателей, включая Егорова и Осипова, для того чтобы перенаправить заявку`, stackForKeyBoard)
     problem_case_1 = null;
     problem_case_2 = null;
     global_problem = null;
@@ -68,18 +56,40 @@ bot.command('start', async (ctx) => {
 let [instructor_name, instructor_id, isChangeQueue, instructorKey, isLinkedInstuctor] = [null, null, null, null, null];
 
 
+bot.on("callback_query:data", async (ctx) => {
+    instructorRedirecitonName = ctx.callbackQuery.data;
+    
+    await ctx.answerCallbackQuery('Вы выбрали: ' + instructorRedirecitonName);
+
+    if (userSteps.get(ctx.chat.id) === 'waiting_for_instructor_response') {
+        try {
+            const { time24, currentFormattedDate } = getTime();
+
+            nextInstructorKey = getEnName(instructorRedirecitonName, data);
+
+            const newInstuctor = data[nextInstructorKey];
+
+            if (availableInstructorStack.includes(nextInstructorKey)) {
+                const requestData =  [newInstuctor.tg_id, num_classroom, global_problem, comment, instructorRedirecitonName];
+                await startConnectWithInsctructor(ctx, userSteps, ...requestData);
+                console.log(`заявка перенаправлена ${instructorRedirecitonName} в ${time24} ${currentFormattedDate}`)
+                await bot.api.sendMessage(ctx.chat.id, `Вы перенаправили сообщение сотруднику ${instructorRedirecitonName}`);
+            }
+        } catch (error) {
+            console.error(`Ошибка: ${error}`)
+        }
+    }
+    
+});
+
 
 // Обработчик для обычных сообщений
 bot.on('message', async (ctx) => {
-    // console.log('Преподаватель отвечает:', ctx.chat.id, 'Шаг у него при ответе:', userSteps.get(ctx.chat.id));
     const messageText = ctx.message.text;
-    //console.log(`Received message: ${messageText}, Current step: ${userSteps.get(ctx.chat.id)}`);
 
     const currentStep = userSteps.get(ctx.chat.id);
-
-    const today = moment(); // Используем текущую дату
-    const time24 = [Number(moment().format('HH')), Number(moment().format('mm'))];
-    const currentFormattedDate = convertDate(today); // Форматируем дату для поиска в базе
+    
+    const { time24, currentFormattedDate } = getTime();
 
     if (currentStep === 'waiting_for_classroom') {
         try {
@@ -313,25 +323,40 @@ bot.on('message', async (ctx) => {
                 // await redirectOrder(ctx, userSteps, instructor_id, instructorKey, ...params);
             }
     
-            else {
-                try {
-                    nextInstructorKey = getEnName(messageText, data);
-                    const newInstuctor = data[nextInstructorKey];
-                    if (availableInstructorStack.includes(nextInstructorKey)) {
-                        const requestData =  [newInstuctor.tg_id, num_classroom, global_problem, comment, messageText];
-                        await startConnectWithInsctructor(ctx, userSteps, ...requestData);
-                        console.log(`заявка перенаправлена ${messageText} в ${time24} ${currentFormattedDate}`)
-                    }
-                } catch (error) {
-                    console.error(`Ошибка: ${error}`)
-                }
-            }
+            // else {
+            //     try {
+            //         console.log(messageText)
+            //         console.log(`получаю имя сотрудника для redirect: ${instructorRedirecitonName}`)
+            //         nextInstructorKey = getEnName(messageText, data);
+            //         const newInstuctor = data[nextInstructorKey];
+            //         if (availableInstructorStack.includes(nextInstructorKey)) {
+            //             const requestData =  [newInstuctor.tg_id, num_classroom, global_problem, comment, messageText];
+            //             await startConnectWithInsctructor(ctx, userSteps, ...requestData);
+            //             console.log(`заявка перенаправлена ${messageText} в ${time24} ${currentFormattedDate}`)
+            //         }
+            //     } catch (error) {
+            //         console.error(`Ошибка: ${error}`)
+            //     }
+            // }
         } catch (error) {
             console.error(`Ошибка в ${currentStep}: ${error}`)
         }
         
     }
 });
+
+bot.catch((err) => {
+    const ctx = err.ctx;
+    console.error(`Error while handling update ${ctx.update.update_id}:`);
+    const e = err.error;
+    if (e instanceof GrammyError) {
+      console.error("Error in request:", e.description);
+    } else if (e instanceof HttpError) {
+      console.error("Could not contact Telegram:", e);
+    } else {
+      console.error("Unknown error:", e);
+    }
+  });
 
 // Запуск бота
 bot.start();
