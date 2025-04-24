@@ -58,7 +58,6 @@ let [instructor_name, instructor_id, isChangeQueue, instructorKey, isLinkedInstu
 
 bot.on("callback_query:data", async (ctx) => {
     instructorRedirecitonName = ctx.callbackQuery.data;
-    
     await ctx.answerCallbackQuery('Вы выбрали: ' + instructorRedirecitonName);
 
     if (userSteps.get(ctx.chat.id) === 'waiting_for_instructor_response') {
@@ -69,12 +68,12 @@ bot.on("callback_query:data", async (ctx) => {
 
             const newInstuctor = data[nextInstructorKey];
 
-            if (availableInstructorStack.includes(nextInstructorKey)) {
-                const requestData =  [newInstuctor.tg_id, num_classroom, global_problem, comment, instructorRedirecitonName];
-                await startConnectWithInsctructor(ctx, userSteps, ...requestData);
-                console.log(`заявка перенаправлена ${instructorRedirecitonName} в ${time24} ${currentFormattedDate}`)
-                await bot.api.sendMessage(ctx.chat.id, `Вы перенаправили сообщение сотруднику ${instructorRedirecitonName}`);
-            }
+            const requestData =  [newInstuctor.tg_id, num_classroom, global_problem, comment, instructorRedirecitonName];
+            await startConnectWithInsctructor(ctx, userSteps, ...requestData);
+            
+            console.log(`заявка перенаправлена ${instructorRedirecitonName} в ${time24} ${currentFormattedDate}`)
+            await bot.api.sendMessage(ctx.chat.id, `Вы перенаправили сообщение сотруднику ${instructorRedirecitonName}`);
+            
         } catch (error) {
             console.error(`Ошибка: ${error}`)
         }

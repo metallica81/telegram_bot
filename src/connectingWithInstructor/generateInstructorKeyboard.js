@@ -1,12 +1,10 @@
 import { getRestPersons } from "./getRestPersons.js";
 import { getInstructorNameFromEn } from "../selectPerson/getEnName.js";
-import { availableInstructorStack } from "../selectPerson/selectPerson.js";
 import { getAvailableStack } from "../selectPerson/getAvailableStack.js";
 import { InlineKeyboard } from "grammy";
 
 export function generateInstructorKeyboard(excludeKey, data) {
     const currentStack = [...getAvailableStack(data.instructorStack)];
-    console.log('currentStack', currentStack)
 
     if (!currentStack.includes("osipovSchedule")) {
         currentStack.push("osipovSchedule");

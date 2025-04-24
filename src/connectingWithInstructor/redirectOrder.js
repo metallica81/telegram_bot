@@ -54,7 +54,7 @@ export async function redirectOrder(ctx, userSteps, ...params) {
                 console.log("Клавиатура обновлена");
                 previousKeyboard = newKeyboardString; // Обновляем старую клавиатуру
             }
-        }, 5000); // обновляем каждую минуту
+        }, 60000); // обновляем каждую минуту
 
     } catch (error) {
         console.error("Ошибка при отправке сообщения:", error);
