@@ -4,8 +4,8 @@ import { getAvailableStack } from "../selectPerson/getAvailableStack.js";
 import { InlineKeyboard } from "grammy";
 
 export function generateInstructorKeyboard(excludeKey, data) {
-    const currentStack = [...getAvailableStack(data.instructorStack)];
-
+    const currentStack = [...getAvailableStack(data.instructorStack, data)];
+    
     if (!currentStack.includes("osipovSchedule")) {
         currentStack.push("osipovSchedule");
     }

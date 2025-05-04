@@ -1,23 +1,13 @@
 import { instructorClassroomsMap } from './connectClassroom.js'; // класс для препода
 import { isInstructorBusy } from './isInstructorBusy.js';
 import { getAssociatedInstructor } from './getAssociatedInstructor.js';
-import { getDataBase, setDataBase } from '../dataBase/getDataBase.js';
-import { getAvailableStack } from './getAvailableStack.js';
 import { getTime } from './getTime.js';
 
-let data = getDataBase(); // Вызвали базу данных
-
-export const availableInstructorStack = getAvailableStack(data.instructorStack);
-console.log(`стек свободных преподавателей`, availableInstructorStack);
-
-// Создаем стек для очереди преподавателей (FILO)
-const instructorStack = data.instructorStack;
-console.log(`стек всех преподаватей`, instructorStack);
-
 // Функция для поиска сотрудника
-export function findStaff(num_classroom) {
+export function findStaff(num_classroom, data) {
     const { time24, currentFormattedDate } = getTime();
 
+    const instructorStack = data.instructorStack;
     // Определяем, кто закреплён за текущей аудиторией
     let associatedInstructor = getAssociatedInstructor(num_classroom, instructorClassroomsMap)
 

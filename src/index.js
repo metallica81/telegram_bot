@@ -1,7 +1,5 @@
-import dotenv from 'dotenv';
-dotenv.config();
-import { Bot, Keyboard, GrammyError, HttpError } from 'grammy';
-import { findStaff, availableInstructorStack } from './selectPerson/selectPerson.js'; // Импорт функции для получения нужного преподавателя
+import { Keyboard, GrammyError, HttpError } from 'grammy';
+import { findStaff } from './selectPerson/selectPerson.js'; // Импорт функции для получения нужного преподавателя
 import { startConnectWithInsctructor } from './connectingWithInstructor/startConnectWithInsctructor.js';
 import { continueWithInstructor } from './connectingWithInstructor/continueWithInstructor.js';
 import { redirectOrder } from './connectingWithInstructor/redirectOrder.js';
@@ -10,12 +8,10 @@ import { setDataBase, getDataBase } from './dataBase/getDataBase.js';
 import { changeStack } from './connectingWithInstructor/changeStack.js'
 import { countOrders } from './countOrders.js';
 import { getTime } from './selectPerson/getTime.js';
-
+import { bot } from './bot.js';
 import { scheduleQuery } from './api/scheduleQuery.js';
 
 
-// Создаем бота
-const bot = new Bot(process.env.BOT_API_KEY);
 bot.api.setMyCommands([
     { command: 'start', description: 'Оформить заявку' },
 ]);
@@ -237,7 +233,6 @@ bot.on('message', async (ctx) => {
         try {
             comment = messageText;
 
-            // Скрываем клавиатуру после ввода примечания
             await ctx.reply('Примечание добавлено.', { reply_markup: { remove_keyboard: true } });
 
             // Отправляем сообщение и кнопки с вопросом о вызове сотрудника
@@ -256,7 +251,7 @@ bot.on('message', async (ctx) => {
         try {
             if (messageText === 'Вызываем') {
                 // Вызываем функцию для поиска преподавателя
-                [instructor_name, instructor_id, isChangeQueue, instructorKey, isLinkedInstuctor] = findStaff(num_classroom);
+                [instructor_name, instructor_id, isChangeQueue, instructorKey, isLinkedInstuctor] = findStaff(num_classroom, data);
                 console.log(`Первоначально заявка отправлена ${instructor_name} в ${time24} ${currentFormattedDate}`)
                 
                 await ctx.reply(`Отправляем заявку сотруднику`, { reply_markup: { remove_keyboard: true } });
@@ -280,26 +275,24 @@ bot.on('message', async (ctx) => {
     else if (currentStep === 'waiting_for_instructor_response') {
         try {
             if (messageText == 'Принять') {
-                //console.log(nextInstructorKey)
                 if (nextInstructorKey) {
                     await continueWithInstructor(chatId, ctx, userSteps, data[nextInstructorKey].name);
                     await countOrders(nextInstructorKey, data);
                     data.countRedirectedOrders++;
                     console.log(`заявку принял ${data[nextInstructorKey].name} в ${time24} ${currentFormattedDate}`)
-                } else {
+                } 
+                
+                else {
                     await continueWithInstructor(chatId, ctx, userSteps, instructor_name);
                     await countOrders(instructorKey, data);
                     console.log(`заявку принял ${instructor_name} в ${time24} ${currentFormattedDate}`)
                 }
-                //console.log(`isChangeQueue и !isLinkedInstuctor: ${isChangeQueue} || ${!isLinkedInstuctor} : ${isChangeQueue || !isLinkedInstuctor}`)
+
                 if (isChangeQueue || !isLinkedInstuctor) { // меняем очередь, если препода брали из очереди или
                     changeStack(data, instructorKey, nextInstructorKey)  // если прикреплённый перенаправил
                 }
-                // isChangeQueue ? isChangeQueue : isChangeQueue = true
+
                 data.countCommonOrders++;
-                // console.log(`все принятые заявки: ${data.countCommonOrders}`)
-                // console.log(`redirected orders: ${data.countRedirectedOrders}`)
-                // console.log(`each clickredirect: ${data.countOfEachClickRedirect}`)
                 setDataBase(data); // Сохраняем изменения обратно
             }
     
@@ -307,38 +300,13 @@ bot.on('message', async (ctx) => {
                 isLinkedInstuctor = false;
     
                 data.countOfEachClickRedirect++;
-                //console.log(`перенаправленные заявки: ${data.countRedirectedOrders}`);
-    
-                //console.log(`меняем isLinked на false`)
-                const params = [instructor_name, 
-                    num_classroom, global_problem, comment, messageText]
 
                 if (nextInstructorKey) {
-                    await redirectOrder(ctx, userSteps, data[nextInstructorKey].tg_id, nextInstructorKey, ...params)
+                    await redirectOrder(data[nextInstructorKey].tg_id, nextInstructorKey, data)
                 } else {
-                    await redirectOrder(ctx, userSteps, instructor_id, instructorKey, ...params)
+                    await redirectOrder(instructor_id, instructorKey, data)
                 }
-                // nextInstructorKey ? // В первый раз отправляем автоматически выбранному сотруднику, а
-                //                     // в следующий раз уже перенаправляем нужному
-                // await redirectOrder(ctx, userSteps, data[nextInstructorKey].tg_id, nextInstructorKey, ...params):
-                // await redirectOrder(ctx, userSteps, instructor_id, instructorKey, ...params);
             }
-    
-            // else {
-            //     try {
-            //         console.log(messageText)
-            //         console.log(`получаю имя сотрудника для redirect: ${instructorRedirecitonName}`)
-            //         nextInstructorKey = getEnName(messageText, data);
-            //         const newInstuctor = data[nextInstructorKey];
-            //         if (availableInstructorStack.includes(nextInstructorKey)) {
-            //             const requestData =  [newInstuctor.tg_id, num_classroom, global_problem, comment, messageText];
-            //             await startConnectWithInsctructor(ctx, userSteps, ...requestData);
-            //             console.log(`заявка перенаправлена ${messageText} в ${time24} ${currentFormattedDate}`)
-            //         }
-            //     } catch (error) {
-            //         console.error(`Ошибка: ${error}`)
-            //     }
-            // }
         } catch (error) {
             console.error(`Ошибка в ${currentStep}: ${error}`)
         }

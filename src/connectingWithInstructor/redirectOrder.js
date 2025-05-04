@@ -1,23 +1,8 @@
-import { Bot, InlineKeyboard } from "grammy";
-import dotenv from "dotenv";
-import { getDataBase } from "../dataBase/getDataBase.js";
 import { generateInstructorKeyboard } from "./generateInstructorKeyboard.js";
-
-dotenv.config();
-const bot = new Bot(process.env.BOT_API_KEY);
-const data = getDataBase();
+import { bot } from '../bot.js';
 
 // Функция для отправки сообщения сотруднику
-export async function redirectOrder(ctx, userSteps, ...params) {
-    const [
-        instructor_id,
-        instructorKey,
-        instructor_name,
-        num_classroom,
-        global_problem,
-        comment,
-        messageText,
-    ] = params;
+export async function redirectOrder(instructor_id, instructorKey, data) {
 
     if (!instructor_id || isNaN(instructor_id)) {
         console.error("Некорректный instructor_id:", instructor_id);
