@@ -1,17 +1,17 @@
 {
-    "countCommonOrders": 67,
-    "countRedirectedOrders": 24,
-    "countOfEachClickRedirect": 40,
+    "countCommonOrders": 7,
+    "countRedirectedOrders": 3,
+    "countOfEachClickRedirect": 4,
     "instructorStack": [
-        "vrublevskiySchedule",
-        "titovSchelule",
         "shatsionokSchedule",
-        "homutovSchelule"
+        "titovSchelule",
+        "homutovSchelule",
+        "vrublevskiySchedule"
     ],
     "osipovSchedule": {
         "name": "Осипов Степан Евгеньевич",
         "tg_id": 885326963,
-        "order_count": 1
+        "order_count": 0
     },
     "egorovSchedule": {
         "name": "Егоров Сергей Владимирович",
@@ -20,12 +20,12 @@
     },
     "shatsionokSchedule": {
         "name": "Шационок Павел Васильевич",
-        "tg_id": 885326963,
-        "order_count": 20,
+        "tg_id": 7458287339,
+        "order_count": 2,
         "schedule_1th_week": [
             {
                 "Понедельник": [
-                    "14 апреля",
+                    "28 апреля",
                     {
                         "lessonNumber": 4,
                         "lessonTime": [
@@ -72,7 +72,7 @@
             },
             {
                 "Вторник": [
-                    "15 апреля",
+                    "29 апреля",
                     {
                         "lessonNumber": 2,
                         "lessonTime": [
@@ -133,7 +133,7 @@
             },
             {
                 "Среда": [
-                    "16 апреля",
+                    "30 апреля",
                     {
                         "lessonNumber": 4,
                         "lessonTime": [
@@ -152,7 +152,7 @@
             },
             {
                 "Четверг": [
-                    "17 апреля",
+                    "1 мая",
                     {
                         "lessonNumber": 1,
                         "lessonTime": [
@@ -229,7 +229,7 @@
         "schedule_2nd_week": [
             {
                 "Понедельник": [
-                    "7 апреля",
+                    "21 апреля",
                     {
                         "lessonNumber": 3,
                         "lessonTime": [
@@ -290,7 +290,7 @@
             },
             {
                 "Вторник": [
-                    "8 апреля",
+                    "22 апреля",
                     {
                         "lessonNumber": 1,
                         "lessonTime": [
@@ -365,7 +365,7 @@
             },
             {
                 "Среда": [
-                    "9 апреля",
+                    "23 апреля",
                     {
                         "lessonNumber": 3,
                         "lessonTime": [
@@ -426,7 +426,7 @@
             },
             {
                 "Четверг": [
-                    "10 апреля",
+                    "24 апреля",
                     {
                         "lessonNumber": 1,
                         "lessonTime": [
@@ -489,12 +489,12 @@
     },
     "homutovSchelule": {
         "name": "Хомутов Андрей Сергеевич",
-        "tg_id": 885326963,
-        "order_count": 20,
+        "tg_id": 7458287339,
+        "order_count": 1,
         "schedule_1th_week": [
             {
                 "Понедельник": [
-                    "14 апреля",
+                    "28 апреля",
                     {
                         "lessonNumber": 3,
                         "lessonTime": [
@@ -541,7 +541,7 @@
             },
             {
                 "Вторник": [
-                    "15 апреля",
+                    "29 апреля",
                     {
                         "lessonNumber": 4,
                         "lessonTime": [
@@ -560,7 +560,7 @@
             },
             {
                 "Среда": [
-                    "16 апреля",
+                    "30 апреля",
                     {
                         "lessonNumber": 1,
                         "lessonTime": [
@@ -607,7 +607,7 @@
             },
             {
                 "Четверг": [
-                    "17 апреля",
+                    "1 мая",
                     {
                         "lessonNumber": 5,
                         "lessonTime": [
@@ -640,7 +640,7 @@
             },
             {
                 "Пятница": [
-                    "18 апреля",
+                    "2 мая",
                     {
                         "lessonNumber": 3,
                         "lessonTime": [
@@ -675,7 +675,7 @@
         "schedule_2nd_week": [
             {
                 "Понедельник": [
-                    "7 апреля",
+                    "21 апреля",
                     {
                         "lessonNumber": 3,
                         "lessonTime": [
@@ -722,7 +722,7 @@
             },
             {
                 "Вторник": [
-                    "8 апреля",
+                    "22 апреля",
                     {
                         "lessonNumber": 4,
                         "lessonTime": [
@@ -741,7 +741,7 @@
             },
             {
                 "Среда": [
-                    "9 апреля",
+                    "23 апреля",
                     {
                         "lessonNumber": 1,
                         "lessonTime": [
@@ -774,7 +774,7 @@
             },
             {
                 "Четверг": [
-                    "10 апреля",
+                    "24 апреля",
                     {
                         "lessonNumber": 4,
                         "lessonTime": [
@@ -821,7 +821,7 @@
             },
             {
                 "Пятница": [
-                    "11 апреля",
+                    "25 апреля",
                     {
                         "lessonNumber": 3,
                         "lessonTime": [
@@ -857,11 +857,11 @@
     "titovSchelule": {
         "name": "Титов Руслан Анатольевич",
         "tg_id": 885326963,
-        "order_count": 19,
+        "order_count": 0,
         "schedule_1th_week": [
             {
                 "Понедельник": [
-                    "31 марта",
+                    "28 апреля",
                     {
                         "lessonNumber": 6,
                         "lessonTime": [
@@ -894,7 +894,7 @@
             },
             {
                 "Вторник": [
-                    "1 апреля",
+                    "29 апреля",
                     {
                         "lessonNumber": 4,
                         "lessonTime": [
@@ -955,7 +955,7 @@
             },
             {
                 "Среда": [
-                    "2 апреля",
+                    "30 апреля",
                     {
                         "lessonNumber": 6,
                         "lessonTime": [
@@ -1004,7 +1004,7 @@
         "schedule_2nd_week": [
             {
                 "Понедельник": [
-                    "7 апреля",
+                    "21 апреля",
                     {
                         "lessonNumber": 2,
                         "lessonTime": [
@@ -1093,7 +1093,7 @@
             },
             {
                 "Вторник": [
-                    "8 апреля",
+                    "22 апреля",
                     {
                         "lessonNumber": 4,
                         "lessonTime": [
@@ -1140,7 +1140,7 @@
             },
             {
                 "Среда": [
-                    "9 апреля",
+                    "23 апреля",
                     {
                         "lessonNumber": 6,
                         "lessonTime": [
@@ -1190,11 +1190,11 @@
     "vrublevskiySchedule": {
         "name": "Врублевский Константин Эдуардович",
         "tg_id": 885326963,
-        "order_count": 18,
+        "order_count": 20,
         "schedule_1th_week": [
             {
                 "Среда": [
-                    "2 апреля",
+                    "23 апреля",
                     {
                         "lessonNumber": 5,
                         "lessonTime": [
@@ -1227,7 +1227,7 @@
             },
             {
                 "Пятница": [
-                    "4 апреля",
+                    "25 апреля",
                     {
                         "lessonNumber": 4,
                         "lessonTime": [

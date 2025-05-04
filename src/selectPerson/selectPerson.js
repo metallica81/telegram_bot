@@ -1,30 +1,22 @@
-import moment from 'moment';
-import 'moment/locale/ru.js';  // русская локализация
-
-// импорты своих модулей
 import { instructorClassroomsMap } from './connectClassroom.js'; // класс для препода
 import { isInstructorBusy } from './isInstructorBusy.js';
-import { convertDate } from './convertDate.js';
 import { getAssociatedInstructor } from './getAssociatedInstructor.js';
 import { getDataBase, setDataBase } from '../dataBase/getDataBase.js';
 import { getAvailableStack } from './getAvailableStack.js';
-import { getRestPersons } from '../connectingWithInstructor/getRestPersons.js';
-import { getEnName } from './getEnName.js';
+import { getTime } from './getTime.js';
 
 let data = getDataBase(); // Вызвали базу данных
 
 export const availableInstructorStack = getAvailableStack(data.instructorStack);
-console.log(`стек свободных преподавателей`, availableInstructorStack)
+console.log(`стек свободных преподавателей`, availableInstructorStack);
 
 // Создаем стек для очереди преподавателей (FILO)
 const instructorStack = data.instructorStack;
-console.log(`стек всех преподаватей`, instructorStack)
+console.log(`стек всех преподаватей`, instructorStack);
 
 // Функция для поиска сотрудника
 export function findStaff(num_classroom) {
-    const today = moment(); // Используем текущую дату
-    const time24 = [Number(moment().format('HH')), Number(moment().format('mm'))];
-    const currentFormattedDate = convertDate(today); // Форматируем дату для поиска в базе
+    const { time24, currentFormattedDate } = getTime();
 
     // Определяем, кто закреплён за текущей аудиторией
     let associatedInstructor = getAssociatedInstructor(num_classroom, instructorClassroomsMap)
@@ -74,7 +66,3 @@ export function findStaff(num_classroom) {
     console.log("база данных повреждена или преподаватели не найдены");
     return "база данных повреждена или преподаватели не найдены";
 }
-
-// console.log(getRestPersons('vrublevskiySchedule', instructorStack))
-// console.log(getEnName(findStaff(212)[0], data));
-

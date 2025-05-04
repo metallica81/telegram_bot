@@ -50,7 +50,7 @@ export async function writeDataToFile() {
         };
 
         // Преобразуем объект в JSON и записываем в файл
-        await fs.writeFile('src/dataBase/dataBase.json', JSON.stringify(combinedData, null, 4));
+        await fs.writeFile('dataBase.json', JSON.stringify(combinedData, null, 4));
         console.log('File successfully written');
     } catch (err) {
         console.log('Error writing file:', err);

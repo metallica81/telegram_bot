@@ -5,7 +5,7 @@ const bot = new Bot(process.env.BOT_API_KEY);
 
 // Функция для отправки сообщения сотруднику
 export async function startConnectWithInsctructor(ctx, userSteps, ...params) {
-    const [instructor_id, num_classroom, global_problem, comment, messageText] = params; // rest-оператор
+    const [instructor_id, num_classroom, global_problem, comment, messageText] = params;
 
     if (!instructor_id || isNaN(instructor_id)) {
         console.error("Некорректный instructor_id:", instructor_id);
