@@ -28,7 +28,7 @@ let global_problem = null;
 let comment = null;
 let instructorRedirecitonName = null;
 
-const data = getDataBase();
+// const data = getDataBase();
 let nextInstructorKey = null;
 
 function resetStack() {
@@ -53,8 +53,9 @@ bot.command('start', async (ctx) => {
 
 let [instructor_name, instructor_id, isChangeQueue, instructorKey, isLinkedInstuctor] = [null, null, null, null, null];
 
-
 bot.on("callback_query:data", async (ctx) => {
+    const data = await scheduleQuery();
+
     instructorRedirecitonName = ctx.callbackQuery.data;
     await ctx.answerCallbackQuery('Вы выбрали: ' + instructorRedirecitonName);
 
@@ -82,11 +83,15 @@ bot.on("callback_query:data", async (ctx) => {
 
 // Обработчик для обычных сообщений
 bot.on('message', async (ctx) => {
+    const data = await scheduleQuery();
+
     const messageText = ctx.message.text;
 
     const currentStep = userSteps.get(ctx.chat.id);
     
     const { time24, currentFormattedDate } = getTime();
+
+    console.log('currentStep', currentStep)
 
     if (currentStep === 'waiting_for_classroom') {
         try {
@@ -264,7 +269,7 @@ bot.on('message', async (ctx) => {
                 await ctx.reply('Заявка не будет продолжена. Всего доброго!', { reply_markup: { remove_keyboard: true } });
                 userSteps.set(ctx.chat.id, 'discontinue_order');
             } else {
-                await ctx.reply('Пожалуйста, нажмите на кнопку справа от поля ввода и выберите один из пунктов');
+                await ctx.reply('Пожалуйста, нажмите на кнопку справа от поля ввода и выберите один из пунктов!');
             }
         } catch (error) {
             console.error(`Ошибка в ${currentStep}: ${error}`)
@@ -277,14 +282,14 @@ bot.on('message', async (ctx) => {
             if (messageText == 'Принять') {
                 if (nextInstructorKey) {
                     await continueWithInstructor(chatId, ctx, userSteps, data[nextInstructorKey].name);
-                    await countOrders(nextInstructorKey, data);
-                    data.countRedirectedOrders++;
+                    // await countOrders(nextInstructorKey, data);
+                    // data.countRedirectedOrders++;
                     console.log(`заявку принял ${data[nextInstructorKey].name} в ${time24} ${currentFormattedDate}`)
                 } 
                 
                 else {
-                    await continueWithInstructor(chatId, ctx, userSteps, instructor_name);
-                    await countOrders(instructorKey, data);
+                    // await continueWithInstructor(chatId, ctx, userSteps, instructor_name);
+                    // await countOrders(instructorKey, data);
                     console.log(`заявку принял ${instructor_name} в ${time24} ${currentFormattedDate}`)
                 }
 
