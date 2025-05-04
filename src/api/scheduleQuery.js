@@ -5,7 +5,7 @@ export async function scheduleQuery() {
         const response = await axios.get("http://localhost:3000/api/schedule");
         return response.data;
     } catch (error) {
-        console.error("Ошибка при получении заказов:", error);
+        console.error("Ошибка при получении расписания:", error);
         throw error;
     }
 }

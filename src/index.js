@@ -11,6 +11,8 @@ import { changeStack } from './connectingWithInstructor/changeStack.js'
 import { countOrders } from './countOrders.js';
 import { getTime } from './selectPerson/getTime.js';
 
+import { scheduleQuery } from './api/scheduleQuery.js';
+
 
 // Создаем бота
 const bot = new Bot(process.env.BOT_API_KEY);
