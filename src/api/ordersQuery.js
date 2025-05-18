@@ -33,17 +33,18 @@ export async function ordersPatch(staff_id, data) {
     }
 }
 
-ordersQuery(885326961)
-    .then((res) => {
+export async function incrementOrderAmount(staff_id) {
+    try {
+        const res = await ordersQuery(staff_id);
         
         if (!res || typeof res.order_amount === "undefined") {
             throw new Error("order_amount не найден в данных сотрудника");
         }
         
-        return ordersPatch(885326961, {
-            name: "Шационок",
+        return await ordersPatch(staff_id, {
             order_amount: res.order_amount + 1,
         });
-    })
-    .then((res) => console.log("Результат обновления:", JSON.stringify(res, null, 2)))
-    .catch((error) => console.error("Ошибка в цепочке:", error));
+    } catch (error) {
+        console.error("Ошибка в цепочке:", error);
+    }
+}

@@ -21,7 +21,6 @@ export async function startConnectWithInsctructor(ctx, userSteps, ...params) {
 
         // Кнопки для принятия заявки
         const problemKeyBoard = new Keyboard().text('Принять').row().text('Перенаправить').resized();
-        console.log('instructor_id', instructor_id, typeof(instructor_id))
         await bot.api.sendMessage(instructor_id, 'Готовы принять заявку?', {
             reply_markup: problemKeyBoard
         });

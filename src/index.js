@@ -6,7 +6,7 @@ import { redirectOrder } from './connectingWithInstructor/redirectOrder.js';
 import { getEnName } from './selectPerson/getEnName.js';
 import { setDataBase, getDataBase } from './dataBase/getDataBase.js';
 import { changeStack } from './connectingWithInstructor/changeStack.js'
-import { countOrders } from './countOrders.js';
+import { incrementOrderAmount } from './api/ordersQuery.js'
 import { getTime } from './selectPerson/getTime.js';
 import { bot } from './bot.js';
 import { scheduleQuery } from './api/scheduleQuery.js';
@@ -282,15 +282,15 @@ bot.on('message', async (ctx) => {
             if (messageText == 'Принять') {
                 if (nextInstructorKey) {
                     await continueWithInstructor(chatId, ctx, userSteps, data[nextInstructorKey].name);
-                    // await countOrders(nextInstructorKey, data);
+                    await incrementOrderAmount(data[nextInstructorKey].tg_id);
                     // data.countRedirectedOrders++;
                     console.log(`заявку принял ${data[nextInstructorKey].name} в ${time24} ${currentFormattedDate}`)
                 } 
                 
                 else {
-                    // await continueWithInstructor(chatId, ctx, userSteps, instructor_name);
-                    // await countOrders(instructorKey, data);
-                    console.log(`заявку принял ${instructor_name} в ${time24} ${currentFormattedDate}`)
+                    await incrementOrderAmount(data[instructorKey].tg_id)
+                    await continueWithInstructor(chatId, ctx, userSteps, instructor_name);
+                    console.log(`заявку принял ${instructor_name} в ${time24} ${currentFormattedDate}`);
                 }
 
                 if (isChangeQueue || !isLinkedInstuctor) { // меняем очередь, если препода брали из очереди или

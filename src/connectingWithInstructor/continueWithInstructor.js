@@ -2,9 +2,6 @@ import { bot } from "../bot.js";
 
 // Функция для отправки сообщения сотруднику
 export async function continueWithInstructor(chatId, ctx, userSteps, instructor_name) {
-
-    //const currentStep = userSteps.get(ctx.chat.id);
-
     if (!chatId || isNaN(chatId)) {
         console.error("Некорректный chatId:", chatId);
         return;
