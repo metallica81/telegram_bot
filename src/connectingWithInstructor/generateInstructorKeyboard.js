@@ -3,8 +3,8 @@ import { getInstructorNameFromEn } from "../selectPerson/getEnName.js";
 import { getAvailableStack } from "../selectPerson/getAvailableStack.js";
 import { InlineKeyboard } from "grammy";
 
-export function generateInstructorKeyboard(excludeKey, data) {
-    const currentStack = [...getAvailableStack(data.instructorStack, data)];
+export function generateInstructorKeyboard(excludeKey, data, queue) {
+    const currentStack = [...getAvailableStack(queue.instructorStack, data)];
     
     if (!currentStack.includes("osipovSchedule")) {
         currentStack.push("osipovSchedule");

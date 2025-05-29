@@ -2,7 +2,7 @@ import { generateInstructorKeyboard } from "./generateInstructorKeyboard.js";
 import { bot } from '../bot.js';
 
 // Функция для отправки сообщения сотруднику
-export async function redirectOrder(instructor_id, instructorKey, data) {
+export async function redirectOrder(instructor_id, instructorKey, data, queue) {
 
     if (!instructor_id || isNaN(instructor_id)) {
         console.error("Некорректный instructor_id:", instructor_id);
@@ -15,15 +15,15 @@ export async function redirectOrder(instructor_id, instructorKey, data) {
             instructor_id,
             "Кому перенаправим?",
             {
-                reply_markup: generateInstructorKeyboard(instructorKey, data),
+                reply_markup: generateInstructorKeyboard(instructorKey, data, queue),
             }
         );
 
-        let previousKeyboard = JSON.stringify(generateInstructorKeyboard(instructorKey, data));
+        let previousKeyboard = JSON.stringify(generateInstructorKeyboard(instructorKey, data, queue));
 
         // Автоматическое обновление клавиатуры каждую минуту
         setInterval(async () => {
-            const newKeyboard = generateInstructorKeyboard(instructorKey, data);
+            const newKeyboard = generateInstructorKeyboard(instructorKey, data, queue);
             const newKeyboardString = JSON.stringify(newKeyboard);
             
             console.log(previousKeyboard !== newKeyboardString)

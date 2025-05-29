@@ -4,10 +4,11 @@ import { getAssociatedInstructor } from './getAssociatedInstructor.js';
 import { getTime } from './getTime.js';
 
 // Функция для поиска сотрудника
-export function findStaff(num_classroom, data) {
+export function findStaff(num_classroom, data, queue) {
     const { time24, currentFormattedDate } = getTime();
 
-    const instructorStack = data.instructorStack;
+    const instructorStack = queue.instructorStack;
+    console.log('instructorStack', instructorStack)
     // Определяем, кто закреплён за текущей аудиторией
     let associatedInstructor = getAssociatedInstructor(num_classroom, instructorClassroomsMap)
 

@@ -1,11 +1,11 @@
-import axios from 'axios';
+import axios from "axios";
 
-export async function ordersQuery() {
-  try {
-    const response = await axios.get('http://localhost:3000/api/queue');
-    return response.data; 
-  } catch (error) {
-    console.error('Ошибка при получении очереди:', error);
-    throw error;
-  }
+export async function queueQuery() {
+    try {
+        const response = await axios.get("http://localhost:3000/api/queue");
+        return response.data;
+    } catch (error) {
+        console.error("Ошибка при получении очереди:", error);
+        throw error;
+    }
 }

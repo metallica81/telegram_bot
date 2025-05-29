@@ -10,8 +10,7 @@ async function sendDataToBackend(data) {
                 "Content-Type": "application/json",
             },
         });
-
-        console.log("Данные успешно отправлены", response.data);
+        
     } catch (error) {
         console.error("Ошибка при отправке данных", error);
     }

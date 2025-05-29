@@ -4,10 +4,10 @@ import { startConnectWithInsctructor } from './connectingWithInstructor/startCon
 import { continueWithInstructor } from './connectingWithInstructor/continueWithInstructor.js';
 import { redirectOrder } from './connectingWithInstructor/redirectOrder.js';
 import { getEnName } from './selectPerson/getEnName.js';
-import { setDataBase, getDataBase } from './dataBase/getDataBase.js';
 import { changeStack } from './connectingWithInstructor/changeStack.js'
 import { incrementOrderAmount } from './api/ordersQuery.js'
 import { getTime } from './selectPerson/getTime.js';
+import { queueQuery } from './api/queueQuery.js';
 import { bot } from './bot.js';
 import { scheduleQuery } from './api/scheduleQuery.js';
 
@@ -255,8 +255,10 @@ bot.on('message', async (ctx) => {
     else if (currentStep === 'waiting_for_employee_call') {
         try {
             if (messageText === 'Вызываем') {
+                const queue = await queueQuery();
+
                 // Вызываем функцию для поиска преподавателя
-                [instructor_name, instructor_id, isChangeQueue, instructorKey, isLinkedInstuctor] = findStaff(num_classroom, data);
+                [instructor_name, instructor_id, isChangeQueue, instructorKey, isLinkedInstuctor] = findStaff(num_classroom, data, queue);
                 console.log(`Первоначально заявка отправлена ${instructor_name} в ${time24} ${currentFormattedDate}`)
                 
                 await ctx.reply(`Отправляем заявку сотруднику`, { reply_markup: { remove_keyboard: true } });
@@ -283,7 +285,6 @@ bot.on('message', async (ctx) => {
                 if (nextInstructorKey) {
                     await continueWithInstructor(chatId, ctx, userSteps, data[nextInstructorKey].name);
                     await incrementOrderAmount(data[nextInstructorKey].tg_id);
-                    // data.countRedirectedOrders++;
                     console.log(`заявку принял ${data[nextInstructorKey].name} в ${time24} ${currentFormattedDate}`)
                 } 
                 
@@ -294,22 +295,23 @@ bot.on('message', async (ctx) => {
                 }
 
                 if (isChangeQueue || !isLinkedInstuctor) { // меняем очередь, если препода брали из очереди или
-                    changeStack(data, instructorKey, nextInstructorKey)  // если прикреплённый перенаправил
+                    const queue = queueQuery();
+                    changeStack(queue, instructorKey, nextInstructorKey)  // если прикреплённый перенаправил
                 }
 
-                data.countCommonOrders++;
-                setDataBase(data); // Сохраняем изменения обратно
+                // data.countCommonOrders++;
             }
     
             else if (messageText == 'Перенаправить') {
+                const queue = await queueQuery();
                 isLinkedInstuctor = false;
     
                 data.countOfEachClickRedirect++;
 
                 if (nextInstructorKey) {
-                    await redirectOrder(data[nextInstructorKey].tg_id, nextInstructorKey, data)
+                    await redirectOrder(data[nextInstructorKey].tg_id, nextInstructorKey, data, queue)
                 } else {
-                    await redirectOrder(instructor_id, instructorKey, data)
+                    await redirectOrder(instructor_id, instructorKey, data, queue)
                 }
             }
         } catch (error) {
