@@ -27,13 +27,13 @@ export async function writeDataToFile() {
             parseData.titov.schedulePart,
             parseData.titov.instructorKey
         );
-        const dataVrublevskiy = await parseStaff(
-            parseData.staffMenu, 
-            parseData.vrublevskiy.instructorPage,
-            parseData.vrublevskiy.infoMenu,
-            parseData.vrublevskiy.schedulePart,
-            parseData.vrublevskiy.instructorKey
-        ); 
+        // const dataVrublevskiy = await parseStaff(
+        //     parseData.staffMenu, 
+        //     parseData.vrublevskiy.instructorPage,
+        //     parseData.vrublevskiy.infoMenu,
+        //     parseData.vrublevskiy.schedulePart,
+        //     parseData.vrublevskiy.instructorKey
+        // ); 
 
         // Создаем объект с данными
         const combinedData = {
@@ -46,7 +46,7 @@ export async function writeDataToFile() {
             shatsionokSchedule: dataShatsionok,
             homutovSchelule: dataHomutov,
             titovSchelule: dataTitov,
-            vrublevskiySchedule: dataVrublevskiy,
+            // vrublevskiySchedule: dataVrublevskiy,
         };
 
         // Преобразуем объект в JSON и записываем в файл

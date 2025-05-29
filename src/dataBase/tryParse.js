@@ -35,10 +35,18 @@ export async function parseStaff(staffList, instructorPage, infoMenu, schedulePa
             };
     
             function parse_week(weekSelector, scheduleKey) {
-                const days = document.querySelectorAll(`${weekSelector} .show`);
+                try {
+                    const days = document.querySelectorAll(`${weekSelector} .show`);
+                
                 days.forEach(day => {
-                    const day_week = day.querySelector(".info-block__header-text").childNodes[0].textContent.trim();
-                    const date = day.querySelector(".info-block__header-text :first-child").textContent.trim();
+                    const dayElement = day.querySelector(".info-block__header-text");
+                    if (!dayElement) {
+                        console.warn("Элемент .info-block__header-text не найден");
+                        return;
+                    }
+                    
+                    const day_week = dayElement.childNodes[0]?.textContent?.trim() || "Неизвестный день";
+                    const date = dayElement?.querySelector(".info-block__header-text :first-child").textContent.trim();
     
                     const lessons = getLessons(day);
                     const classrooms = getClassrooms(day);
@@ -57,6 +65,12 @@ export async function parseStaff(staffList, instructorPage, infoMenu, schedulePa
                         [day_week]: [date].concat(lessonsInfo)
                     });
                 });
+            }
+            catch (err) {
+                console.error("Ошибка в parse_week:", err.message);
+            }
+                
+                
             }
     
             data.name = getInstructorName();

@@ -1,18 +1,65 @@
 {
+    "countCommonOrders": null,
     "instructorStack": [
         "titovSchelule",
-        "vrublevskiySchedule",
         "homutovSchelule",
         "shatsionokSchedule"
     ],
     "shatsionokSchedule": {
-        "name": "Павел Шационок",
+        "name": "Шационок Павел Васильевич",
         "tg_id": 7458287339,
         "order_count": 42,
         "schedule_1th_week": [
             {
+                "Понедельник": [
+                    "26 мая",
+                    {
+                        "lessonNumber": 4,
+                        "lessonTime": [
+                            [
+                                13,
+                                45
+                            ],
+                            [
+                                15,
+                                5
+                            ]
+                        ],
+                        "classroom": 3510
+                    },
+                    {
+                        "lessonNumber": 5,
+                        "lessonTime": [
+                            [
+                                15,
+                                20
+                            ],
+                            [
+                                16,
+                                40
+                            ]
+                        ],
+                        "classroom": 3311
+                    },
+                    {
+                        "lessonNumber": 6,
+                        "lessonTime": [
+                            [
+                                16,
+                                55
+                            ],
+                            [
+                                18,
+                                15
+                            ]
+                        ],
+                        "classroom": 3311
+                    }
+                ]
+            },
+            {
                 "Вторник": [
-                    "29 апреля",
+                    "27 мая",
                     {
                         "lessonNumber": 2,
                         "lessonTime": [
@@ -72,55 +119,8 @@
                 ]
             },
             {
-                "Понедельник": [
-                    "28 апреля",
-                    {
-                        "lessonNumber": 4,
-                        "lessonTime": [
-                            [
-                                13,
-                                45
-                            ],
-                            [
-                                15,
-                                5
-                            ]
-                        ],
-                        "classroom": 3510
-                    },
-                    {
-                        "lessonNumber": 5,
-                        "lessonTime": [
-                            [
-                                15,
-                                20
-                            ],
-                            [
-                                16,
-                                40
-                            ]
-                        ],
-                        "classroom": 3311
-                    },
-                    {
-                        "lessonNumber": 6,
-                        "lessonTime": [
-                            [
-                                16,
-                                55
-                            ],
-                            [
-                                18,
-                                15
-                            ]
-                        ],
-                        "classroom": 3311
-                    }
-                ]
-            },
-            {
                 "Среда": [
-                    "30 апреля",
+                    "28 мая",
                     {
                         "lessonNumber": 4,
                         "lessonTime": [
@@ -139,7 +139,7 @@
             },
             {
                 "Четверг": [
-                    "1 мая",
+                    "29 мая",
                     {
                         "lessonNumber": 1,
                         "lessonTime": [
@@ -215,8 +215,69 @@
         ],
         "schedule_2nd_week": [
             {
+                "Понедельник": [
+                    "2 июня",
+                    {
+                        "lessonNumber": 3,
+                        "lessonTime": [
+                            [
+                                11,
+                                40
+                            ],
+                            [
+                                13,
+                                0
+                            ]
+                        ],
+                        "classroom": 3510
+                    },
+                    {
+                        "lessonNumber": 4,
+                        "lessonTime": [
+                            [
+                                13,
+                                45
+                            ],
+                            [
+                                15,
+                                5
+                            ]
+                        ],
+                        "classroom": 3510
+                    },
+                    {
+                        "lessonNumber": 5,
+                        "lessonTime": [
+                            [
+                                15,
+                                20
+                            ],
+                            [
+                                16,
+                                40
+                            ]
+                        ],
+                        "classroom": 3311
+                    },
+                    {
+                        "lessonNumber": 6,
+                        "lessonTime": [
+                            [
+                                16,
+                                55
+                            ],
+                            [
+                                18,
+                                15
+                            ]
+                        ],
+                        "classroom": 3311
+                    }
+                ]
+            },
+            {
                 "Вторник": [
-                    "22 апреля",
+                    "3 июня",
                     {
                         "lessonNumber": 1,
                         "lessonTime": [
@@ -290,69 +351,8 @@
                 ]
             },
             {
-                "Понедельник": [
-                    "21 апреля",
-                    {
-                        "lessonNumber": 3,
-                        "lessonTime": [
-                            [
-                                11,
-                                40
-                            ],
-                            [
-                                13,
-                                0
-                            ]
-                        ],
-                        "classroom": 3510
-                    },
-                    {
-                        "lessonNumber": 4,
-                        "lessonTime": [
-                            [
-                                13,
-                                45
-                            ],
-                            [
-                                15,
-                                5
-                            ]
-                        ],
-                        "classroom": 3510
-                    },
-                    {
-                        "lessonNumber": 5,
-                        "lessonTime": [
-                            [
-                                15,
-                                20
-                            ],
-                            [
-                                16,
-                                40
-                            ]
-                        ],
-                        "classroom": 3311
-                    },
-                    {
-                        "lessonNumber": 6,
-                        "lessonTime": [
-                            [
-                                16,
-                                55
-                            ],
-                            [
-                                18,
-                                15
-                            ]
-                        ],
-                        "classroom": 3311
-                    }
-                ]
-            },
-            {
                 "Среда": [
-                    "23 апреля",
+                    "4 июня",
                     {
                         "lessonNumber": 3,
                         "lessonTime": [
@@ -413,7 +413,7 @@
             },
             {
                 "Четверг": [
-                    "24 апреля",
+                    "5 июня",
                     {
                         "lessonNumber": 1,
                         "lessonTime": [
@@ -469,371 +469,19 @@
                             ]
                         ],
                         "classroom": 3510
-                    }
-                ]
-            }
-        ]
-    },
-    "titovSchelule": {
-        "name": "Руслан Титов",
-        "tg_id": 885326963,
-        "order_count": 1,
-        "schedule_1th_week": [
-            {
-                "Вторник": [
-                    "29 апреля",
-                    {
-                        "lessonNumber": 4,
-                        "lessonTime": [
-                            [
-                                13,
-                                45
-                            ],
-                            [
-                                15,
-                                5
-                            ]
-                        ],
-                        "classroom": 3504
-                    },
-                    {
-                        "lessonNumber": 6,
-                        "lessonTime": [
-                            [
-                                16,
-                                55
-                            ],
-                            [
-                                18,
-                                15
-                            ]
-                        ],
-                        "classroom": 3504
-                    },
-                    {
-                        "lessonNumber": 7,
-                        "lessonTime": [
-                            [
-                                18,
-                                30
-                            ],
-                            [
-                                19,
-                                50
-                            ]
-                        ],
-                        "classroom": 3401
-                    },
-                    {
-                        "lessonNumber": 8,
-                        "lessonTime": [
-                            [
-                                20,
-                                0
-                            ],
-                            [
-                                21,
-                                20
-                            ]
-                        ],
-                        "classroom": 3401
-                    }
-                ]
-            },
-            {
-                "Понедельник": [
-                    "28 апреля",
-                    {
-                        "lessonNumber": 6,
-                        "lessonTime": [
-                            [
-                                16,
-                                55
-                            ],
-                            [
-                                18,
-                                15
-                            ]
-                        ],
-                        "classroom": 3412
-                    },
-                    {
-                        "lessonNumber": 7,
-                        "lessonTime": [
-                            [
-                                18,
-                                30
-                            ],
-                            [
-                                19,
-                                50
-                            ]
-                        ],
-                        "classroom": 3412
-                    }
-                ]
-            },
-            {
-                "Среда": [
-                    "30 апреля",
-                    {
-                        "lessonNumber": 6,
-                        "lessonTime": [
-                            [
-                                16,
-                                55
-                            ],
-                            [
-                                18,
-                                15
-                            ]
-                        ],
-                        "classroom": 3504
-                    },
-                    {
-                        "lessonNumber": 7,
-                        "lessonTime": [
-                            [
-                                18,
-                                30
-                            ],
-                            [
-                                19,
-                                50
-                            ]
-                        ],
-                        "classroom": 3301
-                    },
-                    {
-                        "lessonNumber": 8,
-                        "lessonTime": [
-                            [
-                                20,
-                                0
-                            ],
-                            [
-                                21,
-                                20
-                            ]
-                        ],
-                        "classroom": 3301
-                    }
-                ]
-            }
-        ],
-        "schedule_2nd_week": [
-            {
-                "Вторник": [
-                    "22 апреля",
-                    {
-                        "lessonNumber": 4,
-                        "lessonTime": [
-                            [
-                                13,
-                                45
-                            ],
-                            [
-                                15,
-                                5
-                            ]
-                        ],
-                        "classroom": 3504
-                    },
-                    {
-                        "lessonNumber": 6,
-                        "lessonTime": [
-                            [
-                                16,
-                                55
-                            ],
-                            [
-                                18,
-                                15
-                            ]
-                        ],
-                        "classroom": 3504
-                    },
-                    {
-                        "lessonNumber": 7,
-                        "lessonTime": [
-                            [
-                                18,
-                                30
-                            ],
-                            [
-                                19,
-                                50
-                            ]
-                        ],
-                        "classroom": 3510
-                    }
-                ]
-            },
-            {
-                "Понедельник": [
-                    "21 апреля",
-                    {
-                        "lessonNumber": 2,
-                        "lessonTime": [
-                            [
-                                10,
-                                5
-                            ],
-                            [
-                                11,
-                                25
-                            ]
-                        ],
-                        "classroom": 3403
-                    },
-                    {
-                        "lessonNumber": 3,
-                        "lessonTime": [
-                            [
-                                11,
-                                40
-                            ],
-                            [
-                                13,
-                                0
-                            ]
-                        ],
-                        "classroom": 3507
-                    },
-                    {
-                        "lessonNumber": 4,
-                        "lessonTime": [
-                            [
-                                13,
-                                45
-                            ],
-                            [
-                                15,
-                                5
-                            ]
-                        ],
-                        "classroom": 3507
-                    },
-                    {
-                        "lessonNumber": 5,
-                        "lessonTime": [
-                            [
-                                15,
-                                20
-                            ],
-                            [
-                                16,
-                                40
-                            ]
-                        ],
-                        "classroom": 3215
-                    },
-                    {
-                        "lessonNumber": 6,
-                        "lessonTime": [
-                            [
-                                16,
-                                55
-                            ],
-                            [
-                                18,
-                                15
-                            ]
-                        ],
-                        "classroom": 3412
-                    },
-                    {
-                        "lessonNumber": 7,
-                        "lessonTime": [
-                            [
-                                18,
-                                30
-                            ],
-                            [
-                                19,
-                                50
-                            ]
-                        ],
-                        "classroom": 3412
-                    }
-                ]
-            },
-            {
-                "Среда": [
-                    "23 апреля",
-                    {
-                        "lessonNumber": 6,
-                        "lessonTime": [
-                            [
-                                16,
-                                55
-                            ],
-                            [
-                                18,
-                                15
-                            ]
-                        ],
-                        "classroom": 3504
-                    },
-                    {
-                        "lessonNumber": 7,
-                        "lessonTime": [
-                            [
-                                18,
-                                30
-                            ],
-                            [
-                                19,
-                                50
-                            ]
-                        ],
-                        "classroom": 3301
-                    },
-                    {
-                        "lessonNumber": 8,
-                        "lessonTime": [
-                            [
-                                20,
-                                0
-                            ],
-                            [
-                                21,
-                                20
-                            ]
-                        ],
-                        "classroom": 3301
                     }
                 ]
             }
         ]
     },
     "homutovSchelule": {
-        "name": "Андрей Хомутов",
+        "name": "Хомутов Андрей Сергеевич",
         "tg_id": 7458287339,
         "order_count": 42,
         "schedule_1th_week": [
             {
-                "Вторник": [
-                    "29 апреля",
-                    {
-                        "lessonNumber": 4,
-                        "lessonTime": [
-                            [
-                                13,
-                                45
-                            ],
-                            [
-                                15,
-                                5
-                            ]
-                        ],
-                        "classroom": 3212
-                    }
-                ]
-            },
-            {
                 "Понедельник": [
-                    "28 апреля",
+                    "26 мая",
                     {
                         "lessonNumber": 3,
                         "lessonTime": [
@@ -879,22 +527,8 @@
                 ]
             },
             {
-                "Пятница": [
-                    "2 мая",
-                    {
-                        "lessonNumber": 3,
-                        "lessonTime": [
-                            [
-                                11,
-                                40
-                            ],
-                            [
-                                13,
-                                0
-                            ]
-                        ],
-                        "classroom": 3212
-                    },
+                "Вторник": [
+                    "27 мая",
                     {
                         "lessonNumber": 4,
                         "lessonTime": [
@@ -907,13 +541,13 @@
                                 5
                             ]
                         ],
-                        "classroom": 3409
+                        "classroom": 3212
                     }
                 ]
             },
             {
                 "Среда": [
-                    "30 апреля",
+                    "28 мая",
                     {
                         "lessonNumber": 1,
                         "lessonTime": [
@@ -960,7 +594,7 @@
             },
             {
                 "Четверг": [
-                    "1 мая",
+                    "29 мая",
                     {
                         "lessonNumber": 5,
                         "lessonTime": [
@@ -988,33 +622,47 @@
                             ]
                         ],
                         "classroom": 3402
+                    }
+                ]
+            },
+            {
+                "Пятница": [
+                    "30 мая",
+                    {
+                        "lessonNumber": 3,
+                        "lessonTime": [
+                            [
+                                11,
+                                40
+                            ],
+                            [
+                                13,
+                                0
+                            ]
+                        ],
+                        "classroom": 3212
+                    },
+                    {
+                        "lessonNumber": 4,
+                        "lessonTime": [
+                            [
+                                13,
+                                45
+                            ],
+                            [
+                                15,
+                                5
+                            ]
+                        ],
+                        "classroom": 3409
                     }
                 ]
             }
         ],
         "schedule_2nd_week": [
             {
-                "Вторник": [
-                    "22 апреля",
-                    {
-                        "lessonNumber": 4,
-                        "lessonTime": [
-                            [
-                                13,
-                                45
-                            ],
-                            [
-                                15,
-                                5
-                            ]
-                        ],
-                        "classroom": 3212
-                    }
-                ]
-            },
-            {
                 "Понедельник": [
-                    "21 апреля",
+                    "2 июня",
                     {
                         "lessonNumber": 3,
                         "lessonTime": [
@@ -1060,22 +708,8 @@
                 ]
             },
             {
-                "Пятница": [
-                    "25 апреля",
-                    {
-                        "lessonNumber": 3,
-                        "lessonTime": [
-                            [
-                                11,
-                                40
-                            ],
-                            [
-                                13,
-                                0
-                            ]
-                        ],
-                        "classroom": 3212
-                    },
+                "Вторник": [
+                    "3 июня",
                     {
                         "lessonNumber": 4,
                         "lessonTime": [
@@ -1088,13 +722,13 @@
                                 5
                             ]
                         ],
-                        "classroom": 3409
+                        "classroom": 3212
                     }
                 ]
             },
             {
                 "Среда": [
-                    "23 апреля",
+                    "4 июня",
                     {
                         "lessonNumber": 1,
                         "lessonTime": [
@@ -1127,7 +761,7 @@
             },
             {
                 "Четверг": [
-                    "24 апреля",
+                    "5 июня",
                     {
                         "lessonNumber": 4,
                         "lessonTime": [
@@ -1171,17 +805,24 @@
                         "classroom": 3402
                     }
                 ]
-            }
-        ]
-    },
-    "vrublevskiySchedule": {
-        "name": "Константин Врублевский",
-        "tg_id": 885326963,
-        "order_count": 1,
-        "schedule_1th_week": [
+            },
             {
                 "Пятница": [
-                    "25 апреля",
+                    "6 июня",
+                    {
+                        "lessonNumber": 3,
+                        "lessonTime": [
+                            [
+                                11,
+                                40
+                            ],
+                            [
+                                13,
+                                0
+                            ]
+                        ],
+                        "classroom": 3212
+                    },
                     {
                         "lessonNumber": 4,
                         "lessonTime": [
@@ -1194,41 +835,114 @@
                                 5
                             ]
                         ],
-                        "classroom": 3213
-                    },
+                        "classroom": 3409
+                    }
+                ]
+            }
+        ]
+    },
+    "titovSchelule": {
+        "name": "Титов Руслан Анатольевич",
+        "tg_id": 885326963,
+        "order_count": 1,
+        "schedule_1th_week": [
+            {
+                "Понедельник": [
+                    "26 мая",
                     {
-                        "lessonNumber": 5,
+                        "lessonNumber": 6,
                         "lessonTime": [
                             [
-                                15,
-                                20
+                                16,
+                                55
                             ],
                             [
-                                16,
-                                40
+                                18,
+                                15
                             ]
                         ],
-                        "classroom": 3213
+                        "classroom": 3412
+                    },
+                    {
+                        "lessonNumber": 7,
+                        "lessonTime": [
+                            [
+                                18,
+                                30
+                            ],
+                            [
+                                19,
+                                50
+                            ]
+                        ],
+                        "classroom": 3412
+                    }
+                ]
+            },
+            {
+                "Вторник": [
+                    "27 мая",
+                    {
+                        "lessonNumber": 4,
+                        "lessonTime": [
+                            [
+                                13,
+                                45
+                            ],
+                            [
+                                15,
+                                5
+                            ]
+                        ],
+                        "classroom": 3504
+                    },
+                    {
+                        "lessonNumber": 6,
+                        "lessonTime": [
+                            [
+                                16,
+                                55
+                            ],
+                            [
+                                18,
+                                15
+                            ]
+                        ],
+                        "classroom": 3504
+                    },
+                    {
+                        "lessonNumber": 7,
+                        "lessonTime": [
+                            [
+                                18,
+                                30
+                            ],
+                            [
+                                19,
+                                50
+                            ]
+                        ],
+                        "classroom": 3401
+                    },
+                    {
+                        "lessonNumber": 8,
+                        "lessonTime": [
+                            [
+                                20,
+                                0
+                            ],
+                            [
+                                21,
+                                20
+                            ]
+                        ],
+                        "classroom": 3401
                     }
                 ]
             },
             {
                 "Среда": [
-                    "23 апреля",
-                    {
-                        "lessonNumber": 5,
-                        "lessonTime": [
-                            [
-                                15,
-                                20
-                            ],
-                            [
-                                16,
-                                40
-                            ]
-                        ],
-                        "classroom": 3302
-                    },
+                    "28 мая",
                     {
                         "lessonNumber": 6,
                         "lessonTime": [
@@ -1241,11 +955,39 @@
                                 15
                             ]
                         ],
-                        "classroom": 3302
+                        "classroom": 3504
+                    },
+                    {
+                        "lessonNumber": 7,
+                        "lessonTime": [
+                            [
+                                18,
+                                30
+                            ],
+                            [
+                                19,
+                                50
+                            ]
+                        ],
+                        "classroom": 3301
+                    },
+                    {
+                        "lessonNumber": 8,
+                        "lessonTime": [
+                            [
+                                20,
+                                0
+                            ],
+                            [
+                                21,
+                                20
+                            ]
+                        ],
+                        "classroom": 3301
                     }
                 ]
             }
-        ]
-    },
-    "countCommonOrders": null
+        ],
+        "schedule_2nd_week": []
+    }
 }
